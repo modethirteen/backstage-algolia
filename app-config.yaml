@@ -1,0 +1,32 @@
+app:
+  title: Backstage Algolia Plugin
+  baseUrl: http://localhost:3000
+
+backend:
+  baseUrl: http://localhost:7007
+  listen: ':7007'
+  database:
+    client: better-sqlite3
+    connection: ':memory:'
+  cors:
+    origin: http://localhost:3000
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+
+auth:
+  providers:
+    guest: {}
+
+algolia:
+  index: ${BACKSTAGE_ALGOLIA_INDEX_NAME}
+  insights: true
+  backend:
+    apikey: ${BACKSTAGE_ALGOLIA_ADMIN_APIKEY}
+    applicationId: ${BACKSTAGE_ALGOLIA_APPLICATION_ID}
+    indexes:
+      catalog:
+        name: ${BACKSTAGE_ALGOLIA_INDEX_NAME}
+      techdocs:
+        name: ${BACKSTAGE_ALGOLIA_INDEX_NAME}
+    maxObjectSizeBytes: 10000
+    chunk: true
