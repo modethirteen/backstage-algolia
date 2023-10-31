@@ -15,17 +15,6 @@ import * as url from 'url';
 import { BuilderBase } from './BuilderBase';
 import { CollatedTechDocsResult } from './TechDocsCollatorFactory';
 
-const applyArgsToFormat = (
-  format: string,
-  args: Record<string, string>,
-): string => {
-  let formatted = format;
-  for (const [key, value] of Object.entries(args)) {
-    formatted = formatted.replace(`:${key}`, value);
-  }
-  return formatted;
-}
-
 class TechDocsBuilder extends BuilderBase {
   private locationTemplate: string;
 
@@ -42,10 +31,13 @@ class TechDocsBuilder extends BuilderBase {
       namespace: entity.metadata.namespace || 'default',
       name: entity.metadata.name,
     };
-    const location = applyArgsToFormat(this.locationTemplate, {
+    let location = this.locationTemplate;
+    for (const [key, value] of Object.entries({
       ...entityInfo,
       path: doc.location,
-    });
+    })) {
+      location = location.replace(`:${key}`, value);
+    }
     let refs = {};
     const ownerTargetRef = entity.relations
       ?.find(r => r.type === RELATION_OWNED_BY)
