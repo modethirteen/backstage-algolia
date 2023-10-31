@@ -1,23 +1,18 @@
-import { errorHandler } from '@backstage/backend-common';
+import {
+  errorHandler,
+} from '@backstage/backend-common';
 import express from 'express';
 import Router from 'express-promise-router';
-import { Logger } from 'winston';
 
 export interface RouterOptions {
-  logger: Logger;
 }
 
-export async function createRouter(
-  options: RouterOptions,
-): Promise<express.Router> {
-  const { logger } = options;
-
+export async function createRouter({}: RouterOptions): Promise<express.Router> {
   const router = Router();
-  router.use(express.json());
 
-  router.get('/health', (_, response) => {
-    logger.info('PONG!');
-    response.json({ status: 'ok' });
+  // stub the indexer endpoint for later implementation
+  router.get('/', async (_, res) => {
+    res.json({});
   });
   router.use(errorHandler());
   return router;

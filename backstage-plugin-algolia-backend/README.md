@@ -1,14 +1,12 @@
-# algolia
+# Algolia for Backstage (Backend)
 
-Welcome to the algolia backend plugin!
+A collection of document collators, object builders, and an indexer to fetch, prepare, and send objects to an Algolia search index.
 
-_This plugin was created through the Backstage CLI_
+## Credits
 
-## Getting started
+The pipeline approach to the collating, building, and indexing stages of the process was inspired by, and sometimes copied from, the core Backstage Search plugins:
 
-Your plugin has been added to the example app in this repository, meaning you'll be able to access it by running `yarn
-start` in the root directory, and then navigating to [/algolia](http://localhost:3000/algolia).
+- [@backstage/plugin-search-backend-node](https://github.com/backstage/backstage/tree/master/plugins/search-backend-node)
+- [@backstage/plugin-search-backend-module-techdocs](https://github.com/backstage/backstage/tree/master/plugins/search-backend-module-techdocs)
 
-You can also serve the plugin in isolation by running `yarn start` in the plugin directory.
-This method of serving the plugin provides quicker iteration speed and a faster startup and hot reloads.
-It is only meant for local development, and the setup for it can be found inside the [/dev](/dev) directory.
+Credit is due to the Backstage Search maintainers, in particular @iamEAP for the solution to search indexing back pressure through streams in [PR#9839](https://github.com/backstage/backstage/pull/9839).

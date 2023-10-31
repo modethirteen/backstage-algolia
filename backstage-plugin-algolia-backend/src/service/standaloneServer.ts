@@ -14,17 +14,14 @@ export async function startStandaloneServer(
 ): Promise<Server> {
   const logger = options.logger.child({ service: 'algolia-backend' });
   logger.debug('Starting application server...');
-  const router = await createRouter({
-    logger,
-  });
-
+  const router = await createRouter({});
   let service = createServiceBuilder(module)
     .setPort(options.port)
-    .addRouter('/algolia', router);
+    .addRouter('/api/algolia', router);
   if (options.enableCors) {
+    logger.info('CORS is enabled, limiting to localhost with port 3000');
     service = service.enableCors({ origin: 'http://localhost:3000' });
   }
-
   return await service.start().catch(err => {
     logger.error(err);
     process.exit(1);
