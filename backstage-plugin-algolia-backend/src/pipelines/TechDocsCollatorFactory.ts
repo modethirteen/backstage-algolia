@@ -8,9 +8,9 @@ import { PluginEndpointDiscovery, TokenManager } from '@backstage/backend-common
 import { Config } from '@backstage/config';
 import { Logger } from 'winston';
 import {
-  CollatedTechDocsResult,
+  CollatorResult,
   CollatorFactory,
-  MkSearchIndexDoc,
+  IndexableDocument,
 } from './types';
 import { Readable } from 'stream';
 import pLimit from 'p-limit';
@@ -51,7 +51,7 @@ export class TechDocsCollatorFactory implements CollatorFactory {
     return Readable.from(this.execute());
   }
 
-  private async *execute(): AsyncGenerator<CollatedTechDocsResult, void, undefined> {
+  private async *execute(): AsyncGenerator<CollatorResult, void, undefined> {
     const limit = pLimit(this.parallelismLimit);
     const techDocsBaseUrl = await this.discovery.getBaseUrl('techdocs');
     const { token } = await this.tokenManager.getToken();
@@ -78,7 +78,7 @@ export class TechDocsCollatorFactory implements CollatorFactory {
         // only entities with techdocs refs were fetched, but they may be null values
         .filter(entity => entity.metadata.annotations?.['backstage.io/techdocs-ref'])
         .map((entity: Entity) =>
-          limit(async(): Promise<CollatedTechDocsResult[]> => {
+          limit(async(): Promise<CollatorResult[]> => {
             const entityInfo = {
               kind: entity.kind,
               namespace: entity.metadata.namespace || 'default',
@@ -91,9 +91,9 @@ export class TechDocsCollatorFactory implements CollatorFactory {
                   Authorization: `Bearer ${token}`,
                 },
               });
-              const searchIndex = await response.json() as { docs: MkSearchIndexDoc[] };
+              const searchIndex = await response.json() as { docs: IndexableDocument[] };
               this.logger.debug(`Retrieved ${searchIndex.docs.length} mkdocs search index items for entity ${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}`);
-              return searchIndex.docs.map(doc => ({ entity, doc }));
+              return searchIndex.docs.map(doc => ({ entity, doc, source: 'mkdocs' }));
             } catch (e) {
               this.logger.warn(
                 `Failed to retrieve mkdocs search index for entity ${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}`,

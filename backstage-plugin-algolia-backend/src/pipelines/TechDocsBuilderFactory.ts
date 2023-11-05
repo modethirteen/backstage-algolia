@@ -6,7 +6,7 @@ import {
 } from '@backstage/catalog-model';
 import {
   BuilderFactory,
-  CollatedTechDocsResult,
+  CollatorResult,
   IndexObject,
 } from './types';
 import { unescape } from 'lodash';
@@ -26,7 +26,7 @@ class TechDocsBuilder extends BuilderBase {
   }
 
   public async build(item: any): Promise<IndexObject | IndexObject[] | undefined> {
-    const { entity, doc } = item as CollatedTechDocsResult;
+    const { entity, doc, source } = item as CollatorResult;
     const entityInfo = {
       kind: entity.kind,
       namespace: entity.metadata.namespace || 'default',
@@ -77,7 +77,7 @@ class TechDocsBuilder extends BuilderBase {
     hash.update(stringifyEntityRef(entityInfo) + doc.location);
     return {
       objectID: hash.digest('hex'),
-      source: 'techdocs',
+      source,
       title: unescape(doc.title),
       text: unescape(doc.text ?? ''),
       location,

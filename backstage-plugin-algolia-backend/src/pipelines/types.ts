@@ -35,12 +35,13 @@ export interface IndexObject {
   };
 }
 
-export interface CollatedTechDocsResult {
+export interface CollatorResult {
   entity: Entity;
-  doc: MkSearchIndexDoc;
+  doc: IndexableDocument;
+  source: string;
 }
 
-export interface MkSearchIndexDoc {
+export interface IndexableDocument {
   title: string;
   text: string;
   location: string;

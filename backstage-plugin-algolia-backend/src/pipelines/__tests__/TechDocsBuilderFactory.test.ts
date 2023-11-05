@@ -1,7 +1,10 @@
 import { Readable } from 'stream';
-import { CollatorFactory, IndexObject } from '../types';
+import {
+  CollatorFactory,
+  CollatorResult,
+  IndexObject,
+} from '../types';
 import { testPipeline } from './util';
-import { CollatedTechDocsResult } from '../TechDocsCollatorFactory';
 import {
   entities as mockEntities,
   search as mockSearchDocIndex,
@@ -11,9 +14,9 @@ import { TechDocsBuilderFactory } from '../TechDocsBuilderFactory';
 import { ConfigReader } from '@backstage/config';
 
 class TestCollatorFactory implements CollatorFactory {
-  private results: CollatedTechDocsResult[];
+  private results: CollatorResult[];
 
-  constructor(options: { results: CollatedTechDocsResult[] }) {
+  constructor(options: { results: CollatorResult[] }) {
     const { results } = options;
     this.results = results;
   }
@@ -33,8 +36,8 @@ describe('TechDocsBuilderFactory', () => {
   it('can build an index object from entity and mkdocs search index items', async () => {
     const results = mockEntities
       .filter(entity => entity.metadata.annotations?.['backstage.io/techdocs-ref'])
-      .map(entity => mockSearchDocIndex.docs.map(doc => ({ entity, doc })))
-      .flat() as CollatedTechDocsResult[];
+      .map(entity => mockSearchDocIndex.docs.map(doc => ({ entity, doc, source: 'mkdocs' })))
+      .flat() as CollatorResult[];
     const collatorFactory = new TestCollatorFactory({ results });
     const builderFactories = [TechDocsBuilderFactory.fromConfig(config)];
     const objects = await testPipeline({ collatorFactory, builderFactories }) as IndexObject[];

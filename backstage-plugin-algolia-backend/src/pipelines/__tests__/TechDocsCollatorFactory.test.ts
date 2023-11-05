@@ -1,4 +1,4 @@
-import { CollatedTechDocsResult, TechDocsCollatorFactory } from '../TechDocsCollatorFactory';
+import { TechDocsCollatorFactory } from '../TechDocsCollatorFactory';
 import {
   PluginEndpointDiscovery,
   getVoidLogger,
@@ -13,6 +13,7 @@ import {
   search as mockSearchDocIndex,
 } from './mocks.json';
 import { testPipeline } from './util';
+import { CollatorResult } from '../types';
 
 describe('TechDocsCollatorFactory', () => {
   const worker = setupServer();
@@ -70,13 +71,13 @@ describe('TechDocsCollatorFactory', () => {
   });
 
   it('fetches from the configured catalog and techdocs services', async () => {
-    const results = await testPipeline({ collatorFactory: factory }) as CollatedTechDocsResult[];
+    const results = await testPipeline({ collatorFactory: factory }) as CollatorResult[];
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('techdocs');
     expect(results).toHaveLength(18);
     const expected = mockEntities
       .filter(entity => entity.metadata.annotations?.['backstage.io/techdocs-ref'])
-      .map(entity => mockSearchDocIndex.docs.map(doc => ({ entity, doc })))
+      .map(entity => mockSearchDocIndex.docs.map(doc => ({ entity, doc, source: 'mkdocs' })))
       .flat();
     expect(results).toEqual(expect.arrayContaining(expected));
   });
