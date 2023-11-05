@@ -5,7 +5,9 @@ import {
   stringifyEntityRef,
 } from '@backstage/catalog-model';
 import {
-  BuilderFactory, IndexObject,
+  BuilderFactory,
+  CollatedTechDocsResult,
+  IndexObject,
 } from './types';
 import { unescape } from 'lodash';
 import { compare } from '../util';
@@ -13,7 +15,6 @@ import { Config } from '@backstage/config';
 import crypto from 'crypto';
 import * as url from 'url';
 import { BuilderBase } from './BuilderBase';
-import { CollatedTechDocsResult } from './TechDocsCollatorFactory';
 
 class TechDocsBuilder extends BuilderBase {
   private locationTemplate: string;

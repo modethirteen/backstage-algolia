@@ -7,20 +7,13 @@ import { Entity } from '@backstage/catalog-model';
 import { PluginEndpointDiscovery, TokenManager } from '@backstage/backend-common';
 import { Config } from '@backstage/config';
 import { Logger } from 'winston';
-import { CollatorFactory } from './types';
+import {
+  CollatedTechDocsResult,
+  CollatorFactory,
+  MkSearchIndexDoc,
+} from './types';
 import { Readable } from 'stream';
 import pLimit from 'p-limit';
-
-export interface CollatedTechDocsResult {
-  entity: Entity;
-  doc: MkSearchIndexDoc;
-}
-
-export interface MkSearchIndexDoc {
-  title: string;
-  text: string;
-  location: string;
-}
 
 export interface TechDocsCollatorFactoryOptions {
   catalogClient?: CatalogApi;

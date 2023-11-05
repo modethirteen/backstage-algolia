@@ -1,4 +1,4 @@
-import { CompoundEntityRef } from '@backstage/catalog-model';
+import { CompoundEntityRef, Entity } from '@backstage/catalog-model';
 import { Readable } from 'stream';
 import { BuilderBase } from './BuilderBase';
 
@@ -33,4 +33,15 @@ export interface IndexObject {
     system?: string;
     systemRef?: CompoundEntityRef;
   };
+}
+
+export interface CollatedTechDocsResult {
+  entity: Entity;
+  doc: MkSearchIndexDoc;
+}
+
+export interface MkSearchIndexDoc {
+  title: string;
+  text: string;
+  location: string;
 }
