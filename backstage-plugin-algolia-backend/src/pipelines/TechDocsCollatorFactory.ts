@@ -25,7 +25,6 @@ export interface MkSearchIndexDoc {
 export interface TechDocsCollatorFactoryOptions {
   catalogClient?: CatalogApi;
   discovery: PluginEndpointDiscovery;
-  generateSummaries?: boolean;
   logger: Logger;
   tokenManager: TokenManager;
 }
