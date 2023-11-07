@@ -81,6 +81,7 @@ class TechDocsBuilder extends BuilderBase {
       title: unescape(doc.title),
       text: unescape(doc.text ?? ''),
       location,
+      path: doc.location,
       entity: {
         ...entityInfo,
         title: entity.metadata.title ?? undefined,
