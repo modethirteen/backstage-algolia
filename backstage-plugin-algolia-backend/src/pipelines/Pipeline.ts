@@ -16,7 +16,7 @@ export class Pipeline {
   private readonly indexer: Indexer;
   private readonly logger: Logger;
 
-  constructor(options: PipelineOptions) {
+  public constructor(options: PipelineOptions) {
     const { builderFactories, collatorFactory, indexer, logger } = options;
     this.builderFactories = builderFactories;
     this.collatorFactory = collatorFactory;

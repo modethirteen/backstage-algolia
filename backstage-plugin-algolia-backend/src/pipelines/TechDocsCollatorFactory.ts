@@ -37,7 +37,7 @@ export class TechDocsCollatorFactory implements CollatorFactory {
   private readonly parallelismLimit: number;
   private readonly tokenManager: TokenManager;
 
-  private constructor(options: TechDocsCollatorFactoryOptions & {
+  public constructor(options: TechDocsCollatorFactoryOptions & {
     parallelismLimit?: number;
   }) {
     this.catalogClient = options.catalogClient ?? new CatalogClient({ discoveryApi: options.discovery });
