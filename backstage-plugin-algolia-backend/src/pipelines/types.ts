@@ -17,6 +17,7 @@ export interface IndexObject {
   text: string;
   summary?: string;
   location: string;
+  path: string;
   entity: {
     kind: string;
     namespace: string;
