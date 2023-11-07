@@ -17,9 +17,9 @@ import * as url from 'url';
 import { BuilderBase } from './BuilderBase';
 
 class TechDocsBuilder extends BuilderBase {
-  private locationTemplate: string;
+  private readonly locationTemplate: string;
 
-  constructor(options: { locationTemplate: string; }) {
+  public constructor(options: { locationTemplate: string; }) {
     super({ objectMode: true });
     const { locationTemplate } = options;
     this.locationTemplate = locationTemplate;
@@ -92,7 +92,7 @@ class TechDocsBuilder extends BuilderBase {
     };
   }
 
-  public finalize(): Promise<void> {
+  public async finalize(): Promise<void> {
     return Promise.resolve();
   }
 }
@@ -105,9 +105,9 @@ export class TechDocsBuilderFactory implements BuilderFactory {
     return new TechDocsBuilderFactory({ locationTemplate });
   }
 
-  private locationTemplate: string;
+  private readonly locationTemplate: string;
 
-  constructor(options: { locationTemplate: string; }) {
+  public constructor(options: { locationTemplate: string; }) {
     const { locationTemplate } = options;
     this.locationTemplate = locationTemplate;
   }
