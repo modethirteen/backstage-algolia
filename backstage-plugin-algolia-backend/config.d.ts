@@ -1,5 +1,9 @@
 export interface Config {
   algolia: {
+
+    /**
+     * @visibility secret
+     */
     apikey: string;
     applicationId: string;
     indexes: {
