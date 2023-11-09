@@ -50,19 +50,22 @@ export class Indexer extends Writable {
 
   public async index(objects: IndexObject[]): Promise<void> {
     this.logger.debug(`Preparing to send ${objects.length} objects to Algolia`);
-    await this.searchIndex.saveObjects(
-      objects.map(o => {
-        const length = Buffer.from(JSON.stringify(o), 'utf-8').length;
-        if (length <= this.maxObjectSizeBytes) {
-          return {
-            ...o,
-            timestamp: this.now.toISOString(),
-          };
-        }
-        this.logger.debug(`Object ${o.objectID} with location ${o.location} is ${length} bytes and larger than the maximum allowed length of ${this.maxObjectSizeBytes} bytes`);
-        return undefined;
-      }).filter(o => o) as IndexObject[]
-    );
+    const filteredObjects = objects.map(o => {
+      const { location, objectID: id } = o;
+      const object = {
+        ...o,
+        timestamp: this.now.toISOString(),
+      };
+      const length = Buffer.from(JSON.stringify(object), 'utf-8').length;
+      if (length <= this.maxObjectSizeBytes) {
+        return object;
+      }
+      this.logger.debug(`Object ${id} with location ${location} is ${length} bytes and larger than the maximum allowed length of ${this.maxObjectSizeBytes} bytes`);
+      return undefined;
+    }).filter(o => o) as IndexObject[];
+    if (filteredObjects.length) {
+      await this.searchIndex.saveObjects(filteredObjects);
+    }
   }
 
   /**

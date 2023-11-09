@@ -25,4 +25,29 @@ describe('Indexer', () => {
     expect(timestamps.length).toEqual(18);
     timestamps.map(t => expect(t).toEqual('2023-11-09T01:25:23.000Z'));
   });
+
+  it('can ignore object that is too large', async () => {
+    const object = {
+      objectID: 'foo',
+      source: 'bar',
+      title: 'plugh',
+      location: 'xyzzy',
+      path: 'fred',
+      text: 'genau',
+      entity: {
+        kind: 'component',
+        namespace: 'default',
+        name: 'foobar',
+      },
+    };
+    const indexer = new Indexer({
+      batchSize: 10,
+      logger: getVoidLogger(),
+      maxObjectSizeBytes: JSON.stringify(object).length,
+      now: new Date('2023-11-09T01:25:23+0000'),
+      searchIndex: { saveObjects } as unknown as SearchIndex,
+    });
+    await indexer.index([]);
+    expect(saveObjects).not.toHaveBeenCalled();
+  })
 });
