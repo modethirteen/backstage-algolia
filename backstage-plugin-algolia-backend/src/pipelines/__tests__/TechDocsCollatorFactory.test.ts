@@ -39,6 +39,7 @@ describe('TechDocsCollatorFactory', () => {
   let factory: TechDocsCollatorFactory;
 
   beforeEach(async () => {
+    jest.clearAllMocks();
     factory = TechDocsCollatorFactory.fromConfig(config, options);
     worker.use(
       ...mockEntities

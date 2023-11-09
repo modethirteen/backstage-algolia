@@ -27,6 +27,9 @@ class TestCollatorFactory implements CollatorFactory {
 }
 
 describe('TechDocsBuilderFactory', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   const config = new ConfigReader({
     app: {
       baseUrl: 'https://dev.example.com',
