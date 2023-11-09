@@ -1,9 +1,10 @@
 import { assertError } from '@backstage/errors';
 import { Writable } from 'stream';
 import { Config } from '@backstage/config';
-import algoliasearch, { SearchIndex } from 'algoliasearch';
+import { SearchIndex } from 'algoliasearch';
 import { IndexObject } from './types';
 import { Logger } from 'winston';
+import { ClientFactory } from './ClientFactory';
 
 export interface IndexerOptions {
   batchSize: number;
@@ -14,13 +15,13 @@ export interface IndexerOptions {
 export class Indexer extends Writable {
   public static fromConfig(config: Config, options: IndexerOptions) {
     const { batchSize, index, logger } = options;
+    const client = ClientFactory.fromConfig(config).newClient();
     return new Indexer({
-      apikey: config.getString('algolia.apikey'),
-      applicationId: config.getString('algolia.applicationId'),
       batchSize,
-      index: config.getString(`algolia.indexes.${index}.name`),
       logger,
       maxObjectSizeBytes: config.getNumber('algolia.maxObjectSizeBytes'),
+      now: new Date(),
+      searchIndex: client.initIndex(config.getString(`algolia.indexes.${index}.name`)),
     });
   }
 
@@ -28,23 +29,23 @@ export class Indexer extends Writable {
   private currentBatch: IndexObject[] = [];
   private readonly logger: Logger;
   private readonly maxObjectSizeBytes: number;
+  private readonly now: Date;
   private readonly searchIndex: SearchIndex;
 
-  private constructor(options: {
-    apikey: string;
-    applicationId: string;
+  public constructor(options: {
     batchSize: number;
-    index: string;
     logger: Logger;
     maxObjectSizeBytes: number;
+    now: Date;
+    searchIndex: SearchIndex;
   }) {
     super({ objectMode: true });
-    const { apikey, applicationId, batchSize, index, logger, maxObjectSizeBytes } = options;
+    const { batchSize, logger, maxObjectSizeBytes, now, searchIndex } = options;
     this.batchSize = batchSize;
     this.logger = logger;
     this.maxObjectSizeBytes = maxObjectSizeBytes;
-    const client = algoliasearch(applicationId, apikey);
-    this.searchIndex = client.initIndex(index);
+    this.now = now;
+    this.searchIndex = searchIndex;
   }
 
   public async index(objects: IndexObject[]): Promise<void> {
@@ -53,7 +54,10 @@ export class Indexer extends Writable {
       objects.map(o => {
         const length = Buffer.from(JSON.stringify(o), 'utf-8').length;
         if (length <= this.maxObjectSizeBytes) {
-          return o;
+          return {
+            ...o,
+            timestamp: this.now.toISOString(),
+          };
         }
         this.logger.debug(`Object ${o.objectID} with location ${o.location} is ${length} bytes and larger than the maximum allowed length of ${this.maxObjectSizeBytes} bytes`);
         return undefined;
