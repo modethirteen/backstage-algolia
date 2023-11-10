@@ -19,7 +19,9 @@ describe('IndexManager', () => {
   it('can be constructed from ISO8601 duration values', () => {
     const config = new ConfigReader({
       algolia: {
-        apikey: 'plugh',
+        apikeys: {
+          admin: 'plugh',
+        },
         applicationId: 'fred',
         indexes: {
           techdocs: {
