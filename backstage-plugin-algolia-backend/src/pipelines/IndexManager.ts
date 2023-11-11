@@ -4,6 +4,7 @@ import { Config } from '@backstage/config';
 import { differenceInSeconds, isValid } from 'date-fns';
 import { Logger } from 'winston';
 import { parse, toSeconds } from 'iso8601-duration';
+import { IndexObjectWithIdAndTimestamp } from './types';
 
 interface Expiration {
   source: string;
@@ -63,7 +64,7 @@ export class IndexManager implements IndexManager {
         ],
         batch: batch => {
           const expiredObjectIDs = batch.filter(o => {
-            const { objectID, timestamp } = o as { objectID: string; timestamp: string; };
+            const { objectID, timestamp } = o as IndexObjectWithIdAndTimestamp;
             const indexDate = new Date(timestamp);
             if (!isValid(indexDate)) {
               this.logger.warn(`Algolia object ${objectID} does not have a valid indexing timestamp and cannot be expired or cleaned`);

@@ -2,18 +2,16 @@ import {
   RELATION_OWNED_BY,
   RELATION_PART_OF,
   parseEntityRef,
-  stringifyEntityRef,
 } from '@backstage/catalog-model';
 import {
   BuilderFactory,
   CollatorResult,
   IndexObject,
 } from './types';
+import * as url from 'url';
 import { unescape } from 'lodash';
 import { compare } from '../util';
 import { Config } from '@backstage/config';
-import crypto from 'crypto';
-import * as url from 'url';
 import { BuilderBase } from './BuilderBase';
 
 class TechDocsBuilder extends BuilderBase {
@@ -73,10 +71,7 @@ class TechDocsBuilder extends BuilderBase {
         systemRef: parsedSystemRef,
       };
     }
-    const hash = crypto.createHash('sha256');
-    hash.update(stringifyEntityRef(entityInfo) + doc.location);
     return {
-      objectID: hash.digest('hex'),
       source,
       title: unescape(doc.title),
       text: unescape(doc.text ?? ''),

@@ -28,17 +28,21 @@ export class Pipeline {
     const builders = await Promise.all(this.builderFactories.map(b => b.newBuilder()));
     const collator = await this.collatorFactory.newCollator();
     return new Promise<void>((resolve, reject) => {
-      pipeline(
-        [collator, ...builders, this.indexer], (error: NodeJS.ErrnoException | null) => {
-          if (error) {
-            this.logger.error(`Collating, building, and indexing documents for Algolia failed: ${error.message}`, error);
-            reject(error);
-          } else {
-            this.logger.info(`Collating, building, and indexing documents for Algolia succeeded`);
-            resolve();
-          }
-        },
-      );
+      try {
+        pipeline(
+          [collator, ...builders, this.indexer], (error: NodeJS.ErrnoException | null) => {
+            if (error) {
+              this.logger.error(`Collating, building, and indexing documents for Algolia failed: ${error.message}`, error);
+              reject(error);
+            } else {
+              this.logger.info(`Collating, building, and indexing documents for Algolia succeeded`);
+              resolve();
+            }
+          },
+        );
+      } catch(e) {
+        reject(e);
+      }
     });
   }
 }

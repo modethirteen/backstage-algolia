@@ -45,12 +45,12 @@ export async function createRouter(
     res
       .status(results.some(r => r.status === 'error') ? 207 : 200)
       .json({
-      pipelines: results.map(({ id, error, status, }) => ({
-        id,
-        status,
-        message: error?.message,
-      })),
-    });
+        pipelines: results.map(({ id, error, status, }) => ({
+          id,
+          status,
+          message: error?.message,
+        })),
+      });
   });
   router.use(errorHandler());
   return router;
