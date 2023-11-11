@@ -1,9 +1,10 @@
-import { createServiceBuilder, loadBackendConfig } from '@backstage/backend-common';
+import { createServiceBuilder } from '@backstage/backend-common';
 import { Server } from 'http';
 import { Logger } from 'winston';
 import { createRouter } from './router';
 import { PipelineTrigger } from '../pipelines';
 import { TaskScheduler } from '@backstage/backend-tasks';
+import { ConfigReader } from '@backstage/config';
 
 export interface ServerOptions {
   port: number;
@@ -16,11 +17,20 @@ export async function startStandaloneServer(
 ): Promise<Server> {
   const logger = options.logger.child({ service: 'algolia-backend' });
   logger.debug('Starting application server...');
-  const config = await loadBackendConfig({ logger, argv: process.argv });
+  const config = new ConfigReader({
+    backend: {
+      database: {
+        client: 'better-sqlite3',
+        connection: ':memory:',
+      },
+    },
+  });
   const router = await createRouter({
-    logger,
     trigger: new PipelineTrigger({
-      taskScheduler: TaskScheduler.fromConfig(config).forPlugin('algolia-backend'),
+      logger,
+      taskScheduler: TaskScheduler
+        .fromConfig(config)
+        .forPlugin('algolia-backend'),
     }),
   });
   let service = createServiceBuilder(module)
