@@ -22,5 +22,6 @@ export interface Config {
       };
     };
     maxObjectSizeBytes: number;
+    chunk: boolean;
   };
 }

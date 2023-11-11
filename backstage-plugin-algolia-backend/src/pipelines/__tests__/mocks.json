@@ -362,7 +362,6 @@
   },
   "objects": [
     {
-      "objectID": "efa68b94a91427a88044d50eadeaa6d3c4e23166827994d5a9bb1d8b322c7ac0",
       "source": "mkdocs",
       "title": "Home",
       "text": "foo bar baz",
@@ -390,7 +389,6 @@
       }
     },
     {
-      "objectID": "c4d3b4f03ffc541c07ea6bc4973d39ebc83c8a13d28e1f0a0d0acdcb61f085be",
       "source": "mkdocs",
       "title": "Front-end Development",
       "text": "fred bazz qux",
@@ -418,7 +416,6 @@
       }
     },
     {
-      "objectID": "5d4868b8ac4f2829669568722ac0cdc23cfeb9ae436b9f678c1fed1b1138e969",
       "source": "mkdocs",
       "title": "React",
       "text": "bazz dita fox",
@@ -446,7 +443,6 @@
       }
     },
     {
-      "objectID": "e038c7b7e202b339fa32f1d02de961a59852c337c308f3e1348c98ef203080c8",
       "source": "mkdocs",
       "title": "Home",
       "text": "foo bar baz",
@@ -474,7 +470,6 @@
       }
     },
     {
-      "objectID": "6df290953cf7ae3ee5323659550284b6f237033fa79b4abd5d2f1ad9fe7f6560",
       "source": "mkdocs",
       "title": "Front-end Development",
       "text": "fred bazz qux",
@@ -502,7 +497,6 @@
       }
     },
     {
-      "objectID": "a491999c7e3523d75325eb43727a30da7d33c472c8145efa3a1723712f38e8ce",
       "source": "mkdocs",
       "title": "React",
       "text": "bazz dita fox",
@@ -530,7 +524,6 @@
       }
     },
     {
-      "objectID": "f0a8c082aeeb9d4f3a6706c130b029c1e620cab15f9d49bfaeb943f9ded4f0d1",
       "source": "mkdocs",
       "title": "Home",
       "text": "foo bar baz",
@@ -558,7 +551,6 @@
       }
     },
     {
-      "objectID": "44d81f292df7c9334d798aa8f9ecc8fce993d54fdb5932c72d803a873546e6de",
       "source": "mkdocs",
       "title": "Front-end Development",
       "text": "fred bazz qux",
@@ -586,7 +578,6 @@
       }
     },
     {
-      "objectID": "afaa3c4609bdc8b043731e04c976c0a43f3e05e02af06af7ef2250d851b0b9b2",
       "source": "mkdocs",
       "title": "React",
       "text": "bazz dita fox",
@@ -614,7 +605,6 @@
       }
     },
     {
-      "objectID": "b05c5657bc64d9c1b6827abc2c3d963a1f5e358cc8290c1aeaebd23873ea83c1",
       "source": "mkdocs",
       "title": "Home",
       "text": "foo bar baz",
@@ -642,7 +632,6 @@
       }
     },
     {
-      "objectID": "2601fc364e368db0e80bb6e57b88355777e025de317a8e6e80f65ef48c12b8ff",
       "source": "mkdocs",
       "title": "Front-end Development",
       "text": "fred bazz qux",
@@ -670,7 +659,6 @@
       }
     },
     {
-      "objectID": "482484641d578fe60fa99efb70aa7564a29d6ee0774fc86d742be143981cb590",
       "source": "mkdocs",
       "title": "React",
       "text": "bazz dita fox",
@@ -698,7 +686,6 @@
       }
     },
     {
-      "objectID": "6f2418e46cc2b7ba50300cf9be1ee2198b2475248ffc6bb99c211e74294454e8",
       "source": "mkdocs",
       "title": "Home",
       "text": "foo bar baz",
@@ -726,7 +713,6 @@
       }
     },
     {
-      "objectID": "e8ddc07642fdf6b72c7fedb857e27996a4a6d1c34f33fe0569e9509b195f83fb",
       "source": "mkdocs",
       "title": "Front-end Development",
       "text": "fred bazz qux",
@@ -754,7 +740,6 @@
       }
     },
     {
-      "objectID": "884a776bc56f8d175358d9720d9df8a641a2e59f9454538c877d9b9130c08ab6",
       "source": "mkdocs",
       "title": "React",
       "text": "bazz dita fox",
@@ -782,7 +767,6 @@
       }
     },
     {
-      "objectID": "35cb8bf3d6e692a681ddb845841ec7066d884ba816f564177d4a065da1089092",
       "source": "mkdocs",
       "title": "Home",
       "text": "foo bar baz",
@@ -810,7 +794,6 @@
       }
     },
     {
-      "objectID": "2ec1df7e18b4e90e3128e3c66f76dede2665880027190cef8837018b16539f3e",
       "source": "mkdocs",
       "title": "Front-end Development",
       "text": "fred bazz qux",
@@ -838,7 +821,6 @@
       }
     },
     {
-      "objectID": "d404dbff580bfe25c5c9195aed0d5c1e3c3e8f41de790dd7ba83cd695400f192",
       "source": "mkdocs",
       "title": "React",
       "text": "bazz dita fox",

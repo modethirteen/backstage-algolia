@@ -51,14 +51,22 @@ export class PipelineTrigger implements PipelineTriggerInterface {
     this.taskScheduler.scheduleTask({
       id: `algolia-pipeline:${id}`,
       ...schedule,
-      fn: () => {
+      fn: async () => {
         const pipeline = new Pipeline({
-          logger: this.logger,
           collatorFactory,
           builderFactories,
           indexer,
         });
-        pipeline.execute();
+        try {
+          await pipeline.execute();
+          this.logger.info(`Collating, building, and indexing documents for Algolia succeeded`);
+        } catch(e) {
+          if (isError(e)) {
+            this.logger.error(`Collating, building, and indexing documents for Algolia failed: ${e.message}`);
+            return;
+          }
+          throw e;
+        }
       },
     });
   }

@@ -11,14 +11,13 @@ export interface CollatorFactory {
 }
 
 export interface IndexObject {
-  objectID: string;
   source: string;
   title: string;
   text: string;
-  summary?: string;
   location: string;
   path: string;
-  entity: {
+  summary?: string;
+  entity?: {
     kind: string;
     namespace: string;
     name: string;
@@ -34,6 +33,11 @@ export interface IndexObject {
     system?: string;
     systemRef?: CompoundEntityRef;
   };
+}
+
+export interface IndexObjectWithIdAndTimestamp extends IndexObject {
+  objectID: string;
+  timestamp: string;
 }
 
 export interface CollatorResult {
