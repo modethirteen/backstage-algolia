@@ -4,7 +4,7 @@ import { Config } from '@backstage/config';
 import { SearchIndex } from 'algoliasearch';
 import { IndexObject } from './types';
 import { Logger } from 'winston';
-import { ClientFactory } from './ClientFactory';
+import { ClientFactory } from '../api/ClientFactory';
 
 export interface IndexerOptions {
   batchSize: number;

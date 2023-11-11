@@ -1,5 +1,5 @@
 import { SearchIndex } from 'algoliasearch';
-import { ClientFactory } from './ClientFactory';
+import { ClientFactory } from '../api/ClientFactory';
 import { Config } from '@backstage/config';
 import { differenceInSeconds, isValid } from 'date-fns';
 import { Logger } from 'winston';
