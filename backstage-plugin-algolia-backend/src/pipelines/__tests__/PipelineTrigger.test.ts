@@ -23,19 +23,15 @@ describe('PipelineTrigger', () => {
   });
 
   it('can register pipeline', async () => {
-    trigger.addScheduledPipeline(
-      'xyzzy',
-      {
-        collatorFactory: {} as CollatorFactory,
-        builderFactories: [],
-        indexer: {} as Indexer,
-      },
-      {
-        frequency: { minutes: 60 },
-        timeout: { minutes: 5 },
-        initialDelay: { seconds: 30 },
-      },
-    );
+    trigger.addScheduledPipeline({
+      id: 'xyzzy',
+      collatorFactory: {} as CollatorFactory,
+      builderFactories: [],
+      indexer: {} as Indexer,
+      frequency: { minutes: 60 },
+      timeout: { minutes: 5 },
+      initialDelay: { seconds: 30 },
+    });
     expect(scheduleTask).toHaveBeenCalled();
   });
 

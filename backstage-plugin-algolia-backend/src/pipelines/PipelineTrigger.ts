@@ -38,19 +38,16 @@ export class PipelineTrigger implements PipelineTriggerInterface {
     this.taskScheduler = taskScheduler;
   }
 
-  public addScheduledPipeline(
-    id: string,
-    pipeline: {
-      collatorFactory: CollatorFactory;
-      builderFactories: BuilderFactory[];
-      indexer: Indexer;
-    },
-    schedule: TaskScheduleDefinition,
-  ) {
-    const { collatorFactory, builderFactories, indexer } = pipeline;
+  public addScheduledPipeline(options: {
+    id: string;
+    collatorFactory: CollatorFactory;
+    builderFactories: BuilderFactory[];
+    indexer: Indexer;
+  } & TaskScheduleDefinition) {
+    const { id, collatorFactory, builderFactories, indexer } = options;
     this.taskScheduler.scheduleTask({
+      ...options,
       id: `algolia-pipeline:${id}`,
-      ...schedule,
       fn: async () => {
         const pipeline = new Pipeline({
           collatorFactory,

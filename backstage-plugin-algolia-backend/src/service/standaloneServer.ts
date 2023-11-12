@@ -67,7 +67,8 @@ export async function startStandaloneServer(
       .fromConfig(config)
       .forPlugin('algolia-backend'),
   });
-  trigger.addScheduledPipeline('development', {
+  trigger.addScheduledPipeline({
+    id: 'development',
     collatorFactory: TechDocsCollatorFactory.fromConfig(config, {
       discovery,
       logger,
@@ -81,7 +82,6 @@ export async function startStandaloneServer(
       index: 'techdocs',
       logger,
     }),
-  }, {
     frequency: { minutes: 15 },
     timeout: { minutes: 5 },
   });
