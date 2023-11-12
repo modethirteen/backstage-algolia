@@ -1,5 +1,5 @@
 import { PluginTaskScheduler, TaskScheduleDefinition } from '@backstage/backend-tasks';
-import { isError } from '@backstage/errors';
+import { assertError } from '@backstage/errors';
 import { BuilderFactory, CollatorFactory } from './types';
 import { Indexer } from './Indexer';
 import { Pipeline } from './Pipeline';
@@ -58,11 +58,9 @@ export class PipelineTrigger implements PipelineTriggerInterface {
           await pipeline.execute();
           this.logger.info(`Collating, building, and indexing documents for Algolia succeeded`);
         } catch(e) {
-          if (isError(e)) {
-            this.logger.error(`Collating, building, and indexing documents for Algolia failed: ${e.message}`);
-            return;
-          }
-          throw e;
+          assertError(e);
+          this.logger.error('Collating, building, and indexing documents for Algolia failed:', e);
+          return;
         }
       },
     });
@@ -84,13 +82,12 @@ export class PipelineTrigger implements PipelineTriggerInterface {
         await this.taskScheduler.triggerTask(id);
         results.push({ id, status: 'ok' });
       } catch (e) {
-        if (isError(e)) {
-          results.push({
-            id,
-            error: new PipelineTriggerError(id, e.message),
-            status: 'error',
-          });
-        }
+        assertError(e);
+        results.push({
+          id,
+          error: new PipelineTriggerError(id, e.message),
+          status: 'error',
+        });
       }
     }
     return results;
