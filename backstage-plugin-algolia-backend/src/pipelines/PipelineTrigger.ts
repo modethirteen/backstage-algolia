@@ -87,7 +87,7 @@ export class PipelineTrigger implements PipelineTriggerInterface {
         if (isError(e)) {
           results.push({
             id,
-            error: new PipelineTriggerError(e.message, id),
+            error: new PipelineTriggerError(id, e.message),
             status: 'error',
           });
         }
