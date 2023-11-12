@@ -3,7 +3,7 @@ import { Transform } from 'stream';
 import { IndexObject } from './types';
 
 export abstract class BuilderBase extends Transform {
-  public abstract build(item: any): Promise<IndexObject | IndexObject[] | undefined>;
+  public abstract build(item: any): Promise<IndexObject | undefined>;
 
   public abstract finalize(): Promise<void>;
 

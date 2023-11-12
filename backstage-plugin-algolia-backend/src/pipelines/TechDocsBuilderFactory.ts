@@ -23,7 +23,7 @@ class TechDocsBuilder extends BuilderBase {
     this.locationTemplate = locationTemplate;
   }
 
-  public async build(item: any): Promise<IndexObject | IndexObject[] | undefined> {
+  public async build(item: any): Promise<IndexObject | undefined> {
     const { entity, doc, source } = item as CollatorResult;
     const entityInfo = {
       kind: entity.kind,

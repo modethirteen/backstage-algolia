@@ -2,6 +2,8 @@ import { getVoidLogger } from '@backstage/backend-common';
 import { Indexer } from '../Indexer';
 import { objects as mockObjects } from './mocks.json';
 import { SearchIndex } from 'algoliasearch';
+import { IndexObject } from '../types';
+import { Readable, pipeline } from 'stream';
 
 const words = [
   'apple',
@@ -26,6 +28,26 @@ const words = [
 
 const generateText = (wordCount: number) =>  Array.from({ length: wordCount }, (_, i) => words[i % words.length]).join(' ');
 
+const testPipeline = async (objects: (IndexObject | undefined)[], indexer: Indexer) => {
+  const items = [...objects];
+  const objectStream = new Readable({
+    objectMode: true,
+    read() {
+      const item = items.shift();
+      this.push(item ? item : null);
+    },
+  });
+  await new Promise<void>((resolve, reject) => {
+    pipeline(objectStream, indexer, (e) => {
+      if (e) {
+        reject(e);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
 const saveObjects = jest.fn();
 
 describe('Indexer', () => {
@@ -35,14 +57,14 @@ describe('Indexer', () => {
 
   it('can include timestamp in index objects', async () => {
     const indexer = new Indexer({
-      batchSize: 10,
+      batchSize: mockObjects.length,
       chunk: false,
       logger: getVoidLogger(),
       maxObjectSizeBytes: 5000,
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await indexer.index(mockObjects);
+    await testPipeline(mockObjects, indexer);
     expect(saveObjects).toHaveBeenCalled();
     const timestamps = Array.from(saveObjects.mock.calls[0][0])
       .map((o: any) => o.timestamp);
@@ -52,14 +74,14 @@ describe('Indexer', () => {
 
   it('can include object ids in index objects', async () => {
     const indexer = new Indexer({
-      batchSize: 10,
+      batchSize: mockObjects.length,
       chunk: false,
       logger: getVoidLogger(),
       maxObjectSizeBytes: 5000,
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await indexer.index(mockObjects);
+    await testPipeline(mockObjects, indexer);
     expect(saveObjects).toHaveBeenCalled();
     const ids = Array.from(saveObjects.mock.calls[0][0])
       .map((o: any) => o.objectID);
@@ -81,14 +103,14 @@ describe('Indexer', () => {
       },
     };
     const indexer = new Indexer({
-      batchSize: 10,
+      batchSize: 1,
       chunk: false,
       logger: getVoidLogger(),
       maxObjectSizeBytes: 50,
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await indexer.index([object]);
+    await testPipeline([object], indexer);
     expect(saveObjects).not.toHaveBeenCalled();
   });
 
@@ -117,14 +139,53 @@ describe('Indexer', () => {
       },
     }];
     const indexer = new Indexer({
-      batchSize: 10,
+      batchSize: 2,
       chunk: true,
       logger: getVoidLogger(),
       maxObjectSizeBytes: 5000,
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await indexer.index(objects);
+    await testPipeline(objects, indexer);
+    expect(saveObjects).toHaveBeenCalled();
+    const results = Array.from(saveObjects.mock.calls[0][0])
+    expect(results.length).toEqual(89);
+  });
+
+  it('can handle undefined object', async () => {
+    const objects = [{
+      source: 'bar',
+      title: 'bazz',
+      location: 'https://example.com/a/b/c',
+      path: 'a/b/c',
+      text: generateText(4000),
+      entity: {
+        kind: 'component',
+        namespace: 'default',
+        name: 'hydro',
+      },
+    }, {
+      source: 'bar',
+      title: 'plugh',
+      location: 'https://example.com/d/e/f',
+      path: 'd/e/f',
+      text: generateText(8000),
+      entity: {
+        kind: 'component',
+        namespace: 'default',
+        name: 'flask',
+      },
+    },
+    undefined];
+    const indexer = new Indexer({
+      batchSize: 2,
+      chunk: true,
+      logger: getVoidLogger(),
+      maxObjectSizeBytes: 5000,
+      now: new Date('2023-11-09T01:25:23+0000'),
+      searchIndex: { saveObjects } as unknown as SearchIndex,
+    });
+    await testPipeline(objects, indexer);
     expect(saveObjects).toHaveBeenCalled();
     const results = Array.from(saveObjects.mock.calls[0][0])
     expect(results.length).toEqual(89);
