@@ -14,6 +14,7 @@ import {
 } from './types';
 import { Readable } from 'stream';
 import pLimit from 'p-limit';
+import { assertError } from '@backstage/errors';
 
 export interface TechDocsCollatorFactoryOptions {
   catalogClient?: CatalogApi;
@@ -51,7 +52,7 @@ export class TechDocsCollatorFactory implements CollatorFactory {
     return Readable.from(this.execute());
   }
 
-  private async *execute(): AsyncGenerator<CollatorResult, void, undefined> {
+  private async * execute(): AsyncGenerator<CollatorResult, void, undefined> {
     const limit = pLimit(this.parallelismLimit);
     const techDocsBaseUrl = await this.discovery.getBaseUrl('techdocs');
     const { token } = await this.tokenManager.getToken();
@@ -81,7 +82,7 @@ export class TechDocsCollatorFactory implements CollatorFactory {
           limit(async(): Promise<CollatorResult[]> => {
             const entityInfo = {
               kind: entity.kind,
-              namespace: entity.metadata.namespace || 'default',
+              namespace: entity.metadata.namespace ?? 'default',
               name: entity.metadata.name,
             };
             try {
@@ -95,15 +96,13 @@ export class TechDocsCollatorFactory implements CollatorFactory {
               this.logger.debug(`Retrieved ${searchIndex.docs.length} mkdocs search index items for entity ${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}`);
               return searchIndex.docs.map(doc => ({ entity, doc, source: 'mkdocs' }));
             } catch (e) {
-              this.logger.warn(
-                `Failed to retrieve mkdocs search index for entity ${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}`,
-                e,
-              );
+              assertError(e);
+              this.logger.warn(`Failed to retrieve mkdocs search index for entity ${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}`, e);
               return [];
             }
           }),
         );
-      yield* (await Promise.all(promises)).flat();
+      yield * (await Promise.all(promises)).flat();
     }
   }
 }

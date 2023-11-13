@@ -55,11 +55,12 @@ export class PipelineTrigger implements PipelineTriggerInterface {
           indexer,
         });
         try {
+          this.logger.info(`Pipeline algolia-pipeline:${id} starting`);
           await pipeline.execute();
-          this.logger.info(`Collating, building, and indexing documents for Algolia succeeded`);
+          this.logger.info(`Pipeline algolia-pipeline:${id} completed successfully`);
         } catch(e) {
           assertError(e);
-          this.logger.error('Collating, building, and indexing documents for Algolia failed:', e);
+          this.logger.error(`Pipeline algolia-pipeline:${id} failed to complete successfully:`, e);
           return;
         }
       },
