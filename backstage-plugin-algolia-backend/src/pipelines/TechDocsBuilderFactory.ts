@@ -4,6 +4,7 @@ import {
   parseEntityRef,
 } from '@backstage/catalog-model';
 import { Config } from '@backstage/config';
+import { assertError } from '@backstage/errors';
 import { unescape } from 'lodash';
 import * as url from 'url';
 import { compare } from '../util';
@@ -71,12 +72,20 @@ class TechDocsBuilder extends BuilderBase {
         systemRef: parsedSystemRef,
       };
     }
+    let section = false;
+    try {
+      section = new url.URL(location).hash !== '';
+    } catch(e) {
+      assertError(e);
+      throw new Error(`Could not parse location URL to determine if location is a page section: ${e.message}`);
+    }
     return {
       source,
       title: unescape(doc.title),
       text: unescape(doc.text ?? ''),
       location,
       path: doc.location,
+      section,
       entity: {
         ...entityInfo,
         title: entity.metadata.title ?? undefined,

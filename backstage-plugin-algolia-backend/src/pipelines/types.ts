@@ -16,6 +16,7 @@ export interface IndexObject {
   text: string;
   location: string;
   path: string;
+  section: boolean;
   summary?: string;
   entity?: {
     kind: string;

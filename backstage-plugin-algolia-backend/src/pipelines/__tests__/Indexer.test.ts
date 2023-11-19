@@ -95,6 +95,7 @@ describe('Indexer', () => {
       title: 'plugh',
       location: 'xyzzy',
       path: 'fred',
+      section: false,
       text: generateText(200),
       entity: {
         kind: 'component',
@@ -120,6 +121,7 @@ describe('Indexer', () => {
       title: 'bazz',
       location: 'https://example.com/a/b/c',
       path: 'a/b/c',
+      section: false,
       text: generateText(4000),
       entity: {
         kind: 'component',
@@ -131,6 +133,7 @@ describe('Indexer', () => {
       title: 'plugh',
       location: 'https://example.com/d/e/f',
       path: 'd/e/f',
+      section: false,
       text: generateText(8000),
       entity: {
         kind: 'component',
@@ -158,6 +161,7 @@ describe('Indexer', () => {
       title: 'bazz',
       location: 'https://example.com/a/b/c',
       path: 'a/b/c',
+      section: false,
       text: generateText(4000),
       entity: {
         kind: 'component',
@@ -169,6 +173,7 @@ describe('Indexer', () => {
       title: 'plugh',
       location: 'https://example.com/d/e/f',
       path: 'd/e/f',
+      section: false,
       text: generateText(8000),
       entity: {
         kind: 'component',
