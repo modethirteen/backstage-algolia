@@ -3,18 +3,18 @@ import {
   ServerTokenManager,
   createServiceBuilder,
 } from '@backstage/backend-common';
+import { TaskScheduler } from '@backstage/backend-tasks';
+import { ConfigReader } from '@backstage/config';
 import { Server } from 'http';
 import { Logger } from 'winston';
-import { createRouter } from './router';
+import yn from 'yn';
 import {
   Indexer,
   PipelineTrigger,
   TechDocsBuilderFactory,
   TechDocsCollatorFactory,
 } from '../pipelines';
-import { TaskScheduler } from '@backstage/backend-tasks';
-import { ConfigReader } from '@backstage/config';
-import yn from 'yn';
+import { createRouter } from './router';
 
 export interface ServerOptions {
   port: number;

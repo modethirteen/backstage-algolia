@@ -1,9 +1,9 @@
 import { PluginTaskScheduler, TaskScheduleDefinition } from '@backstage/backend-tasks';
 import { assertError } from '@backstage/errors';
-import { BuilderFactory, CollatorFactory } from './types';
+import { Logger } from 'winston';
 import { Indexer } from './Indexer';
 import { Pipeline } from './Pipeline';
-import { Logger } from 'winston';
+import { BuilderFactory, CollatorFactory } from './types';
 
 export class PipelineTriggerError extends Error {
   public readonly id: string;

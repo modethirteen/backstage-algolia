@@ -1,20 +1,21 @@
+import { PluginEndpointDiscovery, TokenManager } from '@backstage/backend-common';
 import {
-  CatalogApi,
-  CatalogClient,
   CATALOG_FILTER_EXISTS,
+  CatalogApi,
+
+  CatalogClient,
 } from '@backstage/catalog-client';
 import { Entity } from '@backstage/catalog-model';
-import { PluginEndpointDiscovery, TokenManager } from '@backstage/backend-common';
 import { Config } from '@backstage/config';
+import { assertError } from '@backstage/errors';
+import pLimit from 'p-limit';
+import { Readable } from 'stream';
 import { Logger } from 'winston';
 import {
-  CollatorResult,
   CollatorFactory,
+  CollatorResult,
   IndexableDocument,
 } from './types';
-import { Readable } from 'stream';
-import pLimit from 'p-limit';
-import { assertError } from '@backstage/errors';
 
 export interface TechDocsCollatorFactoryOptions {
   catalogClient?: CatalogApi;

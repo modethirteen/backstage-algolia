@@ -1,9 +1,9 @@
-import { SearchIndex } from 'algoliasearch';
-import { ClientFactory } from '../api/ClientFactory';
 import { Config } from '@backstage/config';
+import { SearchIndex } from 'algoliasearch';
 import { differenceInSeconds, isValid } from 'date-fns';
-import { Logger } from 'winston';
 import { parse, toSeconds } from 'iso8601-duration';
+import { Logger } from 'winston';
+import { ClientFactory } from '../api/ClientFactory';
 import { IndexObjectWithIdAndTimestamp } from './types';
 
 interface Expiration {

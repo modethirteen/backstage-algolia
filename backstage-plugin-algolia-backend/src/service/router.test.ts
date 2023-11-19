@@ -1,7 +1,7 @@
 import express from 'express';
 import request from 'supertest';
-import { createRouter } from './router';
 import { PipelineTriggerError } from '../pipelines';
+import { createRouter } from './router';
 
 const start = jest.fn();
 const getPipelineIds = jest.fn();

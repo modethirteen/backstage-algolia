@@ -1,19 +1,19 @@
-import { TechDocsCollatorFactory } from '../TechDocsCollatorFactory';
 import {
   PluginEndpointDiscovery,
-  getVoidLogger,
   TokenManager,
+  getVoidLogger,
 } from '@backstage/backend-common';
-import { ConfigReader } from '@backstage/config';
 import { setupRequestMockHandlers } from '@backstage/backend-test-utils';
-import { setupServer } from 'msw/node';
+import { ConfigReader } from '@backstage/config';
 import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+import { TechDocsCollatorFactory } from '../TechDocsCollatorFactory';
+import { CollatorResult } from '../types';
 import {
   entities as mockEntities,
   search as mockSearchDocIndex,
 } from './mocks.json';
 import { testPipeline } from './util';
-import { CollatorResult } from '../types';
 
 describe('TechDocsCollatorFactory', () => {
   const worker = setupServer();

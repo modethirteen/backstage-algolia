@@ -1,8 +1,8 @@
-import { ConfigReader } from '@backstage/config';
 import { getVoidLogger } from '@backstage/backend-common';
-import { objects as mockObjects } from './mocks.json';
+import { ConfigReader } from '@backstage/config';
 import { SearchIndex } from 'algoliasearch';
 import { IndexManager } from '../IndexManager';
+import { objects as mockObjects } from './mocks.json';
 
 const mockObjectsWithTimestamp = mockObjects.map(o => ({
   ...o,

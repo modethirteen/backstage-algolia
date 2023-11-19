@@ -1,5 +1,5 @@
+import { Writable, pipeline } from 'stream';
 import { BuilderFactory, CollatorFactory } from '../types';
-import { pipeline, Writable } from 'stream';
 
 class TestResultCollector extends Writable {
   public results: any[] = [];

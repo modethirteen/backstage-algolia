@@ -3,16 +3,16 @@ import {
   RELATION_PART_OF,
   parseEntityRef,
 } from '@backstage/catalog-model';
+import { Config } from '@backstage/config';
+import { unescape } from 'lodash';
+import * as url from 'url';
+import { compare } from '../util';
+import { BuilderBase } from './BuilderBase';
 import {
   BuilderFactory,
   CollatorResult,
   IndexObject,
 } from './types';
-import * as url from 'url';
-import { unescape } from 'lodash';
-import { compare } from '../util';
-import { Config } from '@backstage/config';
-import { BuilderBase } from './BuilderBase';
 
 class TechDocsBuilder extends BuilderBase {
   private readonly locationTemplate: string;

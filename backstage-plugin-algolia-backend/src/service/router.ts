@@ -1,8 +1,8 @@
 import { errorHandler } from '@backstage/backend-common';
 import express from 'express';
 import Router from 'express-promise-router';
-import { PipelineTriggerInterface } from '../pipelines';
 import { body, validationResult } from 'express-validator';
+import { PipelineTriggerInterface } from '../pipelines';
 
 export interface RouterOptions {
   trigger: PipelineTriggerInterface;

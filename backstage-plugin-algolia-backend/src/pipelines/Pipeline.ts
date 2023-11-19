@@ -1,6 +1,6 @@
+import { pipeline } from 'stream';
 import { Indexer } from './Indexer';
 import { BuilderFactory, CollatorFactory } from './types';
-import { pipeline } from 'stream';
 
 export interface PipelineOptions {
   builderFactories: BuilderFactory[];

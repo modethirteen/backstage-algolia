@@ -1,7 +1,7 @@
 import { getVoidLogger } from '@backstage/backend-common';
+import { Indexer } from '../Indexer';
 import { PipelineTrigger } from '../PipelineTrigger';
 import { CollatorFactory } from '../types';
-import { Indexer } from '../Indexer';
 
 const triggerTask = jest.fn();
 const getScheduledTasks = jest.fn();

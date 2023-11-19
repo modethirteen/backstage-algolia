@@ -1,17 +1,17 @@
+import { ConfigReader } from '@backstage/config';
 import { Readable } from 'stream';
+import { TechDocsBuilderFactory } from '../TechDocsBuilderFactory';
 import {
   CollatorFactory,
   CollatorResult,
   IndexObject,
 } from '../types';
-import { testPipeline } from './util';
 import {
   entities as mockEntities,
-  search as mockSearchDocIndex,
   objects as mockObjects,
+  search as mockSearchDocIndex,
 } from './mocks.json';
-import { TechDocsBuilderFactory } from '../TechDocsBuilderFactory';
-import { ConfigReader } from '@backstage/config';
+import { testPipeline } from './util';
 
 class TestCollatorFactory implements CollatorFactory {
   private results: CollatorResult[];

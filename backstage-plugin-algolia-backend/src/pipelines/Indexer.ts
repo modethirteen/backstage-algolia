@@ -1,11 +1,11 @@
-import { assertError } from '@backstage/errors';
-import { Writable } from 'stream';
 import { Config } from '@backstage/config';
+import { assertError } from '@backstage/errors';
 import { SearchIndex } from 'algoliasearch';
-import { IndexObject, IndexObjectWithIdAndTimestamp } from './types';
+import crypto from 'crypto';
+import { Writable } from 'stream';
 import { Logger } from 'winston';
 import { ClientFactory } from '../api/ClientFactory';
-import crypto from 'crypto';
+import { IndexObject, IndexObjectWithIdAndTimestamp } from './types';
 
 const isTextRemaining = (text: string) => text.replace(/^\s+|\s+$/g, '').length;
 
