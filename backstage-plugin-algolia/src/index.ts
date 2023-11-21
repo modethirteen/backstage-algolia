@@ -1,1 +1,1 @@
-export { algoliaPlugin, AlgoliaPage } from './plugin';
+export * from './plugin';
