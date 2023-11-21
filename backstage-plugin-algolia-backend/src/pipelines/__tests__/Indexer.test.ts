@@ -1,8 +1,8 @@
 import { getVoidLogger } from '@backstage/backend-common';
 import { SearchIndex } from 'algoliasearch';
+import { IndexObject } from 'backstage-plugin-algolia-common';
 import { Readable, pipeline } from 'stream';
 import { Indexer } from '../Indexer';
-import { IndexObject } from '../types';
 import { objects as mockObjects } from './mocks.json';
 
 const words = [

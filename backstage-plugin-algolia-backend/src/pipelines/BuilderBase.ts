@@ -1,6 +1,6 @@
 import { assertError } from '@backstage/errors';
+import { IndexObject } from 'backstage-plugin-algolia-common';
 import { Transform } from 'stream';
-import { IndexObject } from './types';
 
 export abstract class BuilderBase extends Transform {
   public abstract build(item: any): Promise<IndexObject | undefined>;

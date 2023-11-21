@@ -1,10 +1,10 @@
 import { ConfigReader } from '@backstage/config';
+import { IndexObject } from 'backstage-plugin-algolia-common';
 import { Readable } from 'stream';
 import { TechDocsBuilderFactory } from '../TechDocsBuilderFactory';
 import {
   CollatorFactory,
   CollatorResult,
-  IndexObject,
 } from '../types';
 import {
   entities as mockEntities,

@@ -2,7 +2,6 @@ import { PluginEndpointDiscovery, TokenManager } from '@backstage/backend-common
 import {
   CATALOG_FILTER_EXISTS,
   CatalogApi,
-
   CatalogClient,
 } from '@backstage/catalog-client';
 import { Entity } from '@backstage/catalog-model';

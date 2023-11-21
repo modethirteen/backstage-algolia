@@ -1,10 +1,10 @@
 import { Config } from '@backstage/config';
 import { SearchIndex } from 'algoliasearch';
+import { IndexObjectWithIdAndTimestamp } from 'backstage-plugin-algolia-common';
 import { differenceInSeconds, isValid } from 'date-fns';
 import { parse, toSeconds } from 'iso8601-duration';
 import { Logger } from 'winston';
 import { ClientFactory } from '../api/ClientFactory';
-import { IndexObjectWithIdAndTimestamp } from './types';
 
 interface Expiration {
   source: string;

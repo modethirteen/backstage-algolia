@@ -5,6 +5,7 @@ import {
 } from '@backstage/catalog-model';
 import { Config } from '@backstage/config';
 import { assertError } from '@backstage/errors';
+import { IndexObject } from 'backstage-plugin-algolia-common';
 import { unescape } from 'lodash';
 import * as url from 'url';
 import { compare } from '../util';
@@ -12,7 +13,6 @@ import { BuilderBase } from './BuilderBase';
 import {
   BuilderFactory,
   CollatorResult,
-  IndexObject,
 } from './types';
 
 class TechDocsBuilder extends BuilderBase {
