@@ -44,17 +44,17 @@ export async function startStandaloneServer(
       },
     },
     algolia: {
-      apikeys: {
-        admin: process.env.BACKSTAGE_ALGOLIA_ADMIN_APIKEY,
-      },
-      applicationId: process.env.BACKSTAGE_ALGOLIA_APPLICATION_ID,
-      indexes: {
-        techdocs: {
-          name: process.env.BACKSTAGE_ALGOLIA_TECHDOCS_INDEX_NAME,
+      backend: {
+        apikey: process.env.BACKSTAGE_ALGOLIA_ADMIN_APIKEY,
+        applicationId: process.env.BACKSTAGE_ALGOLIA_APPLICATION_ID,
+        indexes: {
+          techdocs: {
+            name: process.env.BACKSTAGE_ALGOLIA_TECHDOCS_INDEX_NAME,
+          },
         },
+        maxObjectSizeBytes: 10000,
+        chunk: true,
       },
-      maxObjectSizeBytes: 10000,
-      chunk: true,
     },
   });
   const discovery = HostDiscovery.fromConfig(config);

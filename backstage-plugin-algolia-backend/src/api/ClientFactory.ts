@@ -7,8 +7,8 @@ export interface ClientFactoryInterface {
 
 export class ClientFactory implements ClientFactoryInterface {
   public static fromConfig(config: Config) {
-    const apikey = config.getString('algolia.apikeys.admin');
-    const applicationId = config.getString('algolia.applicationId');
+    const apikey = config.getString('algolia.backend.apikey');
+    const applicationId = config.getString('algolia.backend.applicationId');
     return new ClientFactory({ apikey, applicationId });
   }
 

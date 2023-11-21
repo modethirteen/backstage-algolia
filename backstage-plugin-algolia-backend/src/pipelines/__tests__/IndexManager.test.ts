@@ -19,20 +19,20 @@ describe('IndexManager', () => {
   it('can be constructed from ISO8601 duration values', () => {
     const config = new ConfigReader({
       algolia: {
-        apikeys: {
-          admin: 'plugh',
-        },
-        applicationId: 'fred',
-        indexes: {
-          techdocs: {
-            name: 'xyzzy',
-            expirations: [{
-              source: 'mkdocs',
-              ttl: 'P6M',
-            }, {
-              source: 'coda',
-              ttl: 'P1D',
-            }],
+        backend: {
+          apikey: 'plugh',
+          applicationId: 'fred',
+          indexes: {
+            techdocs: {
+              name: 'xyzzy',
+              expirations: [{
+                source: 'mkdocs',
+                ttl: 'P6M',
+              }, {
+                source: 'coda',
+                ttl: 'P1D',
+              }],
+            },
           },
         },
       },

@@ -104,7 +104,7 @@ class TechDocsBuilder extends BuilderBase {
 export class TechDocsBuilderFactory implements BuilderFactory {
   public static fromConfig(config: Config) {
     const baseUrl = config.getString('app.baseUrl');
-    const locationTemplate = config.getOptionalString('algolia.indexes.techdocs.locationTemplate')
+    const locationTemplate = config.getOptionalString('algolia.backend.indexes.techdocs.locationTemplate')
       ?? url.resolve(baseUrl, '/docs/:namespace/:kind/:name/:path');
     return new TechDocsBuilderFactory({ locationTemplate });
   }

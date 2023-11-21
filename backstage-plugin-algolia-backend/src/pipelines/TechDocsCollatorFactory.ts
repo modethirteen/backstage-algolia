@@ -25,7 +25,7 @@ export interface TechDocsCollatorFactoryOptions {
 
 export class TechDocsCollatorFactory implements CollatorFactory {
   public static fromConfig(config: Config, options: TechDocsCollatorFactoryOptions) {
-    const parallelismLimit = config.getOptionalNumber('algolia.indexes.techdocs.parallelismLimit');
+    const parallelismLimit = config.getOptionalNumber('algolia.backend.indexes.techdocs.parallelismLimit');
     return new TechDocsCollatorFactory({
       ...options,
       parallelismLimit,

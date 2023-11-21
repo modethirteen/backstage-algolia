@@ -21,11 +21,11 @@ export class Indexer extends Writable {
     const client = ClientFactory.fromConfig(config).newClient();
     return new Indexer({
       batchSize,
-      chunk: config.getOptionalBoolean('algolia.chunk') ?? false,
+      chunk: config.getOptionalBoolean('algolia.backend.chunk') ?? false,
       logger,
-      maxObjectSizeBytes: config.getNumber('algolia.maxObjectSizeBytes'),
+      maxObjectSizeBytes: config.getNumber('algolia.backend.maxObjectSizeBytes'),
       now: new Date(),
-      searchIndex: client.initIndex(config.getString(`algolia.indexes.${index}.name`)),
+      searchIndex: client.initIndex(config.getString(`algolia.backend.indexes.${index}.name`)),
     });
   }
 

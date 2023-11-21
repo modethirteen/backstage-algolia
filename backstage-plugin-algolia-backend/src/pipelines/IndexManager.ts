@@ -25,14 +25,14 @@ export class IndexManager implements IndexManager {
     const { index, logger } = options;
     const client = ClientFactory.fromConfig(config).newClient();
     return new IndexManager({
-      expirations: config.getOptionalConfigArray(`algolia.indexes.${index}.expirations`)
+      expirations: config.getOptionalConfigArray(`algolia.backend.indexes.${index}.expirations`)
         ?.map(c => ({
           source: c.get('source'),
           ttl: toSeconds(parse(c.get('ttl'))),
         })),
       logger,
       now: new Date(),
-      searchIndex: client.initIndex(config.getString(`algolia.indexes.${index}.name`)),
+      searchIndex: client.initIndex(config.getString(`algolia.backend.indexes.${index}.name`)),
     });
   }
 
