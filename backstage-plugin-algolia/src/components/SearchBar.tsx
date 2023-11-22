@@ -5,21 +5,22 @@ import {
   TextField,
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 import { useSearchBox } from 'react-instantsearch';
 import useDebounce from 'react-use/lib/useDebounce';
 
 export const SearchBar = (props: {
   debounceTime?: number;
   placeholder?: string;
-  initialValue?: string;
 }) => {
   const {
     debounceTime = 200,
-    initialValue,
     placeholder = 'What can we help you find?',
   } = props;
-  const { refine, clear } = useSearchBox();
+  const { query, refine, clear } = useSearchBox();
   const [value, setValue] = useState<string>('');
   const [debouncedValue, setDebouncedValue] = useState<string>('');
   useDebounce(
@@ -33,9 +34,7 @@ export const SearchBar = (props: {
     }
   }, [debouncedValue]);
   useEffect(() => {
-    if (!value && initialValue) {
-      setValue(initialValue);
-    }
+    setValue(query);
   }, []);
   return (
     <TextField
