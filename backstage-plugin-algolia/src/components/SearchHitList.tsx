@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { IndexObjectWithIdAndTimestamp } from 'backstage-plugin-algolia-common';
-import React from 'react';
+import React, { ComponentType } from 'react';
 import { Highlight, useInfiniteHits, useStats } from 'react-instantsearch';
 
 const tryGetPath = (location: string) => {
@@ -23,10 +23,14 @@ const tryGetPath = (location: string) => {
 
 export const SearchHitList = (props: {
   highlight?: boolean;
-  appendHitLabel?: (object: IndexObjectWithIdAndTimestamp) => JSX.Element;
-  appendHitDescription?: (object: IndexObjectWithIdAndTimestamp) => JSX.Element;
+  AppendedHitLabel?: ComponentType<{ object: IndexObjectWithIdAndTimestamp }>;
+  AppendedHitDescription?: ComponentType<{ object: IndexObjectWithIdAndTimestamp }>;
 }) => {
-  const { appendHitLabel, appendHitDescription, highlight = false } = props;
+  const {
+    AppendedHitLabel,
+    AppendedHitDescription,
+    highlight = false,
+  } = props;
   const { hits, isLastPage, showMore, sendEvent } = useInfiniteHits();
   const { nbHits: hitCount } = useStats();
   return (
@@ -53,8 +57,8 @@ export const SearchHitList = (props: {
                       >
                         {path}
                       </Typography>
-                     )}
-                     {appendHitLabel ? appendHitLabel(object) : null}
+                    )}
+                    {AppendedHitLabel ? <AppendedHitLabel object={object} /> : null}
                   </>
                 }
                 secondary={
@@ -72,7 +76,7 @@ export const SearchHitList = (props: {
                     >
                       {highlight ? <Highlight attribute="text" hit={h} /> : text}
                     </Typography>
-                    {appendHitDescription ? appendHitDescription(object) : null}
+                    {AppendedHitDescription ? <AppendedHitDescription object={object} /> : null}
                   </>
                 }
               />
