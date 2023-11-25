@@ -7,13 +7,13 @@ import { setupRequestMockHandlers } from '@backstage/backend-test-utils';
 import { ConfigReader } from '@backstage/config';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
+import { testCollatingBuildingPipeline } from '../../dev';
 import { TechDocsCollatorFactory } from '../TechDocsCollatorFactory';
 import { CollatorResult } from '../types';
 import {
   entities as mockEntities,
   search as mockSearchDocIndex,
 } from './mocks.json';
-import { testPipeline } from './util';
 
 describe('TechDocsCollatorFactory', () => {
   const worker = setupServer();
@@ -72,7 +72,7 @@ describe('TechDocsCollatorFactory', () => {
   });
 
   it('fetches from the configured catalog and techdocs services', async () => {
-    const results = await testPipeline({ collatorFactory: factory }) as CollatorResult[];
+    const results = await testCollatingBuildingPipeline({ collatorFactory: factory }) as CollatorResult[];
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('techdocs');
     expect(results).toHaveLength(18);

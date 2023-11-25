@@ -1,30 +1,15 @@
 import { ConfigReader } from '@backstage/config';
 import { IndexObject } from 'backstage-plugin-algolia-common';
-import { Readable } from 'stream';
+import { TestCollatorFactory, testCollatingBuildingPipeline } from '../../dev';
 import { TechDocsBuilderFactory } from '../TechDocsBuilderFactory';
 import {
-  CollatorFactory,
-  CollatorResult,
+  CollatorResult
 } from '../types';
 import {
   entities as mockEntities,
   objects as mockObjects,
   search as mockSearchDocIndex,
 } from './mocks.json';
-import { testPipeline } from './util';
-
-class TestCollatorFactory implements CollatorFactory {
-  private results: CollatorResult[];
-
-  constructor(options: { results: CollatorResult[] }) {
-    const { results } = options;
-    this.results = results;
-  }
-
-  newCollator(): Promise<Readable> {
-    return Promise.resolve(Readable.from(this.results));
-  }
-}
 
 describe('TechDocsBuilderFactory', () => {
   beforeEach(() => {
@@ -43,7 +28,7 @@ describe('TechDocsBuilderFactory', () => {
       .flat() as CollatorResult[];
     const collatorFactory = new TestCollatorFactory({ results });
     const builderFactories = [TechDocsBuilderFactory.fromConfig(config)];
-    const objects = await testPipeline({ collatorFactory, builderFactories }) as IndexObject[];
+    const objects = await testCollatingBuildingPipeline({ collatorFactory, builderFactories }) as IndexObject[];
     expect(objects).toHaveLength(18);
     expect(objects).toEqual(expect.arrayContaining(mockObjects));
   });

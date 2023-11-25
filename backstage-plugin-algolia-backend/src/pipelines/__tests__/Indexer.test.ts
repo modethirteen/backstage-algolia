@@ -1,7 +1,6 @@
 import { getVoidLogger } from '@backstage/backend-common';
 import { SearchIndex } from 'algoliasearch';
-import { IndexObject } from 'backstage-plugin-algolia-common';
-import { Readable, pipeline } from 'stream';
+import { testIndexingPipeline } from '../../dev';
 import { Indexer } from '../Indexer';
 import { objects as mockObjects } from './mocks.json';
 
@@ -28,26 +27,6 @@ const words = [
 
 const generateText = (wordCount: number) =>  Array.from({ length: wordCount }, (_, i) => words[i % words.length]).join(' ');
 
-const testPipeline = async (objects: (IndexObject | undefined)[], indexer: Indexer) => {
-  const items = [...objects];
-  const objectStream = new Readable({
-    objectMode: true,
-    read() {
-      const item = items.shift();
-      this.push(item ? item : null);
-    },
-  });
-  await new Promise<void>((resolve, reject) => {
-    pipeline(objectStream, indexer, (e) => {
-      if (e) {
-        reject(e);
-      } else {
-        resolve();
-      }
-    });
-  });
-};
-
 const saveObjects = jest.fn();
 
 describe('Indexer', () => {
@@ -64,7 +43,7 @@ describe('Indexer', () => {
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await testPipeline(mockObjects, indexer);
+    await testIndexingPipeline({ objects: mockObjects, indexer });
     expect(saveObjects).toHaveBeenCalled();
     const timestamps = Array.from(saveObjects.mock.calls[0][0])
       .map((o: any) => o.timestamp);
@@ -81,7 +60,7 @@ describe('Indexer', () => {
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await testPipeline(mockObjects, indexer);
+    await testIndexingPipeline({ objects: mockObjects, indexer });
     expect(saveObjects).toHaveBeenCalled();
     const ids = Array.from(saveObjects.mock.calls[0][0])
       .map((o: any) => o.objectID);
@@ -111,7 +90,7 @@ describe('Indexer', () => {
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await testPipeline([object], indexer);
+    await testIndexingPipeline({ objects: [object], indexer });
     expect(saveObjects).not.toHaveBeenCalled();
   });
 
@@ -149,7 +128,7 @@ describe('Indexer', () => {
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await testPipeline(objects, indexer);
+    await testIndexingPipeline({ objects, indexer });
     expect(saveObjects).toHaveBeenCalled();
     const results = Array.from(saveObjects.mock.calls[0][0])
     expect(results.length).toEqual(89);
@@ -190,7 +169,7 @@ describe('Indexer', () => {
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await testPipeline(objects, indexer);
+    await testIndexingPipeline({ objects, indexer });
     expect(saveObjects).toHaveBeenCalled();
     const results = Array.from(saveObjects.mock.calls[0][0])
     expect(results.length).toEqual(89);
