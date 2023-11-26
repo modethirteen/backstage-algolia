@@ -25,7 +25,7 @@ class TechDocsBuilder extends BuilderBase {
   }
 
   public async build(item: any): Promise<IndexObject | undefined> {
-    const { entity, doc, source } = item as CollatorResult;
+    const { entity, doc, source, parentTitles } = item as CollatorResult;
     const entityInfo = {
       kind: entity.kind,
       namespace: entity.metadata.namespace || 'default',
@@ -82,6 +82,7 @@ class TechDocsBuilder extends BuilderBase {
     return {
       source,
       title: unescape(doc.title),
+      parentTitles: parentTitles.map(t => unescape(t)),
       text: unescape(doc.text ?? ''),
       location,
       path: doc.location,

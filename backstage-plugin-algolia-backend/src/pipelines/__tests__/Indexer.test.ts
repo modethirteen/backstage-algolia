@@ -2,7 +2,7 @@ import { getVoidLogger } from '@backstage/backend-common';
 import { SearchIndex } from 'algoliasearch';
 import { testIndexingPipeline } from '../../dev';
 import { Indexer } from '../Indexer';
-import { objects as mockObjects } from './mocks.json';
+import { indexObjects as mockObjects } from './mocks.json';
 
 const words = [
   'apple',
@@ -47,7 +47,7 @@ describe('Indexer', () => {
     expect(saveObjects).toHaveBeenCalled();
     const timestamps = Array.from(saveObjects.mock.calls[0][0])
       .map((o: any) => o.timestamp);
-    expect(timestamps.length).toEqual(18);
+    expect(timestamps.length).toEqual(24);
     timestamps.map(t => expect(t).toEqual('2023-11-09T01:25:23.000Z'));
   });
 
@@ -64,7 +64,7 @@ describe('Indexer', () => {
     expect(saveObjects).toHaveBeenCalled();
     const ids = Array.from(saveObjects.mock.calls[0][0])
       .map((o: any) => o.objectID);
-    expect(ids.length).toEqual(18);
+    expect(ids.length).toEqual(24);
     ids.map(t => expect(t).toBeDefined());
   });
 
@@ -81,6 +81,7 @@ describe('Indexer', () => {
         namespace: 'default',
         name: 'foobar',
       },
+      parentTitles: [],
     };
     const indexer = new Indexer({
       batchSize: 1,
@@ -107,6 +108,7 @@ describe('Indexer', () => {
         namespace: 'default',
         name: 'hydro',
       },
+      parentTitles: [],
     }, {
       source: 'bar',
       title: 'plugh',
@@ -119,6 +121,7 @@ describe('Indexer', () => {
         namespace: 'default',
         name: 'flask',
       },
+      parentTitles: [],
     }];
     const indexer = new Indexer({
       batchSize: 2,
@@ -147,6 +150,7 @@ describe('Indexer', () => {
         namespace: 'default',
         name: 'hydro',
       },
+      parentTitles: [],
     }, {
       source: 'bar',
       title: 'plugh',
@@ -159,8 +163,8 @@ describe('Indexer', () => {
         namespace: 'default',
         name: 'flask',
       },
-    },
-    undefined];
+      parentTitles: [],
+    }, undefined];
     const indexer = new Indexer({
       batchSize: 2,
       chunk: true,

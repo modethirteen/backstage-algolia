@@ -13,6 +13,7 @@ export interface CollatorFactory {
 export interface CollatorResult {
   entity: Entity;
   doc: IndexableDocument;
+  parentTitles: string[];
   source: string;
 }
 

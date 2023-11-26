@@ -94,7 +94,33 @@ export class TechDocsCollatorFactory implements CollatorFactory {
               });
               const searchIndex = await response.json() as { docs: IndexableDocument[] };
               this.logger.debug(`Retrieved ${searchIndex.docs.length} mkdocs search index items for entity ${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}`);
-              return searchIndex.docs.map(doc => ({ entity, doc, source: 'mkdocs' }));
+              return searchIndex.docs.map(doc => {
+                const { location } = doc;
+
+                // build list of parent paths to fetch parent titles
+                const parts = location.split('/').filter(p => p);
+                const titles: string[] = [];
+                const root = searchIndex.docs.find(({ location }) => location === '')?.title;
+                if (root) {
+                  titles.push(root);
+                }
+                for (let i = 0; i < parts.length; i++) {
+                  let path = parts.slice(0, i + 1).join('/');
+                  if (!path.includes('#')) {
+                    path = `${path}/`;
+                  }
+                  const title = searchIndex.docs.find(({ location }) => location === path)?.title;
+                  if (title) {
+                    titles.push(title);
+                  }
+                }
+                return {
+                  entity,
+                  doc,
+                  parentTitles: titles.filter(t => t !== doc.title),
+                  source: 'mkdocs',
+                };
+              });
             } catch (e) {
               assertError(e);
               this.logger.warn(`Failed to retrieve mkdocs search index for entity ${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}`, e);

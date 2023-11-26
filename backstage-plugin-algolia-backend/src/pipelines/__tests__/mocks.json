@@ -333,7 +333,7 @@
       ]
     }
   ],
-  "search": {
+  "searchDocIndex": {
     "config": {
       "lang": [
         "en"
@@ -354,16 +354,22 @@
         "title": "Front-end Development"
       },
       {
+        "location": "xyzzy/fred",
+        "text": "foobar plugh",
+        "title": "Back-end Testing"
+      },
+      {
         "location": "xyzzy/#plugh",
         "text": "bazz dita fox",
         "title": "React"
       }
     ]
   },
-  "objects": [
+  "indexObjects": [
     {
       "source": "mkdocs",
       "title": "Home",
+      "parentTitles": [],
       "text": "foo bar baz",
       "location": "https://dev.example.com/docs/default/Component/backend-service-1/",
       "path": "",
@@ -392,6 +398,9 @@
     {
       "source": "mkdocs",
       "title": "Front-end Development",
+      "parentTitles": [
+        "Home"
+      ],
       "text": "fred bazz qux",
       "location": "https://dev.example.com/docs/default/Component/backend-service-1/xyzzy/",
       "path": "xyzzy/",
@@ -419,7 +428,43 @@
     },
     {
       "source": "mkdocs",
+      "title": "Back-end Testing",
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "text": "foobar plugh",
+      "location": "https://dev.example.com/docs/default/Component/backend-service-1/xyzzy/fred",
+      "path": "xyzzy/fred",
+      "section": false,
+      "entity": {
+        "kind": "Component",
+        "namespace": "default",
+        "name": "backend-service-1",
+        "title": "Backend Service",
+        "type": "service",
+        "lifecycle": "production",
+        "owner": "team-xyzzy",
+        "ownerRef": {
+          "kind": "group",
+          "namespace": "default",
+          "name": "team-xyzzy"
+        },
+        "system": "user-management",
+        "systemRef": {
+          "kind": "system",
+          "namespace": "default",
+          "name": "user-management"
+        }
+      }
+    },
+    {
+      "source": "mkdocs",
       "title": "React",
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
       "text": "bazz dita fox",
       "location": "https://dev.example.com/docs/default/Component/backend-service-1/xyzzy/#plugh",
       "path": "xyzzy/#plugh",
@@ -448,174 +493,7 @@
     {
       "source": "mkdocs",
       "title": "Home",
-      "text": "foo bar baz",
-      "location": "https://dev.example.com/docs/default/Component/microservice-2/",
-      "path": "",
-      "section": false,
-      "entity": {
-        "kind": "Component",
-        "namespace": "default",
-        "name": "microservice-2",
-        "title": "Data Microservice",
-        "type": "service",
-        "lifecycle": "development",
-        "owner": "team-xyzzy",
-        "ownerRef": {
-          "kind": "group",
-          "namespace": "default",
-          "name": "team-xyzzy"
-        },
-        "system": "data-processing",
-        "systemRef": {
-          "kind": "system",
-          "namespace": "default",
-          "name": "data-processing"
-        }
-      }
-    },
-    {
-      "source": "mkdocs",
-      "title": "Front-end Development",
-      "text": "fred bazz qux",
-      "location": "https://dev.example.com/docs/default/Component/microservice-2/xyzzy/",
-      "path": "xyzzy/",
-      "section": false,
-      "entity": {
-        "kind": "Component",
-        "namespace": "default",
-        "name": "microservice-2",
-        "title": "Data Microservice",
-        "type": "service",
-        "lifecycle": "development",
-        "owner": "team-xyzzy",
-        "ownerRef": {
-          "kind": "group",
-          "namespace": "default",
-          "name": "team-xyzzy"
-        },
-        "system": "data-processing",
-        "systemRef": {
-          "kind": "system",
-          "namespace": "default",
-          "name": "data-processing"
-        }
-      }
-    },
-    {
-      "source": "mkdocs",
-      "title": "React",
-      "text": "bazz dita fox",
-      "location": "https://dev.example.com/docs/default/Component/microservice-2/xyzzy/#plugh",
-      "path": "xyzzy/#plugh",
-      "section": true,
-      "entity": {
-        "kind": "Component",
-        "namespace": "default",
-        "name": "microservice-2",
-        "title": "Data Microservice",
-        "type": "service",
-        "lifecycle": "development",
-        "owner": "team-xyzzy",
-        "ownerRef": {
-          "kind": "group",
-          "namespace": "default",
-          "name": "team-xyzzy"
-        },
-        "system": "data-processing",
-        "systemRef": {
-          "kind": "system",
-          "namespace": "default",
-          "name": "data-processing"
-        }
-      }
-    },
-    {
-      "source": "mkdocs",
-      "title": "Home",
-      "text": "foo bar baz",
-      "location": "https://dev.example.com/docs/default/Component/frontend-app-2/",
-      "path": "",
-      "section": false,
-      "entity": {
-        "kind": "Component",
-        "namespace": "default",
-        "name": "frontend-app-2",
-        "title": "Dashboard Frontend",
-        "type": "website",
-        "lifecycle": "staging",
-        "owner": "team-bazz",
-        "ownerRef": {
-          "kind": "group",
-          "namespace": "default",
-          "name": "team-bazz"
-        },
-        "system": "analytics-dashboard",
-        "systemRef": {
-          "kind": "system",
-          "namespace": "default",
-          "name": "analytics-dashboard"
-        }
-      }
-    },
-    {
-      "source": "mkdocs",
-      "title": "Front-end Development",
-      "text": "fred bazz qux",
-      "location": "https://dev.example.com/docs/default/Component/frontend-app-2/xyzzy/",
-      "path": "xyzzy/",
-      "section": false,
-      "entity": {
-        "kind": "Component",
-        "namespace": "default",
-        "name": "frontend-app-2",
-        "title": "Dashboard Frontend",
-        "type": "website",
-        "lifecycle": "staging",
-        "owner": "team-bazz",
-        "ownerRef": {
-          "kind": "group",
-          "namespace": "default",
-          "name": "team-bazz"
-        },
-        "system": "analytics-dashboard",
-        "systemRef": {
-          "kind": "system",
-          "namespace": "default",
-          "name": "analytics-dashboard"
-        }
-      }
-    },
-    {
-      "source": "mkdocs",
-      "title": "React",
-      "text": "bazz dita fox",
-      "location": "https://dev.example.com/docs/default/Component/frontend-app-2/xyzzy/#plugh",
-      "path": "xyzzy/#plugh",
-      "section": true,
-      "entity": {
-        "kind": "Component",
-        "namespace": "default",
-        "name": "frontend-app-2",
-        "title": "Dashboard Frontend",
-        "type": "website",
-        "lifecycle": "staging",
-        "owner": "team-bazz",
-        "ownerRef": {
-          "kind": "group",
-          "namespace": "default",
-          "name": "team-bazz"
-        },
-        "system": "analytics-dashboard",
-        "systemRef": {
-          "kind": "system",
-          "namespace": "default",
-          "name": "analytics-dashboard"
-        }
-      }
-    },
-    {
-      "source": "mkdocs",
-      "title": "Home",
+      "parentTitles": [],
       "text": "foo bar baz",
       "location": "https://dev.example.com/docs/default/Component/backend-service-2/",
       "path": "",
@@ -644,6 +522,9 @@
     {
       "source": "mkdocs",
       "title": "Front-end Development",
+      "parentTitles": [
+        "Home"
+      ],
       "text": "fred bazz qux",
       "location": "https://dev.example.com/docs/default/Component/backend-service-2/xyzzy/",
       "path": "xyzzy/",
@@ -671,7 +552,43 @@
     },
     {
       "source": "mkdocs",
+      "title": "Back-end Testing",
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "text": "foobar plugh",
+      "location": "https://dev.example.com/docs/default/Component/backend-service-2/xyzzy/fred",
+      "path": "xyzzy/fred",
+      "section": false,
+      "entity": {
+        "kind": "Component",
+        "namespace": "default",
+        "name": "backend-service-2",
+        "title": "API Backend",
+        "type": "service",
+        "lifecycle": "production",
+        "owner": "team-bazz",
+        "ownerRef": {
+          "kind": "group",
+          "namespace": "default",
+          "name": "team-bazz"
+        },
+        "system": "inventory-management",
+        "systemRef": {
+          "kind": "system",
+          "namespace": "default",
+          "name": "inventory-management"
+        }
+      }
+    },
+    {
+      "source": "mkdocs",
       "title": "React",
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
       "text": "bazz dita fox",
       "location": "https://dev.example.com/docs/default/Component/backend-service-2/xyzzy/#plugh",
       "path": "xyzzy/#plugh",
@@ -700,6 +617,7 @@
     {
       "source": "mkdocs",
       "title": "Home",
+      "parentTitles": [],
       "text": "foo bar baz",
       "location": "https://dev.example.com/docs/default/Component/backend-service-3/",
       "path": "",
@@ -728,6 +646,9 @@
     {
       "source": "mkdocs",
       "title": "Front-end Development",
+      "parentTitles": [
+        "Home"
+      ],
       "text": "fred bazz qux",
       "location": "https://dev.example.com/docs/default/Component/backend-service-3/xyzzy/",
       "path": "xyzzy/",
@@ -755,7 +676,43 @@
     },
     {
       "source": "mkdocs",
+      "title": "Back-end Testing",
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "text": "foobar plugh",
+      "location": "https://dev.example.com/docs/default/Component/backend-service-3/xyzzy/fred",
+      "path": "xyzzy/fred",
+      "section": false,
+      "entity": {
+        "kind": "Component",
+        "namespace": "default",
+        "name": "backend-service-3",
+        "title": "Orders API Backend",
+        "type": "service",
+        "lifecycle": "production",
+        "owner": "team-foobar",
+        "ownerRef": {
+          "kind": "group",
+          "namespace": "default",
+          "name": "team-foobar"
+        },
+        "system": "order-processing",
+        "systemRef": {
+          "kind": "system",
+          "namespace": "default",
+          "name": "order-processing"
+        }
+      }
+    },
+    {
+      "source": "mkdocs",
       "title": "React",
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
       "text": "bazz dita fox",
       "location": "https://dev.example.com/docs/default/Component/backend-service-3/xyzzy/#plugh",
       "path": "xyzzy/#plugh",
@@ -784,6 +741,255 @@
     {
       "source": "mkdocs",
       "title": "Home",
+      "parentTitles": [],
+      "text": "foo bar baz",
+      "location": "https://dev.example.com/docs/default/Component/frontend-app-2/",
+      "path": "",
+      "section": false,
+      "entity": {
+        "kind": "Component",
+        "namespace": "default",
+        "name": "frontend-app-2",
+        "title": "Dashboard Frontend",
+        "type": "website",
+        "lifecycle": "staging",
+        "owner": "team-bazz",
+        "ownerRef": {
+          "kind": "group",
+          "namespace": "default",
+          "name": "team-bazz"
+        },
+        "system": "analytics-dashboard",
+        "systemRef": {
+          "kind": "system",
+          "namespace": "default",
+          "name": "analytics-dashboard"
+        }
+      }
+    },
+    {
+      "source": "mkdocs",
+      "title": "Front-end Development",
+      "parentTitles": [
+        "Home"
+      ],
+      "text": "fred bazz qux",
+      "location": "https://dev.example.com/docs/default/Component/frontend-app-2/xyzzy/",
+      "path": "xyzzy/",
+      "section": false,
+      "entity": {
+        "kind": "Component",
+        "namespace": "default",
+        "name": "frontend-app-2",
+        "title": "Dashboard Frontend",
+        "type": "website",
+        "lifecycle": "staging",
+        "owner": "team-bazz",
+        "ownerRef": {
+          "kind": "group",
+          "namespace": "default",
+          "name": "team-bazz"
+        },
+        "system": "analytics-dashboard",
+        "systemRef": {
+          "kind": "system",
+          "namespace": "default",
+          "name": "analytics-dashboard"
+        }
+      }
+    },
+    {
+      "source": "mkdocs",
+      "title": "Back-end Testing",
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "text": "foobar plugh",
+      "location": "https://dev.example.com/docs/default/Component/frontend-app-2/xyzzy/fred",
+      "path": "xyzzy/fred",
+      "section": false,
+      "entity": {
+        "kind": "Component",
+        "namespace": "default",
+        "name": "frontend-app-2",
+        "title": "Dashboard Frontend",
+        "type": "website",
+        "lifecycle": "staging",
+        "owner": "team-bazz",
+        "ownerRef": {
+          "kind": "group",
+          "namespace": "default",
+          "name": "team-bazz"
+        },
+        "system": "analytics-dashboard",
+        "systemRef": {
+          "kind": "system",
+          "namespace": "default",
+          "name": "analytics-dashboard"
+        }
+      }
+    },
+    {
+      "source": "mkdocs",
+      "title": "React",
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "text": "bazz dita fox",
+      "location": "https://dev.example.com/docs/default/Component/frontend-app-2/xyzzy/#plugh",
+      "path": "xyzzy/#plugh",
+      "section": true,
+      "entity": {
+        "kind": "Component",
+        "namespace": "default",
+        "name": "frontend-app-2",
+        "title": "Dashboard Frontend",
+        "type": "website",
+        "lifecycle": "staging",
+        "owner": "team-bazz",
+        "ownerRef": {
+          "kind": "group",
+          "namespace": "default",
+          "name": "team-bazz"
+        },
+        "system": "analytics-dashboard",
+        "systemRef": {
+          "kind": "system",
+          "namespace": "default",
+          "name": "analytics-dashboard"
+        }
+      }
+    },
+    {
+      "source": "mkdocs",
+      "title": "Home",
+      "parentTitles": [],
+      "text": "foo bar baz",
+      "location": "https://dev.example.com/docs/default/Component/microservice-2/",
+      "path": "",
+      "section": false,
+      "entity": {
+        "kind": "Component",
+        "namespace": "default",
+        "name": "microservice-2",
+        "title": "Data Microservice",
+        "type": "service",
+        "lifecycle": "development",
+        "owner": "team-xyzzy",
+        "ownerRef": {
+          "kind": "group",
+          "namespace": "default",
+          "name": "team-xyzzy"
+        },
+        "system": "data-processing",
+        "systemRef": {
+          "kind": "system",
+          "namespace": "default",
+          "name": "data-processing"
+        }
+      }
+    },
+    {
+      "source": "mkdocs",
+      "title": "Front-end Development",
+      "parentTitles": [
+        "Home"
+      ],
+      "text": "fred bazz qux",
+      "location": "https://dev.example.com/docs/default/Component/microservice-2/xyzzy/",
+      "path": "xyzzy/",
+      "section": false,
+      "entity": {
+        "kind": "Component",
+        "namespace": "default",
+        "name": "microservice-2",
+        "title": "Data Microservice",
+        "type": "service",
+        "lifecycle": "development",
+        "owner": "team-xyzzy",
+        "ownerRef": {
+          "kind": "group",
+          "namespace": "default",
+          "name": "team-xyzzy"
+        },
+        "system": "data-processing",
+        "systemRef": {
+          "kind": "system",
+          "namespace": "default",
+          "name": "data-processing"
+        }
+      }
+    },
+    {
+      "source": "mkdocs",
+      "title": "Back-end Testing",
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "text": "foobar plugh",
+      "location": "https://dev.example.com/docs/default/Component/microservice-2/xyzzy/fred",
+      "path": "xyzzy/fred",
+      "section": false,
+      "entity": {
+        "kind": "Component",
+        "namespace": "default",
+        "name": "microservice-2",
+        "title": "Data Microservice",
+        "type": "service",
+        "lifecycle": "development",
+        "owner": "team-xyzzy",
+        "ownerRef": {
+          "kind": "group",
+          "namespace": "default",
+          "name": "team-xyzzy"
+        },
+        "system": "data-processing",
+        "systemRef": {
+          "kind": "system",
+          "namespace": "default",
+          "name": "data-processing"
+        }
+      }
+    },
+    {
+      "source": "mkdocs",
+      "title": "React",
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "text": "bazz dita fox",
+      "location": "https://dev.example.com/docs/default/Component/microservice-2/xyzzy/#plugh",
+      "path": "xyzzy/#plugh",
+      "section": true,
+      "entity": {
+        "kind": "Component",
+        "namespace": "default",
+        "name": "microservice-2",
+        "title": "Data Microservice",
+        "type": "service",
+        "lifecycle": "development",
+        "owner": "team-xyzzy",
+        "ownerRef": {
+          "kind": "group",
+          "namespace": "default",
+          "name": "team-xyzzy"
+        },
+        "system": "data-processing",
+        "systemRef": {
+          "kind": "system",
+          "namespace": "default",
+          "name": "data-processing"
+        }
+      }
+    },
+    {
+      "source": "mkdocs",
+      "title": "Home",
+      "parentTitles": [],
       "text": "foo bar baz",
       "location": "https://dev.example.com/docs/default/System/user-dashboard/",
       "path": "",
@@ -812,6 +1018,9 @@
     {
       "source": "mkdocs",
       "title": "Front-end Development",
+      "parentTitles": [
+        "Home"
+      ],
       "text": "fred bazz qux",
       "location": "https://dev.example.com/docs/default/System/user-dashboard/xyzzy/",
       "path": "xyzzy/",
@@ -839,7 +1048,43 @@
     },
     {
       "source": "mkdocs",
+      "title": "Back-end Testing",
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "text": "foobar plugh",
+      "location": "https://dev.example.com/docs/default/System/user-dashboard/xyzzy/fred",
+      "path": "xyzzy/fred",
+      "section": false,
+      "entity": {
+        "kind": "System",
+        "namespace": "default",
+        "name": "user-dashboard",
+        "title": "User Dashboard",
+        "type": "dashboard",
+        "lifecycle": "staging",
+        "owner": "team-bazz",
+        "ownerRef": {
+          "kind": "group",
+          "namespace": "default",
+          "name": "team-bazz"
+        },
+        "domain": "secondary",
+        "domainRef": {
+          "kind": "domain",
+          "namespace": "default",
+          "name": "secondary"
+        }
+      }
+    },
+    {
+      "source": "mkdocs",
       "title": "React",
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
       "text": "bazz dita fox",
       "location": "https://dev.example.com/docs/default/System/user-dashboard/xyzzy/#plugh",
       "path": "xyzzy/#plugh",
@@ -864,6 +1109,1024 @@
           "name": "secondary"
         }
       }
+    }
+  ],
+  "collatorResults": [
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-1",
+          "title": "Backend Service",
+          "description": "A backend microservice for user management",
+          "tags": [
+            "backend",
+            "microservice"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-xyzzy",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "user-management"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/user-management"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-xyzzy"
+          }
+        ]
+      },
+      "doc": {
+        "location": "",
+        "text": "foo bar baz",
+        "title": "Home"
+      },
+      "parentTitles": [],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-1",
+          "title": "Backend Service",
+          "description": "A backend microservice for user management",
+          "tags": [
+            "backend",
+            "microservice"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-xyzzy",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "user-management"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/user-management"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-xyzzy"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/",
+        "text": "fred bazz qux",
+        "title": "Front-end Development"
+      },
+      "parentTitles": [
+        "Home"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-1",
+          "title": "Backend Service",
+          "description": "A backend microservice for user management",
+          "tags": [
+            "backend",
+            "microservice"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-xyzzy",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "user-management"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/user-management"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-xyzzy"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/fred",
+        "text": "foobar plugh",
+        "title": "Back-end Testing"
+      },
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-1",
+          "title": "Backend Service",
+          "description": "A backend microservice for user management",
+          "tags": [
+            "backend",
+            "microservice"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-xyzzy",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "user-management"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/user-management"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-xyzzy"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/#plugh",
+        "text": "bazz dita fox",
+        "title": "React"
+      },
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-2",
+          "title": "API Backend",
+          "description": "A RESTful backend service for inventory management",
+          "tags": [
+            "backend",
+            "REST"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "inventory-management"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/inventory-management"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "location": "",
+        "text": "foo bar baz",
+        "title": "Home"
+      },
+      "parentTitles": [],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-2",
+          "title": "API Backend",
+          "description": "A RESTful backend service for inventory management",
+          "tags": [
+            "backend",
+            "REST"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "inventory-management"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/inventory-management"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/",
+        "text": "fred bazz qux",
+        "title": "Front-end Development"
+      },
+      "parentTitles": [
+        "Home"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-2",
+          "title": "API Backend",
+          "description": "A RESTful backend service for inventory management",
+          "tags": [
+            "backend",
+            "REST"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "inventory-management"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/inventory-management"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/fred",
+        "text": "foobar plugh",
+        "title": "Back-end Testing"
+      },
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-2",
+          "title": "API Backend",
+          "description": "A RESTful backend service for inventory management",
+          "tags": [
+            "backend",
+            "REST"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "inventory-management"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/inventory-management"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/#plugh",
+        "text": "bazz dita fox",
+        "title": "React"
+      },
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-3",
+          "title": "Orders API Backend",
+          "description": "A RESTful backend service for order processing",
+          "tags": [
+            "backend",
+            "REST"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-foobar",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "order-processing"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/order-processing"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-foobar"
+          }
+        ]
+      },
+      "doc": {
+        "location": "",
+        "text": "foo bar baz",
+        "title": "Home"
+      },
+      "parentTitles": [],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-3",
+          "title": "Orders API Backend",
+          "description": "A RESTful backend service for order processing",
+          "tags": [
+            "backend",
+            "REST"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-foobar",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "order-processing"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/order-processing"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-foobar"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/",
+        "text": "fred bazz qux",
+        "title": "Front-end Development"
+      },
+      "parentTitles": [
+        "Home"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-3",
+          "title": "Orders API Backend",
+          "description": "A RESTful backend service for order processing",
+          "tags": [
+            "backend",
+            "REST"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-foobar",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "order-processing"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/order-processing"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-foobar"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/fred",
+        "text": "foobar plugh",
+        "title": "Back-end Testing"
+      },
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-3",
+          "title": "Orders API Backend",
+          "description": "A RESTful backend service for order processing",
+          "tags": [
+            "backend",
+            "REST"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-foobar",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "order-processing"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/order-processing"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-foobar"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/#plugh",
+        "text": "bazz dita fox",
+        "title": "React"
+      },
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "frontend-app-2",
+          "title": "Dashboard Frontend",
+          "description": "A Vue.js frontend app for analytics dashboard",
+          "tags": [
+            "frontend",
+            "Vue.js"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "type": "website",
+          "lifecycle": "staging",
+          "system": "analytics-dashboard"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/analytics-dashboard"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "location": "",
+        "text": "foo bar baz",
+        "title": "Home"
+      },
+      "parentTitles": [],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "frontend-app-2",
+          "title": "Dashboard Frontend",
+          "description": "A Vue.js frontend app for analytics dashboard",
+          "tags": [
+            "frontend",
+            "Vue.js"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "type": "website",
+          "lifecycle": "staging",
+          "system": "analytics-dashboard"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/analytics-dashboard"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/",
+        "text": "fred bazz qux",
+        "title": "Front-end Development"
+      },
+      "parentTitles": [
+        "Home"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "frontend-app-2",
+          "title": "Dashboard Frontend",
+          "description": "A Vue.js frontend app for analytics dashboard",
+          "tags": [
+            "frontend",
+            "Vue.js"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "type": "website",
+          "lifecycle": "staging",
+          "system": "analytics-dashboard"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/analytics-dashboard"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/fred",
+        "text": "foobar plugh",
+        "title": "Back-end Testing"
+      },
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "frontend-app-2",
+          "title": "Dashboard Frontend",
+          "description": "A Vue.js frontend app for analytics dashboard",
+          "tags": [
+            "frontend",
+            "Vue.js"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "type": "website",
+          "lifecycle": "staging",
+          "system": "analytics-dashboard"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/analytics-dashboard"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/#plugh",
+        "text": "bazz dita fox",
+        "title": "React"
+      },
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "microservice-2",
+          "title": "Data Microservice",
+          "description": "A microservice for data processing",
+          "tags": [
+            "backend",
+            "microservice"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-xyzzy",
+          "type": "service",
+          "lifecycle": "development",
+          "system": "data-processing"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/data-processing"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-xyzzy"
+          }
+        ]
+      },
+      "doc": {
+        "location": "",
+        "text": "foo bar baz",
+        "title": "Home"
+      },
+      "parentTitles": [],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "microservice-2",
+          "title": "Data Microservice",
+          "description": "A microservice for data processing",
+          "tags": [
+            "backend",
+            "microservice"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-xyzzy",
+          "type": "service",
+          "lifecycle": "development",
+          "system": "data-processing"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/data-processing"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-xyzzy"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/",
+        "text": "fred bazz qux",
+        "title": "Front-end Development"
+      },
+      "parentTitles": [
+        "Home"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "microservice-2",
+          "title": "Data Microservice",
+          "description": "A microservice for data processing",
+          "tags": [
+            "backend",
+            "microservice"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-xyzzy",
+          "type": "service",
+          "lifecycle": "development",
+          "system": "data-processing"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/data-processing"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-xyzzy"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/fred",
+        "text": "foobar plugh",
+        "title": "Back-end Testing"
+      },
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "microservice-2",
+          "title": "Data Microservice",
+          "description": "A microservice for data processing",
+          "tags": [
+            "backend",
+            "microservice"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-xyzzy",
+          "type": "service",
+          "lifecycle": "development",
+          "system": "data-processing"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/data-processing"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-xyzzy"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/#plugh",
+        "text": "bazz dita fox",
+        "title": "React"
+      },
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "System",
+        "metadata": {
+          "name": "user-dashboard",
+          "title": "User Dashboard",
+          "description": "System for displaying user-related data and statistics",
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "domain": "secondary",
+          "type": "dashboard",
+          "lifecycle": "staging"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "domain:default/secondary"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "location": "",
+        "text": "foo bar baz",
+        "title": "Home"
+      },
+      "parentTitles": [],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "System",
+        "metadata": {
+          "name": "user-dashboard",
+          "title": "User Dashboard",
+          "description": "System for displaying user-related data and statistics",
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "domain": "secondary",
+          "type": "dashboard",
+          "lifecycle": "staging"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "domain:default/secondary"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/",
+        "text": "fred bazz qux",
+        "title": "Front-end Development"
+      },
+      "parentTitles": [
+        "Home"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "System",
+        "metadata": {
+          "name": "user-dashboard",
+          "title": "User Dashboard",
+          "description": "System for displaying user-related data and statistics",
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "domain": "secondary",
+          "type": "dashboard",
+          "lifecycle": "staging"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "domain:default/secondary"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/fred",
+        "text": "foobar plugh",
+        "title": "Back-end Testing"
+      },
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "source": "mkdocs"
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "System",
+        "metadata": {
+          "name": "user-dashboard",
+          "title": "User Dashboard",
+          "description": "System for displaying user-related data and statistics",
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "domain": "secondary",
+          "type": "dashboard",
+          "lifecycle": "staging"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "domain:default/secondary"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "location": "xyzzy/#plugh",
+        "text": "bazz dita fox",
+        "title": "React"
+      },
+      "parentTitles": [
+        "Home",
+        "Front-end Development"
+      ],
+      "source": "mkdocs"
     }
   ]
 }

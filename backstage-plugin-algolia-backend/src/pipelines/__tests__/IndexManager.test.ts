@@ -2,7 +2,7 @@ import { getVoidLogger } from '@backstage/backend-common';
 import { ConfigReader } from '@backstage/config';
 import { SearchIndex } from 'algoliasearch';
 import { IndexManager } from '../IndexManager';
-import { objects as mockObjects } from './mocks.json';
+import { indexObjects as mockObjects } from './mocks.json';
 
 const mockObjectsWithTimestamp = mockObjects.map(o => ({
   ...o,
@@ -80,6 +80,6 @@ describe('IndexManager', () => {
     }));
     expect(deleteObjects).toHaveBeenCalledTimes(2);
     expect(deleteObjects.mock.calls[0][0].length).toEqual(0);
-    expect(deleteObjects.mock.calls[1][0].length).toEqual(18);
+    expect(deleteObjects.mock.calls[1][0].length).toEqual(24);
   });
 });

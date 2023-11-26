@@ -11,33 +11,34 @@ import { testCollatingBuildingPipeline } from '../../dev';
 import { TechDocsCollatorFactory } from '../TechDocsCollatorFactory';
 import { CollatorResult } from '../types';
 import {
+  collatorResults as mockCollatorResults,
   entities as mockEntities,
-  search as mockSearchDocIndex,
+  searchDocIndex as mockSearchDocIndex,
 } from './mocks.json';
+
+const config = new ConfigReader({
+  app: {
+    baseUrl: 'htts://dev.example.com',
+  },
+});
+const mockDiscoveryApi: jest.Mocked<PluginEndpointDiscovery> = {
+  getBaseUrl: jest.fn().mockResolvedValue('http://backend.example.com'),
+  getExternalBaseUrl: jest.fn(),
+};
+const mockTokenManager: jest.Mocked<TokenManager> = {
+  getToken: jest.fn().mockResolvedValue({ token: 'bar' }),
+  authenticate: jest.fn(),
+};
+const options = {
+  discovery: mockDiscoveryApi,
+  logger: getVoidLogger(),
+  tokenManager: mockTokenManager,
+};
+let factory: TechDocsCollatorFactory;
 
 describe('TechDocsCollatorFactory', () => {
   const worker = setupServer();
   setupRequestMockHandlers(worker);
-  const config = new ConfigReader({
-    app: {
-      baseUrl: 'htts://portal.example.com',
-    },
-  });
-  const mockDiscoveryApi: jest.Mocked<PluginEndpointDiscovery> = {
-    getBaseUrl: jest.fn().mockResolvedValue('http://backend.example.com'),
-    getExternalBaseUrl: jest.fn(),
-  };
-  const mockTokenManager: jest.Mocked<TokenManager> = {
-    getToken: jest.fn().mockResolvedValue({ token: 'bar' }),
-    authenticate: jest.fn(),
-  };
-  const options = {
-    discovery: mockDiscoveryApi,
-    logger: getVoidLogger(),
-    tokenManager: mockTokenManager,
-  };
-  let factory: TechDocsCollatorFactory;
-
   beforeEach(async () => {
     jest.clearAllMocks();
     factory = TechDocsCollatorFactory.fromConfig(config, options);
@@ -75,11 +76,33 @@ describe('TechDocsCollatorFactory', () => {
     const results = await testCollatingBuildingPipeline({ collatorFactory: factory }) as CollatorResult[];
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('techdocs');
-    expect(results).toHaveLength(18);
-    const expected = mockEntities
-      .filter(entity => entity.metadata.annotations?.['backstage.io/techdocs-ref'])
-      .map(entity => mockSearchDocIndex.docs.map(doc => ({ entity, doc, source: 'mkdocs' })))
-      .flat();
-    expect(results).toEqual(expect.arrayContaining(expected));
+    expect(results).toHaveLength(24);
+    expect(results).toEqual(expect.arrayContaining(mockCollatorResults));
+  });
+
+  it('can include parent titles in result', async () => {
+    const results = await testCollatingBuildingPipeline({ collatorFactory: factory }) as CollatorResult[];
+    expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
+    expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('techdocs');
+    results.filter(({ doc }) => doc.location === '')
+      .map(r => {
+        expect(r.parentTitles.length).toEqual(0);
+        expect(r.parentTitles).toEqual(expect.arrayContaining([]));
+      });
+    results.filter(({ doc }) => doc.location === 'xyzzy/')
+      .map(r => {
+        expect(r.parentTitles.length).toEqual(1);
+        expect(r.parentTitles).toEqual(expect.arrayContaining(['Home']));
+      });
+    results.filter(({ doc }) => doc.location === 'xyzzy/fred')
+      .map(r => {
+        expect(r.parentTitles.length).toEqual(2);
+        expect(r.parentTitles).toEqual(expect.arrayContaining(['Home', 'Front-end Development']));
+      });
+    results.filter(({ doc }) => doc.location === 'xyzzy/#plugh')
+      .map(r => {
+        expect(r.parentTitles.length).toEqual(2);
+        expect(r.parentTitles).toEqual(expect.arrayContaining(['Home', 'Front-end Development']));
+      });
   });
 });
