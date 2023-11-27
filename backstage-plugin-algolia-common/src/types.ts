@@ -8,6 +8,7 @@ export interface IndexObject {
   path: string;
   section: boolean;
   summary?: string;
+  topics?: string[];
   entity?: {
     kind: string;
     namespace: string;
