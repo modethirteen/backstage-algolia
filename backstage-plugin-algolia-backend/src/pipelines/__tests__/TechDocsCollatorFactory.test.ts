@@ -79,30 +79,4 @@ describe('TechDocsCollatorFactory', () => {
     expect(results).toHaveLength(24);
     expect(results).toEqual(expect.arrayContaining(mockCollatorResults));
   });
-
-  it('can include parent titles in result', async () => {
-    const results = await testCollatingBuildingPipeline({ collatorFactory: factory }) as CollatorResult[];
-    expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
-    expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('techdocs');
-    results.filter(({ doc }) => doc.location === '')
-      .map(r => {
-        expect(r.parentTitles.length).toEqual(0);
-        expect(r.parentTitles).toEqual(expect.arrayContaining([]));
-      });
-    results.filter(({ doc }) => doc.location === 'xyzzy/')
-      .map(r => {
-        expect(r.parentTitles.length).toEqual(1);
-        expect(r.parentTitles).toEqual(expect.arrayContaining(['Home']));
-      });
-    results.filter(({ doc }) => doc.location === 'xyzzy/fred')
-      .map(r => {
-        expect(r.parentTitles.length).toEqual(2);
-        expect(r.parentTitles).toEqual(expect.arrayContaining(['Home', 'Front-end Development']));
-      });
-    results.filter(({ doc }) => doc.location === 'xyzzy/#plugh')
-      .map(r => {
-        expect(r.parentTitles.length).toEqual(2);
-        expect(r.parentTitles).toEqual(expect.arrayContaining(['Home', 'Front-end Development']));
-      });
-  });
 });

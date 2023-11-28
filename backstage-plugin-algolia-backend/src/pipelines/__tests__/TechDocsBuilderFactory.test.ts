@@ -1,5 +1,6 @@
 import { ConfigReader } from '@backstage/config';
 import { IndexObject } from 'backstage-plugin-algolia-common';
+import fs from 'fs';
 import { TestCollatorFactory, testCollatingBuildingPipeline } from '../../dev';
 import { TechDocsBuilderFactory } from '../TechDocsBuilderFactory';
 import {
@@ -13,6 +14,8 @@ const config = new ConfigReader({
   },
 });
 
+const getTopics = jest.fn();
+
 describe('TechDocsBuilderFactory', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -20,8 +23,10 @@ describe('TechDocsBuilderFactory', () => {
 
   it('can build an index object from entity and mkdocs search index items', async () => {
     const collatorFactory = new TestCollatorFactory({ results: mockCollatorResults });
-    const builderFactories = [TechDocsBuilderFactory.fromConfig(config)];
+    getTopics.mockResolvedValue(['api', 'system', 'debug']);
+    const builderFactories = [TechDocsBuilderFactory.fromConfig(config, { getTopics })];
     const objects = await testCollatingBuildingPipeline({ collatorFactory, builderFactories }) as IndexObject[];
+    fs.writeFileSync('objects.json', JSON.stringify(objects), 'utf-8');
     expect(objects).toHaveLength(24);
     expect(objects).toEqual(expect.arrayContaining(mockObjects));
   });

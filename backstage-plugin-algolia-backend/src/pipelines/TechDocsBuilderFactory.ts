@@ -10,6 +10,7 @@ import { unescape } from 'lodash';
 import * as url from 'url';
 import { compare } from '../util';
 import { BuilderBase } from './BuilderBase';
+import { TopicProviderInterface } from './TopicProviderInterface';
 import {
   BuilderFactory,
   CollatorResult,
@@ -17,15 +18,20 @@ import {
 
 class TechDocsBuilder extends BuilderBase {
   private readonly locationTemplate: string;
+  private readonly topicProvider: TopicProviderInterface;
 
-  public constructor(options: { locationTemplate: string; }) {
+  public constructor(options: {
+    locationTemplate: string;
+    topicProvider: TopicProviderInterface;
+  }) {
     super({ objectMode: true });
-    const { locationTemplate } = options;
+    const { locationTemplate, topicProvider } = options;
     this.locationTemplate = locationTemplate;
+    this.topicProvider = topicProvider;
   }
 
   public async build(item: any): Promise<IndexObject | undefined> {
-    const { entity, doc, source, parentTitles } = item as CollatorResult;
+    const { entity, doc, source } = item as CollatorResult;
     const entityInfo = {
       kind: entity.kind,
       namespace: entity.metadata.namespace || 'default',
@@ -82,11 +88,11 @@ class TechDocsBuilder extends BuilderBase {
     return {
       source,
       title: unescape(doc.title),
-      parentTitles: parentTitles.map(t => unescape(t)),
       text: unescape(doc.text ?? ''),
       location,
       path: doc.location,
       section,
+      topics: await this.topicProvider.getTopics(item),
       entity: {
         ...entityInfo,
         title: entity.metadata.title ?? undefined,
@@ -103,22 +109,30 @@ class TechDocsBuilder extends BuilderBase {
 }
 
 export class TechDocsBuilderFactory implements BuilderFactory {
-  public static fromConfig(config: Config) {
+  public static fromConfig(config: Config, topicProvider: TopicProviderInterface) {
     const baseUrl = config.getString('app.baseUrl');
     const locationTemplate = config.getOptionalString('algolia.backend.indexes.techdocs.locationTemplate')
       ?? url.resolve(baseUrl, '/docs/:namespace/:kind/:name/:path');
-    return new TechDocsBuilderFactory({ locationTemplate });
+    return new TechDocsBuilderFactory({ locationTemplate, topicProvider });
   }
 
   private readonly locationTemplate: string;
+  private readonly topicProvider: TopicProviderInterface;
 
-  public constructor(options: { locationTemplate: string; }) {
-    const { locationTemplate } = options;
+  public constructor(options: {
+    locationTemplate: string;
+    topicProvider: TopicProviderInterface;
+  }) {
+    const { locationTemplate, topicProvider } = options;
     this.locationTemplate = locationTemplate;
+    this.topicProvider = topicProvider;
   }
 
   public async newBuilder(): Promise<BuilderBase> {
-    return new TechDocsBuilder({ locationTemplate: this.locationTemplate });
+    return new TechDocsBuilder({
+      locationTemplate: this.locationTemplate,
+      topicProvider: this.topicProvider,
+    });
   }
 }
 
