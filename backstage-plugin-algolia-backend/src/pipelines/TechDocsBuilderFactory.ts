@@ -5,7 +5,6 @@ import {
 } from '@backstage/catalog-model';
 import { Config } from '@backstage/config';
 import { assertError } from '@backstage/errors';
-import { IndexObject } from 'backstage-plugin-algolia-common';
 import { unescape } from 'lodash';
 import * as url from 'url';
 import { compare } from '../util';
@@ -13,7 +12,7 @@ import { BuilderBase } from './BuilderBase';
 import { TopicProviderInterface } from './TopicProviderInterface';
 import {
   BuilderFactory,
-  CollatorResult,
+  PipelineResult,
 } from './types';
 
 class TechDocsBuilder extends BuilderBase {
@@ -30,7 +29,7 @@ class TechDocsBuilder extends BuilderBase {
     this.topicProvider = topicProvider;
   }
 
-  public async build(result: CollatorResult): Promise<IndexObject | undefined> {
+  public async build(result: PipelineResult): Promise<PipelineResult | undefined> {
     const { entity, doc, source } = result;
     const entityInfo = {
       kind: entity.kind,
@@ -86,19 +85,22 @@ class TechDocsBuilder extends BuilderBase {
       throw new Error(`Could not parse location URL to determine if location is a page section: ${e.message}`);
     }
     return {
-      source,
-      title: unescape(doc.title),
-      text: unescape(doc.text ?? ''),
-      location,
-      path: doc.location,
-      section,
-      topics: await this.topicProvider.getTopics({ result }),
-      entity: {
-        ...entityInfo,
-        title: entity.metadata.title ?? undefined,
-        type: entity.spec?.type?.toString() ?? undefined,
-        lifecycle: entity.spec?.lifecycle as string ?? undefined,
-        ...refs,
+      ...result,
+      indexObject: {
+        source,
+        title: unescape(doc.title),
+        text: unescape(doc.text ?? ''),
+        location,
+        path: doc.location,
+        section,
+        topics: await this.topicProvider.getTopics({ result }),
+        entity: {
+          ...entityInfo,
+          title: entity.metadata.title ?? undefined,
+          type: entity.spec?.type?.toString() ?? undefined,
+          lifecycle: entity.spec?.lifecycle as string ?? undefined,
+          ...refs,
+        },
       },
     };
   }

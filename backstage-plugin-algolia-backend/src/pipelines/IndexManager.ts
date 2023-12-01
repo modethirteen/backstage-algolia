@@ -16,19 +16,20 @@ export interface IndexManager {
 }
 
 export interface IndexManagerOptions {
+  date: Date;
   index: 'techdocs';
   logger: Logger;
 }
 
 export class IndexManager implements IndexManager {
   public static fromConfig(config: Config, options: IndexManagerOptions) {
-    const { index, logger } = options;
+    const { date, index, logger } = options;
     const client = ClientFactory.fromConfig(config).newClient();
     return new IndexManager({
       expirations: config.getOptionalConfigArray(`algolia.backend.indexes.${index}.expirations`)
         ?.map(c => ({
           source: c.get('source'),
-          ttl: toSeconds(parse(c.get('ttl'))),
+          ttl: toSeconds(parse(c.get('ttl')), date),
         })),
       logger,
       now: new Date(),

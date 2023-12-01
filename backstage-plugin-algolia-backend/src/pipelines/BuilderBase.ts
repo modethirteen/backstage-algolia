@@ -1,14 +1,13 @@
 import { assertError } from '@backstage/errors';
-import { IndexObject } from 'backstage-plugin-algolia-common';
 import { Transform } from 'stream';
-import { CollatorResult } from './types';
+import { PipelineResult } from './types';
 
 export abstract class BuilderBase extends Transform {
   public constructor() {
     super({ objectMode: true });
   }
 
-  public abstract build(result: CollatorResult): Promise<IndexObject | undefined>;
+  public abstract build(result: PipelineResult): Promise<PipelineResult | undefined>;
 
   public abstract finalize(): Promise<void>;
 
@@ -16,7 +15,7 @@ export abstract class BuilderBase extends Transform {
    * @internal
    */
   async _transform(
-    result: CollatorResult,
+    result: PipelineResult,
     _: any,
     done: (error?: Error | null) => void,
   ) {

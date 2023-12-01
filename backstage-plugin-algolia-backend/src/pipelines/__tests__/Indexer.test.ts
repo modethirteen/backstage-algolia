@@ -1,8 +1,10 @@
 import { getVoidLogger } from '@backstage/backend-common';
+import { Entity } from '@backstage/catalog-model';
 import { SearchIndex } from 'algoliasearch';
 import { testIndexingPipeline } from '../../dev';
 import { Indexer } from '../Indexer';
-import { indexObjects as mockObjects } from './mocks.json';
+import { IndexableDocument, PipelineResult } from '../types';
+import { pipelineResults as mockPipelineResults } from './mocks.json';
 
 const words = [
   'apple',
@@ -36,14 +38,14 @@ describe('Indexer', () => {
 
   it('can include timestamp in index objects', async () => {
     const indexer = new Indexer({
-      batchSize: mockObjects.length,
+      batchSize: mockPipelineResults.length,
       chunk: false,
       logger: getVoidLogger(),
       maxObjectSizeBytes: 5000,
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await testIndexingPipeline({ objects: mockObjects, indexer });
+    await testIndexingPipeline({ results: mockPipelineResults, indexer });
     expect(saveObjects).toHaveBeenCalled();
     const timestamps = Array.from(saveObjects.mock.calls[0][0])
       .map((o: any) => o.timestamp);
@@ -53,14 +55,14 @@ describe('Indexer', () => {
 
   it('can include object ids in index objects', async () => {
     const indexer = new Indexer({
-      batchSize: mockObjects.length,
+      batchSize: mockPipelineResults.length,
       chunk: false,
       logger: getVoidLogger(),
       maxObjectSizeBytes: 5000,
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await testIndexingPipeline({ objects: mockObjects, indexer });
+    await testIndexingPipeline({ results: mockPipelineResults, indexer });
     expect(saveObjects).toHaveBeenCalled();
     const ids = Array.from(saveObjects.mock.calls[0][0])
       .map((o: any) => o.objectID);
@@ -91,7 +93,13 @@ describe('Indexer', () => {
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await testIndexingPipeline({ objects: [object], indexer });
+    const result: PipelineResult = {
+      indexObject: object,
+      doc: {} as IndexableDocument,
+      source: 'xyzzy',
+      entity: {} as Entity,
+    };
+    await testIndexingPipeline({ results: [result], indexer });
     expect(saveObjects).not.toHaveBeenCalled();
   });
 
@@ -131,7 +139,12 @@ describe('Indexer', () => {
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await testIndexingPipeline({ objects, indexer });
+    await testIndexingPipeline({ results: objects.map(o => ({
+      indexObject: o,
+      doc: {} as IndexableDocument,
+      source: 'xyzzy',
+      entity: {} as Entity,
+    })), indexer });
     expect(saveObjects).toHaveBeenCalled();
     const results = Array.from(saveObjects.mock.calls[0][0])
     expect(results.length).toEqual(89);
@@ -164,7 +177,7 @@ describe('Indexer', () => {
         name: 'flask',
       },
       parentTitles: [],
-    }, undefined];
+    }];
     const indexer = new Indexer({
       batchSize: 2,
       chunk: true,
@@ -173,7 +186,12 @@ describe('Indexer', () => {
       now: new Date('2023-11-09T01:25:23+0000'),
       searchIndex: { saveObjects } as unknown as SearchIndex,
     });
-    await testIndexingPipeline({ objects, indexer });
+    await testIndexingPipeline({ results: [...objects.map(o => ({
+      indexObject: o,
+      doc: {} as IndexableDocument,
+      source: 'xyzzy',
+      entity: {} as Entity,
+    })), undefined], indexer });
     expect(saveObjects).toHaveBeenCalled();
     const results = Array.from(saveObjects.mock.calls[0][0])
     expect(results.length).toEqual(89);

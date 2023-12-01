@@ -9,10 +9,9 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { testCollatingBuildingPipeline } from '../../dev';
 import { TechDocsCollatorFactory } from '../TechDocsCollatorFactory';
-import { CollatorResult } from '../types';
 import {
-  collatorResults as mockCollatorResults,
   entities as mockEntities,
+  pipelineResults as mockPipelineResults,
   searchDocIndex as mockSearchDocIndex,
 } from './mocks.json';
 
@@ -73,10 +72,12 @@ describe('TechDocsCollatorFactory', () => {
   });
 
   it('fetches from the configured catalog and techdocs services', async () => {
-    const results = await testCollatingBuildingPipeline({ collatorFactory: factory }) as CollatorResult[];
+    const results = await testCollatingBuildingPipeline({ collatorFactory: factory });
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('techdocs');
     expect(results).toHaveLength(24);
-    expect(results).toEqual(expect.arrayContaining(mockCollatorResults));
+    expect(results).toEqual(expect.arrayContaining(mockPipelineResults.map(({ entity, doc, docs, source }) => ({
+      entity, doc, docs, source   
+    }))));
   });
 });

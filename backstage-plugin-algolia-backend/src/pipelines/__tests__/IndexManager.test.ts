@@ -2,10 +2,10 @@ import { getVoidLogger } from '@backstage/backend-common';
 import { ConfigReader } from '@backstage/config';
 import { SearchIndex } from 'algoliasearch';
 import { IndexManager } from '../IndexManager';
-import { indexObjects as mockObjects } from './mocks.json';
+import { pipelineResults as mockPipelineResults } from './mocks.json';
 
-const mockObjectsWithTimestamp = mockObjects.map(o => ({
-  ...o,
+const mockObjectsWithTimestamp = mockPipelineResults.map(r => ({
+  ...r.indexObject,
   timestamp: '2023-09-15T11:12:58+0000'
 }));
 const browseObjects = jest.fn(({ batch }) => batch(mockObjectsWithTimestamp));
@@ -38,12 +38,13 @@ describe('IndexManager', () => {
       },
     });
     const indexManager = IndexManager.fromConfig(config, {
+      date: new Date('2023-12-01T20:21:34Z'),
       index: 'techdocs',
       logger: getVoidLogger(),
     });
     expect(indexManager.expirations).toEqual([{
       source: 'mkdocs',
-      ttl: 15724800,
+      ttl: 15811200,
     }, {
       source: 'coda',
       ttl: 86400,

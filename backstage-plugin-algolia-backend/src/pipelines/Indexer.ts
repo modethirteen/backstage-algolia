@@ -6,6 +6,7 @@ import crypto from 'crypto';
 import { Writable } from 'stream';
 import { Logger } from 'winston';
 import { ClientFactory } from '../api/ClientFactory';
+import { PipelineResult } from './types';
 
 const isTextRemaining = (text: string) => text.replace(/^\s+|\s+$/g, '').length;
 
@@ -59,14 +60,14 @@ export class Indexer extends Writable {
    * @internal
    */
   async _write(
-    object: IndexObject | undefined,
+    result: PipelineResult | undefined,
     _e: any,
     done: (error?: Error | null) => void,
   ) {
-    if (typeof object === 'undefined') {
+    if (typeof result?.indexObject === 'undefined') {
       return;
     }
-    this.currentBatch.push(object);
+    this.currentBatch.push(result.indexObject);
     if (this.currentBatch.length < this.batchSize) {
       done();
       return;

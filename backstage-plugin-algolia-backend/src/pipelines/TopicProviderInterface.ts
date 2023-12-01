@@ -1,5 +1,5 @@
-import { CollatorResult } from "./types";
+import { PipelineResult } from "./types";
 
 export interface TopicProviderInterface {
-  getTopics(options: { result: CollatorResult }): Promise<string[]>;
+  getTopics(options: { result: PipelineResult }): Promise<string[]>;
 }

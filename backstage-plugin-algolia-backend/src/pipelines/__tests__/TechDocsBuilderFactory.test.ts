@@ -1,11 +1,7 @@
 import { ConfigReader } from '@backstage/config';
-import { IndexObject } from 'backstage-plugin-algolia-common';
 import { TestCollatorFactory, testCollatingBuildingPipeline } from '../../dev';
 import { TechDocsBuilderFactory } from '../TechDocsBuilderFactory';
-import {
-  collatorResults as mockCollatorResults,
-  indexObjects as mockObjects,
-} from './mocks.json';
+import { pipelineResults as mockPipelineResults } from './mocks.json';
 
 const config = new ConfigReader({
   app: {
@@ -21,11 +17,15 @@ describe('TechDocsBuilderFactory', () => {
   });
 
   it('can build an index object from entity and mkdocs search index items', async () => {
-    const collatorFactory = new TestCollatorFactory({ results: mockCollatorResults });
+    const collatorFactory = new TestCollatorFactory({
+      results: mockPipelineResults.map(({ entity, doc, docs, source }) => ({
+        entity, doc, docs, source   
+      }))
+    });
     getTopics.mockResolvedValue(['api', 'system', 'debug']);
     const builderFactories = [TechDocsBuilderFactory.fromConfig(config, { getTopics })];
-    const objects = await testCollatingBuildingPipeline({ collatorFactory, builderFactories }) as IndexObject[];
-    expect(objects).toHaveLength(24);
-    expect(objects).toEqual(expect.arrayContaining(mockObjects));
+    const results = await testCollatingBuildingPipeline({ collatorFactory, builderFactories });
+    expect(results).toHaveLength(24);
+    expect(results).toEqual(expect.arrayContaining(mockPipelineResults));
   });
 });

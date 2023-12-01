@@ -12,8 +12,8 @@ import { Readable } from 'stream';
 import { Logger } from 'winston';
 import {
   CollatorFactory,
-  CollatorResult,
   IndexableDocument,
+  PipelineResult,
 } from './types';
 
 export interface TechDocsCollatorFactoryOptions {
@@ -52,7 +52,7 @@ export class TechDocsCollatorFactory implements CollatorFactory {
     return Readable.from(this.execute());
   }
 
-  private async * execute(): AsyncGenerator<CollatorResult, void, undefined> {
+  private async * execute(): AsyncGenerator<PipelineResult, void, undefined> {
     const limit = pLimit(this.parallelismLimit);
     const techDocsBaseUrl = await this.discovery.getBaseUrl('techdocs');
     const { token } = await this.tokenManager.getToken();
@@ -79,7 +79,7 @@ export class TechDocsCollatorFactory implements CollatorFactory {
         // only entities with techdocs refs were fetched, but they may be null values
         .filter(entity => entity.metadata.annotations?.['backstage.io/techdocs-ref'])
         .map((entity: Entity) =>
-          limit(async(): Promise<CollatorResult[]> => {
+          limit(async(): Promise<PipelineResult[]> => {
             const entityInfo = {
               kind: entity.kind,
               namespace: entity.metadata.namespace ?? 'default',

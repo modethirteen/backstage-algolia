@@ -1,7 +1,6 @@
-import { IndexObject } from 'backstage-plugin-algolia-common';
 import { Readable, Writable, pipeline } from 'stream';
 import { Indexer } from '../pipelines';
-import { BuilderFactory, CollatorFactory } from '../pipelines/types';
+import { BuilderFactory, CollatorFactory, PipelineResult } from '../pipelines/types';
 
 export const testCollatingBuildingPipeline = async (options: {
   collatorFactory: CollatorFactory;
@@ -10,11 +9,11 @@ export const testCollatingBuildingPipeline = async (options: {
   const { builderFactories, collatorFactory } = options;
   const collator = await collatorFactory.newCollator();
   const builders = await Promise.all((builderFactories ?? []).map(b => b.newBuilder()));
-  const results: any[] = [];
+  const results: PipelineResult[] = [];
   const collector = new Writable({
     objectMode: true,
     write(
-      result: any,
+      result: PipelineResult,
       _e: any,
       done: () => void,
     ) {
@@ -22,17 +21,17 @@ export const testCollatingBuildingPipeline = async (options: {
       done();
     }
   })
-  return new Promise<any[]>(resolve => {
+  return new Promise<PipelineResult[]>(resolve => {
     pipeline([collator, ...builders, collector], () => resolve(results));
   });
 };
 
 export const testIndexingPipeline = async (options: {
-  objects: (IndexObject | undefined)[];
+  results: (PipelineResult | undefined)[];
   indexer: Indexer;
 }) => {
-  const { objects, indexer } = options;
-  const items = [...objects];
+  const { results, indexer } = options;
+  const items = [...results];
   const objectStream = new Readable({
     objectMode: true,
     read() {

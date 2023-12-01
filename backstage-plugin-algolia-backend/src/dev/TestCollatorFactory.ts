@@ -1,10 +1,10 @@
 import { Readable } from 'stream';
-import { CollatorFactory, CollatorResult } from '../pipelines';
+import { CollatorFactory, PipelineResult } from '../pipelines';
 
 export class TestCollatorFactory implements CollatorFactory {
-  private results: CollatorResult[];
+  private results: PipelineResult[];
 
-  constructor(options: { results: CollatorResult[] }) {
+  constructor(options: { results: PipelineResult[] }) {
     const { results } = options;
     this.results = results;
   }
