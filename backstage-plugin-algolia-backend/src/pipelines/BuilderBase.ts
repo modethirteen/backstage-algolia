@@ -1,9 +1,14 @@
 import { assertError } from '@backstage/errors';
 import { IndexObject } from 'backstage-plugin-algolia-common';
 import { Transform } from 'stream';
+import { CollatorResult } from './types';
 
 export abstract class BuilderBase extends Transform {
-  public abstract build(item: any): Promise<IndexObject | undefined>;
+  public constructor() {
+    super({ objectMode: true });
+  }
+
+  public abstract build(result: CollatorResult): Promise<IndexObject | undefined>;
 
   public abstract finalize(): Promise<void>;
 
@@ -11,12 +16,12 @@ export abstract class BuilderBase extends Transform {
    * @internal
    */
   async _transform(
-    item: any,
+    result: CollatorResult,
     _: any,
     done: (error?: Error | null) => void,
   ) {
     try {
-      const object = await this.build(item);
+      const object = await this.build(result);
       if (typeof object === 'undefined') {
         done();
         return;

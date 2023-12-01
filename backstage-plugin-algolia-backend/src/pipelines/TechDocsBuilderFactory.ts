@@ -24,14 +24,14 @@ class TechDocsBuilder extends BuilderBase {
     locationTemplate: string;
     topicProvider: TopicProviderInterface;
   }) {
-    super({ objectMode: true });
+    super();
     const { locationTemplate, topicProvider } = options;
     this.locationTemplate = locationTemplate;
     this.topicProvider = topicProvider;
   }
 
-  public async build(item: any): Promise<IndexObject | undefined> {
-    const { entity, doc, source } = item as CollatorResult;
+  public async build(result: CollatorResult): Promise<IndexObject | undefined> {
+    const { entity, doc, source } = result;
     const entityInfo = {
       kind: entity.kind,
       namespace: entity.metadata.namespace || 'default',
@@ -92,7 +92,7 @@ class TechDocsBuilder extends BuilderBase {
       location,
       path: doc.location,
       section,
-      topics: await this.topicProvider.getTopics(item),
+      topics: await this.topicProvider.getTopics({ result }),
       entity: {
         ...entityInfo,
         title: entity.metadata.title ?? undefined,
