@@ -8,7 +8,6 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
-import FilterIcon from '@material-ui/icons/FilterList';
 import React from 'react';
 import { useRefinementList } from 'react-instantsearch';
 
@@ -18,6 +17,11 @@ export interface SearchRefinementItem {
   highlighted?: string;
   count: number;
   isRefined: boolean;
+}
+
+export interface SearchRefinementItemWithIcons extends SearchRefinementItem {
+  CheckedIcon?: IconComponent;
+  Icon?: IconComponent;
 }
 
 const useStyles = makeStyles({
@@ -47,19 +51,14 @@ export const SearchRefinement = (props: {
   attribute: string;
   className?: string;
   label: string;
-  transformItems?: (item: SearchRefinementItem) => SearchRefinementItem & {
-    Icon: IconComponent;
-  };
+  transformItems?: (item: SearchRefinementItem) => SearchRefinementItemWithIcons;
   onRefinement?: (value: string) => void;
 }) => {
   const {
     attribute,
     className,
     label,
-    transformItems = i => ({
-      ...i,
-      Icon: FilterIcon,
-    }),
+    transformItems = i => i as SearchRefinementItemWithIcons,
     onRefinement,
   } = props;
   const { items, refine, canRefine } = useRefinementList({
@@ -89,7 +88,7 @@ export const SearchRefinement = (props: {
           }
           control={
             <Checkbox
-              color="primary"
+              color="default"
               size="small"
               value={i.value}
               name={i.value}
@@ -100,8 +99,8 @@ export const SearchRefinement = (props: {
                 }
               }}
               checked={i.isRefined}
-              icon={<i.Icon />}
-              checkedIcon={<i.Icon />}
+              icon={i.Icon ? <i.Icon /> : undefined}
+              checkedIcon={i.CheckedIcon ? <i.CheckedIcon /> : undefined}
             />
           }
         />

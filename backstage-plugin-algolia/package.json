@@ -53,7 +53,8 @@
   },
   "files": [
     "dist",
-    "config.d.ts"
+    "config.d.ts",
+    "types.d.ts"
   ],
   "configSchema": "config.d.ts"
 }

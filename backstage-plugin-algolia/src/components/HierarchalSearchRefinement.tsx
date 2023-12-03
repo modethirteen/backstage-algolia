@@ -9,6 +9,8 @@ import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import { TreeItem, TreeView } from '@material-ui/lab';
 import React, { useMemo } from 'react';
 import { useHierarchicalMenu } from 'react-instantsearch';
+import DefaultCheckedIcon from '../icons/checked.icon.svg';
+import DefaultIcon from '../icons/unchecked.icon.svg';
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -37,6 +39,9 @@ const useStyles = makeStyles(theme => ({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
+  icon: {
+    color: theme.palette.text.secondary,
+  },
 }));
 
 interface HierarchyNode {
@@ -47,23 +52,24 @@ interface HierarchyNode {
   value: string;
 }
 
-const buildTree = (
-  item: HierarchyNode,
-  createOnClickHandler: (value: string) => (e: React.MouseEvent<Element, MouseEvent>) => void,
-  Icon: IconComponent,
-  nodeIds: string[],
-  classes: ClassNameMap,
-) => {
-  const nodeId = nodeIds.length.toString();
+const buildTree = (options: {
+  item: HierarchyNode;
+  CheckedIcon?: IconComponent;
+  nodeIds: string[];
+  classes: ClassNameMap;
+}) => {
+  const { item, CheckedIcon, nodeIds, classes } = options;
+  const nodeId = item.value;
   nodeIds.push(nodeId);
   return (
     <TreeItem
-      key={`node-${nodeId}`}
+      key={nodeId}
       nodeId={nodeId}
       classes={{
         root: classes.node,
         group: classes.group,
         label: classes.textWrapper,
+        iconContainer: classes.icon,
       }}
       label={
         <Typography variant="body2" noWrap>
@@ -71,50 +77,62 @@ const buildTree = (
           <Chip className={classes.chip} variant="outlined" size="small" label={item.count} />
         </Typography>
       }
-      onIconClick={e => {
-        const handler = createOnClickHandler(item.value);
-        return handler(e);
-      }}
-      onLabelClick={e => {
-        const handler = createOnClickHandler(item.value);
-        return handler(e);
-      }}
-      icon={<Icon />}
+      icon={item.isRefined && CheckedIcon ? <CheckedIcon /> : undefined}
     >
-      {Array.isArray(item.data) ? item.data.map(i => buildTree(i, createOnClickHandler, Icon, nodeIds, classes)) : null}
+      {Array.isArray(item.data) ? item.data.map(i => buildTree({
+        item: i,
+        CheckedIcon,
+        nodeIds,
+        classes,
+      })) : null}
     </TreeItem>
   );
 };
 
 export const HierarchalSearchRefinement = (props: {
   attributes: string[];
-  Icon: IconComponent;
+  Icon?: IconComponent;
+  CheckedIcon?: IconComponent;
   label: string;
   onRefinement?: (value: string) => void;
 }) => {
   const classes = useStyles();
-  const { attributes, Icon, label, onRefinement } = props;
+  const {
+    attributes,
+    Icon = DefaultIcon as IconComponent,
+    CheckedIcon = DefaultCheckedIcon as IconComponent,
+    label,
+    onRefinement,
+  } = props;
   const { items, refine, canRefine } = useHierarchicalMenu({
     attributes,
   });
   const { tree, nodeIds } = useMemo(() => {
     const nodeIds: string[] = [];
-    const createOnClickHandler = (value: string) =>
-      (e: React.MouseEvent<Element, MouseEvent>) => {
-        e.preventDefault();
-        refine(value);
-        if (onRefinement) {
-          onRefinement(value);
-        }
-      };
-    const tree = items.map(i => buildTree(i, createOnClickHandler, Icon, nodeIds, classes));
+    const tree = items.map(i => buildTree({
+      item: i,
+      CheckedIcon,
+      nodeIds,
+      classes,
+    }));
     return { tree, nodeIds };
   }, [items]);
   return (
     <>
       <Typography variant="body1" className={classes.label}>{label}</Typography>
       {nodeIds.length > 0 && (
-        <TreeView expanded={nodeIds} disableSelection={!canRefine}>
+        <TreeView
+          expanded={nodeIds}
+          disableSelection={!canRefine}
+          defaultCollapseIcon={CheckedIcon ? <CheckedIcon /> : undefined}
+          defaultEndIcon={Icon ? <Icon /> : undefined}
+          onNodeSelect={(_: any, nodeId: string) => {
+            refine(nodeId);
+            if (onRefinement) {
+              onRefinement(nodeId);
+            }
+          }}
+        >
           {tree}
         </TreeView>
       )}
