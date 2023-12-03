@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { IndexObjectWithIdAndTimestamp } from 'backstage-plugin-algolia-common';
-import React, { ComponentType } from 'react';
+import React, { ComponentType, ReactNode } from 'react';
 import { Highlight, useInfiniteHits, useStats } from 'react-instantsearch';
 
 const tryGetPath = (location: string) => {
@@ -23,13 +23,26 @@ const tryGetPath = (location: string) => {
 
 export const SearchHitList = (props: {
   highlight?: boolean;
-  AppendedHitLabel?: ComponentType<{ object: IndexObjectWithIdAndTimestamp }>;
-  AppendedHitDescription?: ComponentType<{ object: IndexObjectWithIdAndTimestamp }>;
+  HitTitleContent?: ComponentType<{
+    object: IndexObjectWithIdAndTimestamp,
+    promoted: boolean;
+    children: ReactNode,
+  }>;
+  HitDescriptionContent?: ComponentType<{
+    object: IndexObjectWithIdAndTimestamp,
+    promoted: boolean;
+    children: ReactNode,
+  }>;
+  transformObject?: (options: {
+    object: IndexObjectWithIdAndTimestamp;
+    promoted: boolean;
+  }) => IndexObjectWithIdAndTimestamp;
 }) => {
   const {
-    AppendedHitLabel,
-    AppendedHitDescription,
+    HitTitleContent,
+    HitDescriptionContent,
     highlight = false,
+    transformObject,
   } = props;
   const { hits, isLastPage, showMore, sendEvent } = useInfiniteHits();
   const { nbHits: hitCount } = useStats();
@@ -37,48 +50,51 @@ export const SearchHitList = (props: {
     <>
       <List subheader={<ListSubheader>{hitCount} results</ListSubheader>}>
         {hits.map(h => {
+          const promoted = h._rankingInfo?.promoted ?? false;
           const object = h as unknown as IndexObjectWithIdAndTimestamp;
-          const { location, text, title, objectID } = object;
+          const { location, text, title, objectID } = transformObject
+            ? transformObject({ object, promoted })
+            : object;
           const path = tryGetPath(location);
+          const titleContent = (
+            <>
+              <Typography variant="h6">
+                <Link noTrack to={location} onClick={() => { sendEvent('click', h, 'Hit Clicked') }}>
+                  {highlight ? <Highlight attribute="title" hit={h} /> : title}
+                </Link>
+              </Typography>
+              {path && (
+                <Typography
+                  variant="body2"
+                  gutterBottom={true}
+                >
+                  {path}
+                </Typography>
+              )}
+            </>
+          );
+          const descriptionContent = (
+            <>
+              <Typography
+                component="span"
+                style={{
+                  display: '-webkit-box',
+                  WebkitBoxOrient: 'vertical',
+                  WebkitLineClamp: 3,
+                  overflow: 'hidden',
+                }}
+                color="textSecondary"
+                variant="body2"
+              >
+                {highlight ? <Highlight attribute="text" hit={h} /> : text}
+              </Typography>
+            </>
+          );
           return (
             <ListItem key={objectID} divider>
               <ListItemText
-                primary={
-                  <>
-                    <Typography variant="h6">
-                      <Link noTrack to={location} onClick={() => { sendEvent('click', h, 'Hit Clicked') }}>
-                        {highlight ? <Highlight attribute="title" hit={h} /> : title}
-                      </Link>
-                    </Typography>
-                    {path && (
-                      <Typography
-                        variant="body2"
-                        gutterBottom={true}
-                      >
-                        {path}
-                      </Typography>
-                    )}
-                    {AppendedHitLabel ? <AppendedHitLabel object={object} /> : null}
-                  </>
-                }
-                secondary={
-                  <>
-                    <Typography
-                      component="span"
-                      style={{
-                        display: '-webkit-box',
-                        WebkitBoxOrient: 'vertical',
-                        WebkitLineClamp: 3,
-                        overflow: 'hidden',
-                      }}
-                      color="textSecondary"
-                      variant="body2"
-                    >
-                      {highlight ? <Highlight attribute="text" hit={h} /> : text}
-                    </Typography>
-                    {AppendedHitDescription ? <AppendedHitDescription object={object} /> : null}
-                  </>
-                }
+                primary={HitTitleContent ? <HitTitleContent object={object} promoted>{titleContent}</HitTitleContent> : titleContent}
+                secondary={HitDescriptionContent ? <HitDescriptionContent object={object} promoted>{descriptionContent}</HitDescriptionContent> : descriptionContent}
               />
             </ListItem>
           );
