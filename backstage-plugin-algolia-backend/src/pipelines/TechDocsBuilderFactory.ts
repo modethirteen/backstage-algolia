@@ -84,7 +84,7 @@ class TechDocsBuilder extends BuilderBase {
       assertError(e);
       throw new Error(`Could not parse location URL to determine if location is a page section: ${e.message}`);
     }
-    return {
+    const resultWithIndexObject = {
       ...result,
       indexObject: {
         source,
@@ -93,7 +93,6 @@ class TechDocsBuilder extends BuilderBase {
         location,
         path: doc.location,
         section,
-        topics: await this.topicProvider.getTopics({ result }),
         entity: {
           ...entityInfo,
           title: entity.metadata.title ?? undefined,
@@ -102,6 +101,13 @@ class TechDocsBuilder extends BuilderBase {
           ...refs,
         },
       },
+    };
+    return {
+      ...resultWithIndexObject,
+      indexObject: {
+        ...resultWithIndexObject.indexObject,
+        topics: await this.topicProvider.getTopics({ result: resultWithIndexObject }),
+      }
     };
   }
 

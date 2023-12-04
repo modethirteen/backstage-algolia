@@ -28,4 +28,16 @@ describe('TechDocsBuilderFactory', () => {
     expect(results).toHaveLength(24);
     expect(results).toEqual(expect.arrayContaining(mockPipelineResults));
   });
+
+  it('can provide pipeline result with index object to topic provider', async () => {
+    const collatorFactory = new TestCollatorFactory({
+      results: mockPipelineResults.map(({ entity, doc, docs, source }) => ({
+        entity, doc, docs, source   
+      }))
+    });
+    const builderFactories = [TechDocsBuilderFactory.fromConfig(config, { getTopics })];
+    await testCollatingBuildingPipeline({ collatorFactory, builderFactories });
+    const calls = getTopics.mock.calls.map((c: any[]) => c.at(0));
+    calls.map(c => expect(c.result.indexObject).toBeDefined());
+  });
 });
