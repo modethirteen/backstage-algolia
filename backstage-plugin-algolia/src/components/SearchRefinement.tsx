@@ -9,6 +9,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import React from 'react';
+import type { UseRefinementListProps } from 'react-instantsearch';
 import { useRefinementList } from 'react-instantsearch';
 
 export interface SearchRefinementItem {
@@ -53,6 +54,7 @@ export const SearchRefinement = (props: {
   label: string;
   transformItems?: (item: SearchRefinementItem) => SearchRefinementItemWithIcons;
   onRefinement?: (value: string) => void;
+  sortBy?: UseRefinementListProps['sortBy'];
 }) => {
   const {
     attribute,
@@ -60,9 +62,11 @@ export const SearchRefinement = (props: {
     label,
     transformItems = i => i as SearchRefinementItemWithIcons,
     onRefinement,
+    sortBy,
   } = props;
   const { items, refine, canRefine } = useRefinementList({
     attribute,
+    sortBy,
   });
   const classes = useStyles();
   const transformedItems = items.map(transformItems);
