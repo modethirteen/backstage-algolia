@@ -17,6 +17,7 @@ export interface PipelineResult {
   docs?: IndexableDocument[];
   source: string;
   indexObject?: IndexObject;
+  metadata?: object;
 }
 
 export interface IndexableDocument {

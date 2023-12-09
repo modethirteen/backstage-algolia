@@ -4,7 +4,7 @@ import {
   CatalogApi,
   CatalogClient,
 } from '@backstage/catalog-client';
-import { Entity } from '@backstage/catalog-model';
+import { Entity, stringifyEntityRef } from '@backstage/catalog-model';
 import { Config } from '@backstage/config';
 import { assertError } from '@backstage/errors';
 import pLimit from 'p-limit';
@@ -85,6 +85,7 @@ export class TechDocsCollatorFactory implements CollatorFactory {
               namespace: entity.metadata.namespace ?? 'default',
               name: entity.metadata.name,
             };
+            let searchIndex: { docs: IndexableDocument[] };
             try {
               const response = await fetch(
                 `${techDocsBaseUrl}/static/docs/${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}/search/search_index.json`, {
@@ -92,19 +93,32 @@ export class TechDocsCollatorFactory implements CollatorFactory {
                   Authorization: `Bearer ${token}`,
                 },
               });
-              const searchIndex = await response.json() as { docs: IndexableDocument[] };
-              this.logger.debug(`Retrieved ${searchIndex.docs.length} mkdocs search index items for entity ${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}`);
-              return searchIndex.docs.map(doc => ({
-                entity,
-                doc,
-                docs: searchIndex.docs.map(d => ({ ...d })),
-                source: 'mkdocs',
-              }));
+              searchIndex = await response.json();
             } catch (e) {
               assertError(e);
-              this.logger.warn(`Failed to retrieve mkdocs search index for entity ${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}`, e);
+              this.logger.warn(`Failed to retrieve mkdocs search index for entity ${stringifyEntityRef(entityInfo)}`, e);
               return [];
             }
+            this.logger.debug(`Retrieved ${searchIndex.docs.length} mkdocs search index items for entity ${stringifyEntityRef(entityInfo)}`);
+            let metadata: object = {};
+            try {
+              const response = await fetch(
+                `${techDocsBaseUrl}/static/docs/${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}/techdocs_metadata.json`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+              metadata = await response.json();
+            } catch (e) {
+              this.logger.warn(`Failed to retrieve techdocs metadata for entity ${stringifyEntityRef(entityInfo)}`, e);
+            }
+            return searchIndex.docs.map(doc => ({
+              entity,
+              doc,
+              docs: searchIndex.docs.map(d => ({ ...d })),
+              source: 'mkdocs',
+              metadata,
+            }));
           }),
         );
       yield * (await Promise.all(promises)).flat();

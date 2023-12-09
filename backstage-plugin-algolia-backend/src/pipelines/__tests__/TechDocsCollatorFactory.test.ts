@@ -41,13 +41,16 @@ describe('TechDocsCollatorFactory', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     factory = TechDocsCollatorFactory.fromConfig(config, options);
+    const entities = mockEntities.filter(e => e.metadata.annotations?.['backstage.io/techdocs-ref']);
     worker.use(
-      ...mockEntities
-        .filter(e => e.metadata.annotations?.['backstage.io/techdocs-ref'])
-        .map(e => rest.get(
-          `http://backend.example.com/static/docs/default/${e.kind}/${e.metadata.name}/search/search_index.json`,
-          (_, res, ctx) => res(ctx.status(200), ctx.json(mockSearchDocIndex)),
-        )),
+      ...entities.map(e => rest.get(
+        `http://backend.example.com/static/docs/default/${e.kind}/${e.metadata.name}/search/search_index.json`,
+        (_, res, ctx) => res(ctx.status(200), ctx.json(mockSearchDocIndex)),
+      )),
+      ...entities.map(e => rest.get(
+        `http://backend.example.com/static/docs/default/${e.kind}/${e.metadata.name}/techdocs_metadata.json`,
+        (_, res, ctx) => res(ctx.status(200), ctx.json({ foo: 'bar' }))
+      )),
       rest.get('http://backend.example.com/entities', (req, res, ctx) => {
         const offset = parseInt(
           req.url.searchParams.get('offset') || '0',
@@ -77,7 +80,7 @@ describe('TechDocsCollatorFactory', () => {
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('techdocs');
     expect(results).toHaveLength(24);
     expect(results).toEqual(expect.arrayContaining(mockPipelineResults.map(({ entity, doc, docs, source }) => ({
-      entity, doc, docs, source   
+      entity, doc, docs, source, metadata: { foo: 'bar' }   
     }))));
   });
 });
