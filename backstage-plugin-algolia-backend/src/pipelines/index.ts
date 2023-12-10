@@ -1,4 +1,6 @@
 export * from './BuilderBase';
+export * from './CatalogBuilderFactory';
+export * from './CatalogCollatorFactory';
 export * from './IndexManager';
 export * from './Indexer';
 export * from './Pipeline';

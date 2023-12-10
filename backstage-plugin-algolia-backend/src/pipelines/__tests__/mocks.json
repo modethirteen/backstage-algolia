@@ -365,7 +365,7 @@
       }
     ]
   },
-  "pipelineResults": [
+  "techdocsPipelineResults": [
     {
       "entity": {
         "apiVersion": "backstage.io/v1alpha1",
@@ -2628,6 +2628,774 @@
             "name": "secondary"
           }
         }
+      }
+    }
+  ],
+  "catalogPipelineResults": [
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-1",
+          "title": "Backend Service",
+          "description": "A backend microservice for user management",
+          "tags": [
+            "backend",
+            "microservice"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-xyzzy",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "user-management"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/user-management"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-xyzzy"
+          }
+        ]
+      },
+      "doc": {
+        "title": "Backend Service",
+        "text": "A backend microservice for user management",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "Backend Service",
+        "text": "A backend microservice for user management",
+        "location": "https://dev.example.com/catalog/default/Component/backend-service-1",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "Component",
+          "namespace": "default",
+          "name": "backend-service-1",
+          "title": "Backend Service",
+          "type": "service",
+          "lifecycle": "production",
+          "owner": "team-xyzzy",
+          "ownerRef": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "team-xyzzy"
+          },
+          "system": "user-management",
+          "systemRef": {
+            "kind": "system",
+            "namespace": "default",
+            "name": "user-management"
+          }
+        },
+        "topics": [
+          "backend",
+          "microservice"
+        ]
+      }
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-2",
+          "title": "API Backend",
+          "description": "A RESTful backend service for inventory management",
+          "tags": [
+            "backend",
+            "REST"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "inventory-management"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/inventory-management"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "title": "API Backend",
+        "text": "A RESTful backend service for inventory management",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "API Backend",
+        "text": "A RESTful backend service for inventory management",
+        "location": "https://dev.example.com/catalog/default/Component/backend-service-2",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "Component",
+          "namespace": "default",
+          "name": "backend-service-2",
+          "title": "API Backend",
+          "type": "service",
+          "lifecycle": "production",
+          "owner": "team-bazz",
+          "ownerRef": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "team-bazz"
+          },
+          "system": "inventory-management",
+          "systemRef": {
+            "kind": "system",
+            "namespace": "default",
+            "name": "inventory-management"
+          }
+        },
+        "topics": [
+          "backend",
+          "REST"
+        ]
+      }
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "backend-service-3",
+          "title": "Orders API Backend",
+          "description": "A RESTful backend service for order processing",
+          "tags": [
+            "backend",
+            "REST"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-foobar",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "order-processing"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/order-processing"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-foobar"
+          }
+        ]
+      },
+      "doc": {
+        "title": "Orders API Backend",
+        "text": "A RESTful backend service for order processing",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "Orders API Backend",
+        "text": "A RESTful backend service for order processing",
+        "location": "https://dev.example.com/catalog/default/Component/backend-service-3",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "Component",
+          "namespace": "default",
+          "name": "backend-service-3",
+          "title": "Orders API Backend",
+          "type": "service",
+          "lifecycle": "production",
+          "owner": "team-foobar",
+          "ownerRef": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "team-foobar"
+          },
+          "system": "order-processing",
+          "systemRef": {
+            "kind": "system",
+            "namespace": "default",
+            "name": "order-processing"
+          }
+        },
+        "topics": [
+          "backend",
+          "REST"
+        ]
+      }
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "frontend-app-1",
+          "title": "React Frontend Service",
+          "description": "A React frontend application for user dashboard",
+          "tags": [
+            "frontend",
+            "React"
+          ]
+        },
+        "spec": {
+          "owner": "team-xyzzy",
+          "type": "website",
+          "lifecycle": "staging",
+          "system": "user-dashboard"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/user-dashboard"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-xyzzy"
+          }
+        ]
+      },
+      "doc": {
+        "title": "React Frontend Service",
+        "text": "A React frontend application for user dashboard",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "React Frontend Service",
+        "text": "A React frontend application for user dashboard",
+        "location": "https://dev.example.com/catalog/default/Component/frontend-app-1",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "Component",
+          "namespace": "default",
+          "name": "frontend-app-1",
+          "title": "React Frontend Service",
+          "type": "website",
+          "lifecycle": "staging",
+          "owner": "team-xyzzy",
+          "ownerRef": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "team-xyzzy"
+          },
+          "system": "user-dashboard",
+          "systemRef": {
+            "kind": "system",
+            "namespace": "default",
+            "name": "user-dashboard"
+          }
+        },
+        "topics": [
+          "frontend",
+          "React"
+        ]
+      }
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "frontend-app-2",
+          "title": "Dashboard Frontend",
+          "description": "A Vue.js frontend app for analytics dashboard",
+          "tags": [
+            "frontend",
+            "Vue.js"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "type": "website",
+          "lifecycle": "staging",
+          "system": "analytics-dashboard"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/analytics-dashboard"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "title": "Dashboard Frontend",
+        "text": "A Vue.js frontend app for analytics dashboard",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "Dashboard Frontend",
+        "text": "A Vue.js frontend app for analytics dashboard",
+        "location": "https://dev.example.com/catalog/default/Component/frontend-app-2",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "Component",
+          "namespace": "default",
+          "name": "frontend-app-2",
+          "title": "Dashboard Frontend",
+          "type": "website",
+          "lifecycle": "staging",
+          "owner": "team-bazz",
+          "ownerRef": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "team-bazz"
+          },
+          "system": "analytics-dashboard",
+          "systemRef": {
+            "kind": "system",
+            "namespace": "default",
+            "name": "analytics-dashboard"
+          }
+        },
+        "topics": [
+          "frontend",
+          "Vue.js"
+        ]
+      }
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "frontend-app-3",
+          "title": "Reporting Frontend",
+          "description": "An Angular frontend app for reporting",
+          "tags": [
+            "frontend",
+            "Angular"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-entity": "component:default/backend-service-2"
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "type": "website",
+          "lifecycle": "staging",
+          "system": "reporting"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/reporting"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "title": "Reporting Frontend",
+        "text": "An Angular frontend app for reporting",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "Reporting Frontend",
+        "text": "An Angular frontend app for reporting",
+        "location": "https://dev.example.com/catalog/default/Component/frontend-app-3",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "Component",
+          "namespace": "default",
+          "name": "frontend-app-3",
+          "title": "Reporting Frontend",
+          "type": "website",
+          "lifecycle": "staging",
+          "owner": "team-bazz",
+          "ownerRef": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "team-bazz"
+          },
+          "system": "reporting",
+          "systemRef": {
+            "kind": "system",
+            "namespace": "default",
+            "name": "reporting"
+          }
+        },
+        "topics": [
+          "frontend",
+          "Angular"
+        ]
+      }
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "frontend-app-4",
+          "title": "Portal Frontend",
+          "description": "A Svelte frontend app for customer portal",
+          "tags": [
+            "frontend",
+            "Svelte"
+          ]
+        },
+        "spec": {
+          "owner": "team-foobar",
+          "type": "website",
+          "lifecycle": "staging",
+          "system": "customer-portal"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/customer-portal"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-foobar"
+          }
+        ]
+      },
+      "doc": {
+        "title": "Portal Frontend",
+        "text": "A Svelte frontend app for customer portal",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "Portal Frontend",
+        "text": "A Svelte frontend app for customer portal",
+        "location": "https://dev.example.com/catalog/default/Component/frontend-app-4",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "Component",
+          "namespace": "default",
+          "name": "frontend-app-4",
+          "title": "Portal Frontend",
+          "type": "website",
+          "lifecycle": "staging",
+          "owner": "team-foobar",
+          "ownerRef": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "team-foobar"
+          },
+          "system": "customer-portal",
+          "systemRef": {
+            "kind": "system",
+            "namespace": "default",
+            "name": "customer-portal"
+          }
+        },
+        "topics": [
+          "frontend",
+          "Svelte"
+        ]
+      }
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "microservice-2",
+          "title": "Data Microservice",
+          "description": "A microservice for data processing",
+          "tags": [
+            "backend",
+            "microservice"
+          ],
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-xyzzy",
+          "type": "service",
+          "lifecycle": "development",
+          "system": "data-processing"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/data-processing"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-xyzzy"
+          }
+        ]
+      },
+      "doc": {
+        "title": "Data Microservice",
+        "text": "A microservice for data processing",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "Data Microservice",
+        "text": "A microservice for data processing",
+        "location": "https://dev.example.com/catalog/default/Component/microservice-2",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "Component",
+          "namespace": "default",
+          "name": "microservice-2",
+          "title": "Data Microservice",
+          "type": "service",
+          "lifecycle": "development",
+          "owner": "team-xyzzy",
+          "ownerRef": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "team-xyzzy"
+          },
+          "system": "data-processing",
+          "systemRef": {
+            "kind": "system",
+            "namespace": "default",
+            "name": "data-processing"
+          }
+        },
+        "topics": [
+          "backend",
+          "microservice"
+        ]
+      }
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Component",
+        "metadata": {
+          "name": "microservice-3",
+          "title": "Payment Processor Service",
+          "description": "A microservice for payment processing",
+          "tags": [
+            "backend",
+            "microservice"
+          ]
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "type": "service",
+          "lifecycle": "production",
+          "system": "payment-processing"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "system:default/payment-processing"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "title": "Payment Processor Service",
+        "text": "A microservice for payment processing",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "Payment Processor Service",
+        "text": "A microservice for payment processing",
+        "location": "https://dev.example.com/catalog/default/Component/microservice-3",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "Component",
+          "namespace": "default",
+          "name": "microservice-3",
+          "title": "Payment Processor Service",
+          "type": "service",
+          "lifecycle": "production",
+          "owner": "team-bazz",
+          "ownerRef": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "team-bazz"
+          },
+          "system": "payment-processing",
+          "systemRef": {
+            "kind": "system",
+            "namespace": "default",
+            "name": "payment-processing"
+          }
+        },
+        "topics": [
+          "backend",
+          "microservice"
+        ]
+      }
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "System",
+        "metadata": {
+          "name": "inventory-management",
+          "title": "Inventory Managemnt",
+          "description": "System for managing inventory and stock levels"
+        },
+        "spec": {
+          "owner": "team-foobar",
+          "domain": "primary",
+          "type": "inventory",
+          "lifecycle": "production"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "domain:default/primary"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-foobar"
+          }
+        ]
+      },
+      "doc": {
+        "title": "Inventory Managemnt",
+        "text": "System for managing inventory and stock levels",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "Inventory Managemnt",
+        "text": "System for managing inventory and stock levels",
+        "location": "https://dev.example.com/catalog/default/System/inventory-management",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "System",
+          "namespace": "default",
+          "name": "inventory-management",
+          "title": "Inventory Managemnt",
+          "type": "inventory",
+          "lifecycle": "production",
+          "owner": "team-foobar",
+          "ownerRef": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "team-foobar"
+          },
+          "domain": "primary",
+          "domainRef": {
+            "kind": "domain",
+            "namespace": "default",
+            "name": "primary"
+          }
+        },
+        "topics": []
+      }
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "System",
+        "metadata": {
+          "name": "user-dashboard",
+          "title": "User Dashboard",
+          "description": "System for displaying user-related data and statistics",
+          "annotations": {
+            "backstage.io/techdocs-ref": "dir:."
+          }
+        },
+        "spec": {
+          "owner": "team-bazz",
+          "domain": "secondary",
+          "type": "dashboard",
+          "lifecycle": "staging"
+        },
+        "relations": [
+          {
+            "type": "partOf",
+            "targetRef": "domain:default/secondary"
+          },
+          {
+            "type": "ownedBy",
+            "targetRef": "group:default/team-bazz"
+          }
+        ]
+      },
+      "doc": {
+        "title": "User Dashboard",
+        "text": "System for displaying user-related data and statistics",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "User Dashboard",
+        "text": "System for displaying user-related data and statistics",
+        "location": "https://dev.example.com/catalog/default/System/user-dashboard",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "System",
+          "namespace": "default",
+          "name": "user-dashboard",
+          "title": "User Dashboard",
+          "type": "dashboard",
+          "lifecycle": "staging",
+          "owner": "team-bazz",
+          "ownerRef": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "team-bazz"
+          },
+          "domain": "secondary",
+          "domainRef": {
+            "kind": "domain",
+            "namespace": "default",
+            "name": "secondary"
+          }
+        },
+        "topics": []
       }
     }
   ]

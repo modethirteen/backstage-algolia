@@ -1,8 +1,8 @@
 import { getVoidLogger } from '@backstage/backend-common';
 import { ConfigReader } from '@backstage/config';
 import { SearchIndex } from 'algoliasearch';
-import { IndexManager } from '../IndexManager';
-import { pipelineResults as mockPipelineResults } from './mocks.json';
+import { IndexManager } from '../';
+import { techdocsPipelineResults as mockPipelineResults } from './mocks.json';
 
 const mockObjectsWithTimestamp = mockPipelineResults.map(r => ({
   ...r.indexObject,

@@ -7,19 +7,14 @@ import { setupRequestMockHandlers } from '@backstage/backend-test-utils';
 import { ConfigReader } from '@backstage/config';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
+import { TechDocsCollatorFactory } from '../';
 import { testCollatingBuildingPipeline } from '../../dev';
-import { TechDocsCollatorFactory } from '../TechDocsCollatorFactory';
 import {
   entities as mockEntities,
-  pipelineResults as mockPipelineResults,
+  techdocsPipelineResults as mockPipelineResults,
   searchDocIndex as mockSearchDocIndex,
 } from './mocks.json';
 
-const config = new ConfigReader({
-  app: {
-    baseUrl: 'htts://dev.example.com',
-  },
-});
 const mockDiscoveryApi: jest.Mocked<PluginEndpointDiscovery> = {
   getBaseUrl: jest.fn().mockResolvedValue('http://backend.example.com'),
   getExternalBaseUrl: jest.fn(),
@@ -40,7 +35,7 @@ describe('TechDocsCollatorFactory', () => {
   setupRequestMockHandlers(worker);
   beforeEach(async () => {
     jest.clearAllMocks();
-    factory = TechDocsCollatorFactory.fromConfig(config, options);
+    factory = TechDocsCollatorFactory.fromConfig(new ConfigReader({}), options);
     const entities = mockEntities.filter(e => e.metadata.annotations?.['backstage.io/techdocs-ref']);
     worker.use(
       ...entities.map(e => rest.get(

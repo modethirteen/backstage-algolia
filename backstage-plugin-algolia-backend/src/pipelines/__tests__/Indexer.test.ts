@@ -1,10 +1,9 @@
 import { getVoidLogger } from '@backstage/backend-common';
 import { Entity } from '@backstage/catalog-model';
 import { SearchIndex } from 'algoliasearch';
+import { IndexableDocument, Indexer, PipelineResult } from '../';
 import { testIndexingPipeline } from '../../dev';
-import { Indexer } from '../Indexer';
-import { IndexableDocument, PipelineResult } from '../types';
-import { pipelineResults as mockPipelineResults } from './mocks.json';
+import { techdocsPipelineResults as mockPipelineResults } from './mocks.json';
 
 const words = [
   'apple',

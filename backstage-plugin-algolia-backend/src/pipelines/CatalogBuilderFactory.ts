@@ -1,27 +1,22 @@
 import { Config } from '@backstage/config';
-import { assertError } from '@backstage/errors';
 import { unescape } from 'lodash';
 import * as url from 'url';
 import { BuilderBase } from './BuilderBase';
-import { TopicProviderInterface } from './TopicProviderInterface';
 import { entityRefsBuilder } from './entityRefsBuilder';
 import {
   BuilderFactory,
   PipelineResult,
 } from './types';
 
-class TechDocsBuilder extends BuilderBase {
+class CatalogBuilder extends BuilderBase {
   private readonly locationTemplate: string;
-  private readonly topicProvider: TopicProviderInterface;
 
   public constructor(options: {
     locationTemplate: string;
-    topicProvider: TopicProviderInterface;
   }) {
     super();
-    const { locationTemplate, topicProvider } = options;
+    const { locationTemplate } = options;
     this.locationTemplate = locationTemplate;
-    this.topicProvider = topicProvider;
   }
 
   public async build(result: PipelineResult): Promise<PipelineResult | undefined> {
@@ -34,18 +29,10 @@ class TechDocsBuilder extends BuilderBase {
     let location = this.locationTemplate;
     for (const [key, value] of Object.entries({
       ...entityInfo,
-      path: doc.location,
     })) {
       location = location.replace(`:${key}`, value);
     }
     const refs = entityRefsBuilder(entity);
-    let section = false;
-    try {
-      section = new url.URL(location).hash !== '';
-    } catch(e) {
-      assertError(e);
-      throw new Error(`Could not parse location URL to determine if location is a page section: ${e.message}`);
-    }
     const resultWithIndexObject = {
       ...result,
       indexObject: {
@@ -54,7 +41,7 @@ class TechDocsBuilder extends BuilderBase {
         text: unescape(doc.text ?? ''),
         location,
         path: doc.location,
-        section,
+        section: false,
         entity: {
           ...entityInfo,
           title: entity.metadata.title ?? undefined,
@@ -68,7 +55,7 @@ class TechDocsBuilder extends BuilderBase {
       ...resultWithIndexObject,
       indexObject: {
         ...resultWithIndexObject.indexObject,
-        topics: await this.topicProvider.getTopics({ result: resultWithIndexObject }),
+        topics: entity.metadata.tags ?? [],
       }
     };
   }
@@ -78,31 +65,22 @@ class TechDocsBuilder extends BuilderBase {
   }
 }
 
-export class TechDocsBuilderFactory implements BuilderFactory {
-  public static fromConfig(config: Config, topicProvider: TopicProviderInterface) {
+export class CatalogBuilderFactory implements BuilderFactory {
+  public static fromConfig(config: Config) {
     const baseUrl = config.getString('app.baseUrl');
-    const locationTemplate = config.getOptionalString('algolia.backend.indexes.techdocs.locationTemplate')
-      ?? url.resolve(baseUrl, '/docs/:namespace/:kind/:name/:path');
-    return new TechDocsBuilderFactory({ locationTemplate, topicProvider });
+    const locationTemplate = config.getOptionalString('algolia.backend.indexes.catalog.locationTemplate')
+      ?? url.resolve(baseUrl, '/catalog/:namespace/:kind/:name');
+    return new CatalogBuilderFactory({ locationTemplate });
   }
 
   private readonly locationTemplate: string;
-  private readonly topicProvider: TopicProviderInterface;
 
-  public constructor(options: {
-    locationTemplate: string;
-    topicProvider: TopicProviderInterface;
-  }) {
-    const { locationTemplate, topicProvider } = options;
+  public constructor(options: { locationTemplate: string; }) {
+    const { locationTemplate } = options;
     this.locationTemplate = locationTemplate;
-    this.topicProvider = topicProvider;
   }
 
   public async newBuilder(): Promise<BuilderBase> {
-    return new TechDocsBuilder({
-      locationTemplate: this.locationTemplate,
-      topicProvider: this.topicProvider,
-    });
+    return new CatalogBuilder({ locationTemplate: this.locationTemplate });
   }
 }
-

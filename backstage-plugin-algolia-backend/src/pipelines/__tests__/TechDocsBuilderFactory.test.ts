@@ -1,7 +1,7 @@
 import { ConfigReader } from '@backstage/config';
+import { TechDocsBuilderFactory } from '../';
 import { TestCollatorFactory, testCollatingBuildingPipeline } from '../../dev';
-import { TechDocsBuilderFactory } from '../TechDocsBuilderFactory';
-import { pipelineResults as mockPipelineResults } from './mocks.json';
+import { techdocsPipelineResults as mockPipelineResults } from './mocks.json';
 
 const config = new ConfigReader({
   app: {
