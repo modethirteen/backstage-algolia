@@ -11,7 +11,9 @@ interface Expiration {
   ttl: number;
 }
 
-export interface IndexManager {
+export interface IndexManagerInterface {
+  readonly searchIndex: SearchIndex;
+  readonly expirations: Expiration[];
   clean(): Promise<void>;  
 }
 
@@ -21,7 +23,7 @@ export interface IndexManagerOptions {
   logger: Logger;
 }
 
-export class IndexManager implements IndexManager {
+export class IndexManager implements IndexManagerInterface {
   public static fromConfig(config: Config, options: IndexManagerOptions) {
     const { date, index, logger } = options;
     const client = ClientFactory.fromConfig(config).newClient();
@@ -37,10 +39,10 @@ export class IndexManager implements IndexManager {
     });
   }
 
+  public readonly searchIndex: SearchIndex;
   public readonly expirations: Expiration[];
   private readonly logger: Logger;
   private readonly now: Date;
-  private readonly searchIndex: SearchIndex;
 
   public constructor(options: {
     expirations?: Expiration[];
