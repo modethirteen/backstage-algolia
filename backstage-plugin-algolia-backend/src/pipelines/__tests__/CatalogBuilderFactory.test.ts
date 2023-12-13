@@ -24,4 +24,21 @@ describe('CatalogBuilderFactory', () => {
     expect(results).toHaveLength(11);
     expect(results).toEqual(expect.arrayContaining(mockPipelineResults));
   });
+
+  it('can override entity', async () => {
+    const collatorFactory = new TestCollatorFactory({
+      results: mockPipelineResults.map(({ entity, doc, source }) => ({ entity, doc, source } as PipelineResult))
+    });
+    const builderFactories = [CatalogBuilderFactory.fromConfig(config, {
+      entityProvider: r => ({
+        ...r.entity,
+        metadata: {
+          ...r.entity.metadata,
+          name: 'replaced',
+        },
+      }),
+    })];
+    const results = await testCollatingBuildingPipeline({ collatorFactory, builderFactories });
+    results.map(r => expect(r.entity.metadata.name).toEqual('replaced'));
+  });
 });

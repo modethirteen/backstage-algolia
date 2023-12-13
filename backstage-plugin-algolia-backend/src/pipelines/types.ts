@@ -25,3 +25,5 @@ export interface IndexableDocument {
   text: string;
   location: string;
 }
+
+export type EntityProvider = (result: PipelineResult) => Entity;

@@ -76,9 +76,7 @@ export async function startStandaloneServer(
       tokenManager,
     }),
     builderFactories: [
-      TechDocsBuilderFactory.fromConfig(config, {
-        getTopics: async () => [],
-      }),
+      TechDocsBuilderFactory.fromConfig(config),
     ],
     indexer: Indexer.fromConfig(config, {
       batchSize: 10,

@@ -7,25 +7,33 @@ import { TopicProviderInterface } from './TopicProviderInterface';
 import { entityRefsBuilder } from './entityRefsBuilder';
 import {
   BuilderFactory,
+  EntityProvider,
   PipelineResult,
 } from './types';
 
 class TechDocsBuilder extends BuilderBase {
+  private readonly entityProvider?: EntityProvider;
   private readonly locationTemplate: string;
-  private readonly topicProvider: TopicProviderInterface;
+  private readonly topicProvider?: TopicProviderInterface;
 
   public constructor(options: {
+    entityProvider?: EntityProvider;
     locationTemplate: string;
-    topicProvider: TopicProviderInterface;
+    topicProvider?: TopicProviderInterface;
   }) {
     super();
-    const { locationTemplate, topicProvider } = options;
+    const { entityProvider, locationTemplate, topicProvider } = options;
+    this.entityProvider = entityProvider;
     this.locationTemplate = locationTemplate;
     this.topicProvider = topicProvider;
   }
 
   public async build(result: PipelineResult): Promise<PipelineResult | undefined> {
-    const { entity, doc, source } = result;
+    result = {
+      ...result,
+      entity: this.entityProvider ? this.entityProvider(result) : result.entity,
+    };
+    const { doc, source, entity } = result;
     const entityInfo = {
       kind: entity.kind,
       namespace: entity.metadata.namespace ?? 'default',
@@ -68,7 +76,7 @@ class TechDocsBuilder extends BuilderBase {
       ...resultWithIndexObject,
       indexObject: {
         ...resultWithIndexObject.indexObject,
-        topics: await this.topicProvider.getTopics({ result: resultWithIndexObject }),
+        topics: this.topicProvider ? await this.topicProvider.getTopics({ result: resultWithIndexObject }) : [],
       }
     };
   }
@@ -79,30 +87,37 @@ class TechDocsBuilder extends BuilderBase {
 }
 
 export class TechDocsBuilderFactory implements BuilderFactory {
-  public static fromConfig(config: Config, topicProvider: TopicProviderInterface) {
+  public static fromConfig(config: Config, options?: {
+    entityProvider?: EntityProvider;
+    topicProvider?: TopicProviderInterface;
+  }) {
+    const { entityProvider, topicProvider } = options ?? {};
     const baseUrl = config.getString('app.baseUrl');
     const locationTemplate = config.getOptionalString('algolia.backend.indexes.techdocs.locationTemplate')
       ?? url.resolve(baseUrl, '/docs/:namespace/:kind/:name/:path');
-    return new TechDocsBuilderFactory({ locationTemplate, topicProvider });
+    return new TechDocsBuilderFactory({ entityProvider, locationTemplate, topicProvider });
   }
 
+  private readonly entityProvider?: EntityProvider;
   private readonly locationTemplate: string;
-  private readonly topicProvider: TopicProviderInterface;
+  private readonly topicProvider?: TopicProviderInterface;
 
   public constructor(options: {
+    entityProvider?: EntityProvider;
     locationTemplate: string;
-    topicProvider: TopicProviderInterface;
+    topicProvider?: TopicProviderInterface;
   }) {
-    const { locationTemplate, topicProvider } = options;
+    const { entityProvider, locationTemplate, topicProvider } = options;
+    this.entityProvider = entityProvider;
     this.locationTemplate = locationTemplate;
     this.topicProvider = topicProvider;
   }
 
   public async newBuilder(): Promise<BuilderBase> {
     return new TechDocsBuilder({
+      entityProvider: this.entityProvider,
       locationTemplate: this.locationTemplate,
       topicProvider: this.topicProvider,
     });
   }
 }
-

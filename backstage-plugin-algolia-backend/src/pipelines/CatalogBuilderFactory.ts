@@ -5,22 +5,30 @@ import { BuilderBase } from './BuilderBase';
 import { entityRefsBuilder } from './entityRefsBuilder';
 import {
   BuilderFactory,
+  EntityProvider,
   PipelineResult,
 } from './types';
 
 class CatalogBuilder extends BuilderBase {
+  private readonly entityProvider?: EntityProvider;
   private readonly locationTemplate: string;
 
   public constructor(options: {
+    entityProvider?: EntityProvider;
     locationTemplate: string;
   }) {
     super();
-    const { locationTemplate } = options;
+    const { entityProvider, locationTemplate } = options;
+    this.entityProvider = entityProvider;
     this.locationTemplate = locationTemplate;
   }
 
   public async build(result: PipelineResult): Promise<PipelineResult | undefined> {
-    const { entity, doc, source } = result;
+    result = {
+      ...result,
+      entity: this.entityProvider ? this.entityProvider(result) : result.entity,
+    };
+    const { doc, source, entity } = result;
     const entityInfo = {
       kind: entity.kind,
       namespace: entity.metadata.namespace ?? 'default',
@@ -66,21 +74,32 @@ class CatalogBuilder extends BuilderBase {
 }
 
 export class CatalogBuilderFactory implements BuilderFactory {
-  public static fromConfig(config: Config) {
+  public static fromConfig(config: Config, options?: {
+    entityProvider?: EntityProvider;
+  }) {
+    const { entityProvider } = options ?? {};
     const baseUrl = config.getString('app.baseUrl');
     const locationTemplate = config.getOptionalString('algolia.backend.indexes.catalog.locationTemplate')
       ?? url.resolve(baseUrl, '/catalog/:namespace/:kind/:name');
-    return new CatalogBuilderFactory({ locationTemplate });
+    return new CatalogBuilderFactory({ entityProvider, locationTemplate });
   }
 
+  private readonly entityProvider?: EntityProvider;
   private readonly locationTemplate: string;
 
-  public constructor(options: { locationTemplate: string; }) {
-    const { locationTemplate } = options;
+  public constructor(options: {
+    entityProvider?: EntityProvider;
+    locationTemplate: string;
+  }) {
+    const { entityProvider, locationTemplate } = options;
+    this.entityProvider = entityProvider;
     this.locationTemplate = locationTemplate;
   }
 
   public async newBuilder(): Promise<BuilderBase> {
-    return new CatalogBuilder({ locationTemplate: this.locationTemplate });
+    return new CatalogBuilder({
+      entityProvider: this.entityProvider,
+      locationTemplate: this.locationTemplate,
+    });
   }
 }

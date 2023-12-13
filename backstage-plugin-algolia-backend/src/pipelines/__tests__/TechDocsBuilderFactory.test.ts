@@ -23,7 +23,7 @@ describe('TechDocsBuilderFactory', () => {
       }))
     });
     getTopics.mockResolvedValue(['api', 'system', 'debug']);
-    const builderFactories = [TechDocsBuilderFactory.fromConfig(config, { getTopics })];
+    const builderFactories = [TechDocsBuilderFactory.fromConfig(config, { topicProvider: { getTopics } })];
     const results = await testCollatingBuildingPipeline({ collatorFactory, builderFactories });
     expect(results).toHaveLength(24);
     expect(results).toEqual(expect.arrayContaining(mockPipelineResults));
@@ -35,9 +35,28 @@ describe('TechDocsBuilderFactory', () => {
         entity, doc, docs, source   
       }))
     });
-    const builderFactories = [TechDocsBuilderFactory.fromConfig(config, { getTopics })];
+    const builderFactories = [TechDocsBuilderFactory.fromConfig(config, { topicProvider: {  getTopics } })];
     await testCollatingBuildingPipeline({ collatorFactory, builderFactories });
     const calls = getTopics.mock.calls.map((c: any[]) => c.at(0));
     calls.map(c => expect(c.result.indexObject).toBeDefined());
+  });
+
+  it('can override entity', async () => {
+    const collatorFactory = new TestCollatorFactory({
+      results: mockPipelineResults.map(({ entity, doc, docs, source }) => ({
+        entity, doc, docs, source   
+      }))
+    });
+    const builderFactories = [TechDocsBuilderFactory.fromConfig(config, {
+      entityProvider: r => ({
+        ...r.entity,
+        metadata: {
+          ...r.entity.metadata,
+          name: 'replaced',
+        },
+      }),
+    })];
+    const results = await testCollatingBuildingPipeline({ collatorFactory, builderFactories });
+    results.map(r => expect(r.entity.metadata.name).toEqual('replaced'));
   });
 });
