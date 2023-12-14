@@ -1,3 +1,4 @@
+import { parseEntityRef } from '@backstage/catalog-model';
 import { Config } from '@backstage/config';
 import { assertError } from '@backstage/errors';
 import { unescape } from 'lodash';
@@ -34,14 +35,17 @@ class TechDocsBuilder extends BuilderBase {
       entity: this.entityProvider ? await this.entityProvider(result) : result.entity,
     };
     const { doc, source, entity } = result;
-    const entityInfo = {
-      kind: entity.kind,
-      namespace: entity.metadata.namespace ?? 'default',
-      name: entity.metadata.name,
-    };
+    const techdocsEntityRef = entity.metadata.annotations?.['backstage.io/techdocs-entity'];
+    const techdocsEntityInfo = techdocsEntityRef
+      ? parseEntityRef(techdocsEntityRef)
+      : {
+        kind: entity.kind,
+        namespace: entity.metadata.namespace ?? 'default',
+        name: entity.metadata.name,
+      };
     let location = this.locationTemplate;
     for (const [key, value] of Object.entries({
-      ...entityInfo,
+      ...techdocsEntityInfo,
       path: doc.location,
     })) {
       location = location.replace(`:${key}`, value);
@@ -64,7 +68,9 @@ class TechDocsBuilder extends BuilderBase {
         path: doc.location,
         section,
         entity: {
-          ...entityInfo,
+          kind: entity.kind,
+          namespace: entity.metadata.namespace ?? 'default',
+          name: entity.metadata.name,
           title: entity.metadata.title ?? undefined,
           type: entity.spec?.type?.toString() ?? undefined,
           lifecycle: entity.spec?.lifecycle as string ?? undefined,

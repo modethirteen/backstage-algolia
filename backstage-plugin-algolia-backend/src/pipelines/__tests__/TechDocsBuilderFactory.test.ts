@@ -59,4 +59,30 @@ describe('TechDocsBuilderFactory', () => {
     const results = await testCollatingBuildingPipeline({ collatorFactory, builderFactories });
     results.map(r => expect(r.entity.metadata.name).toEqual('replaced'));
   });
+
+  it('can use techdocs-entity annotation for index object location', async () => {
+    const collatorFactory = new TestCollatorFactory({
+      results: mockPipelineResults.map(({ entity, doc, docs, source }) => ({
+        entity: {
+          ...entity,
+          metadata: {
+            ...entity.metadata,
+            annotations: {
+              ...entity.metadata.annotations,
+              'backstage.io/techdocs-entity': 'component:default/crystal',
+            },
+          },
+        },
+        doc,
+        docs,
+        source,
+      }))
+    });
+    const builderFactories = [TechDocsBuilderFactory.fromConfig(config)];
+    const results = await testCollatingBuildingPipeline({ collatorFactory, builderFactories });
+    results.map(r => {
+      expect(r.indexObject?.location.startsWith('https://dev.example.com/docs/default/component/crystal/')).toBeTruthy();
+      expect(r.entity.metadata.name).not.toEqual('crystal');
+    });
+  });
 });
