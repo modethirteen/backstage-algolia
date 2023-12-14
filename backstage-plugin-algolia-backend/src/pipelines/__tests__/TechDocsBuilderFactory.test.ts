@@ -1,5 +1,5 @@
 import { ConfigReader } from '@backstage/config';
-import { TechDocsBuilderFactory } from '../';
+import { PipelineResult, TechDocsBuilderFactory } from '../';
 import { TestCollatorFactory, testCollatingBuildingPipeline } from '../../dev';
 import { techdocsPipelineResults as mockPipelineResults } from './mocks.json';
 
@@ -48,13 +48,17 @@ describe('TechDocsBuilderFactory', () => {
       }))
     });
     const builderFactories = [TechDocsBuilderFactory.fromConfig(config, {
-      entityProvider: r => Promise.resolve({
-        ...r.entity,
-        metadata: {
-          ...r.entity.metadata,
-          name: 'replaced',
-        },
-      }),
+      entityProviderFactory: {
+        newEntityProvider: jest.fn().mockResolvedValue(
+          (r: PipelineResult) => Promise.resolve({
+            ...r.entity,
+            metadata: {
+              ...r.entity.metadata,
+              name: 'replaced',
+            },
+          }),
+        ),
+      },
     })];
     const results = await testCollatingBuildingPipeline({ collatorFactory, builderFactories });
     results.map(r => expect(r.entity.metadata.name).toEqual('replaced'));

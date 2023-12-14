@@ -27,3 +27,11 @@ export interface IndexableDocument {
 }
 
 export type EntityProvider = (result: PipelineResult) => Promise<Entity>;
+
+export interface EntityProviderFactoryInterface {
+  newEntityProvider(): Promise<EntityProvider>;
+}
+
+export interface TopicProviderInterface {
+  getTopics(options: { result: PipelineResult }): Promise<string[]>;
+}

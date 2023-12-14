@@ -6,6 +6,7 @@ import { entityRefsBuilder } from './entityRefsBuilder';
 import {
   BuilderFactory,
   EntityProvider,
+  EntityProviderFactoryInterface,
   PipelineResult,
 } from './types';
 
@@ -75,30 +76,30 @@ class CatalogBuilder extends BuilderBase {
 
 export class CatalogBuilderFactory implements BuilderFactory {
   public static fromConfig(config: Config, options?: {
-    entityProvider?: EntityProvider;
+    entityProviderFactory?: EntityProviderFactoryInterface;
   }) {
-    const { entityProvider } = options ?? {};
+    const { entityProviderFactory } = options ?? {};
     const baseUrl = config.getString('app.baseUrl');
     const locationTemplate = config.getOptionalString('algolia.backend.indexes.catalog.locationTemplate')
       ?? url.resolve(baseUrl, '/catalog/:namespace/:kind/:name');
-    return new CatalogBuilderFactory({ entityProvider, locationTemplate });
+    return new CatalogBuilderFactory({ entityProviderFactory, locationTemplate });
   }
 
-  private readonly entityProvider?: EntityProvider;
+  private readonly entityProviderFactory?: EntityProviderFactoryInterface;
   private readonly locationTemplate: string;
 
   public constructor(options: {
-    entityProvider?: EntityProvider;
+    entityProviderFactory?: EntityProviderFactoryInterface;
     locationTemplate: string;
   }) {
-    const { entityProvider, locationTemplate } = options;
-    this.entityProvider = entityProvider;
+    const { entityProviderFactory, locationTemplate } = options;
+    this.entityProviderFactory = entityProviderFactory;
     this.locationTemplate = locationTemplate;
   }
 
   public async newBuilder(): Promise<BuilderBase> {
     return new CatalogBuilder({
-      entityProvider: this.entityProvider,
+      entityProvider: await this.entityProviderFactory?.newEntityProvider(),
       locationTemplate: this.locationTemplate,
     });
   }

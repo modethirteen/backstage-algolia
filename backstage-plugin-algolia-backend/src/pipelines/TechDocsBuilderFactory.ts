@@ -4,12 +4,13 @@ import { assertError } from '@backstage/errors';
 import { unescape } from 'lodash';
 import * as url from 'url';
 import { BuilderBase } from './BuilderBase';
-import { TopicProviderInterface } from './TopicProviderInterface';
 import { entityRefsBuilder } from './entityRefsBuilder';
 import {
   BuilderFactory,
   EntityProvider,
+  EntityProviderFactoryInterface,
   PipelineResult,
+  TopicProviderInterface,
 } from './types';
 
 class TechDocsBuilder extends BuilderBase {
@@ -94,34 +95,34 @@ class TechDocsBuilder extends BuilderBase {
 
 export class TechDocsBuilderFactory implements BuilderFactory {
   public static fromConfig(config: Config, options?: {
-    entityProvider?: EntityProvider;
+    entityProviderFactory?: EntityProviderFactoryInterface;
     topicProvider?: TopicProviderInterface;
   }) {
-    const { entityProvider, topicProvider } = options ?? {};
+    const { entityProviderFactory, topicProvider } = options ?? {};
     const baseUrl = config.getString('app.baseUrl');
     const locationTemplate = config.getOptionalString('algolia.backend.indexes.techdocs.locationTemplate')
       ?? url.resolve(baseUrl, '/docs/:namespace/:kind/:name/:path');
-    return new TechDocsBuilderFactory({ entityProvider, locationTemplate, topicProvider });
+    return new TechDocsBuilderFactory({ entityProviderFactory, locationTemplate, topicProvider });
   }
 
-  private readonly entityProvider?: EntityProvider;
+  private readonly entityProviderFactory?: EntityProviderFactoryInterface;
   private readonly locationTemplate: string;
   private readonly topicProvider?: TopicProviderInterface;
 
   public constructor(options: {
-    entityProvider?: EntityProvider;
+    entityProviderFactory?: EntityProviderFactoryInterface;
     locationTemplate: string;
     topicProvider?: TopicProviderInterface;
   }) {
-    const { entityProvider, locationTemplate, topicProvider } = options;
-    this.entityProvider = entityProvider;
+    const { entityProviderFactory, locationTemplate, topicProvider } = options;
+    this.entityProviderFactory = entityProviderFactory;
     this.locationTemplate = locationTemplate;
     this.topicProvider = topicProvider;
   }
 
   public async newBuilder(): Promise<BuilderBase> {
     return new TechDocsBuilder({
-      entityProvider: this.entityProvider,
+      entityProvider: await this.entityProviderFactory?.newEntityProvider(),
       locationTemplate: this.locationTemplate,
       topicProvider: this.topicProvider,
     });

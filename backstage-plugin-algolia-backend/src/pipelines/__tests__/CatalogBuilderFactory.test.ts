@@ -30,13 +30,17 @@ describe('CatalogBuilderFactory', () => {
       results: mockPipelineResults.map(({ entity, doc, source }) => ({ entity, doc, source } as PipelineResult))
     });
     const builderFactories = [CatalogBuilderFactory.fromConfig(config, {
-      entityProvider: r => Promise.resolve({
-        ...r.entity,
-        metadata: {
-          ...r.entity.metadata,
-          name: 'replaced',
-        },
-      }),
+      entityProviderFactory: {
+        newEntityProvider: jest.fn().mockResolvedValue(
+          (r: PipelineResult) => Promise.resolve({
+            ...r.entity,
+            metadata: {
+              ...r.entity.metadata,
+              name: 'replaced',
+            },
+          }),
+        ),
+      },
     })];
     const results = await testCollatingBuildingPipeline({ collatorFactory, builderFactories });
     results.map(r => expect(r.entity.metadata.name).toEqual('replaced'));
