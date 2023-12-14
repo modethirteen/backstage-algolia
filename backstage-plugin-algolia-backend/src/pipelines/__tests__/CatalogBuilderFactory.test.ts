@@ -30,7 +30,7 @@ describe('CatalogBuilderFactory', () => {
       results: mockPipelineResults.map(({ entity, doc, source }) => ({ entity, doc, source } as PipelineResult))
     });
     const builderFactories = [CatalogBuilderFactory.fromConfig(config, {
-      entityProvider: r => ({
+      entityProvider: r => Promise.resolve({
         ...r.entity,
         metadata: {
           ...r.entity.metadata,

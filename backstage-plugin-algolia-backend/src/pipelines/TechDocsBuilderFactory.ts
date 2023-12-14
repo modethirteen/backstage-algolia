@@ -31,7 +31,7 @@ class TechDocsBuilder extends BuilderBase {
   public async build(result: PipelineResult): Promise<PipelineResult | undefined> {
     result = {
       ...result,
-      entity: this.entityProvider ? this.entityProvider(result) : result.entity,
+      entity: this.entityProvider ? await this.entityProvider(result) : result.entity,
     };
     const { doc, source, entity } = result;
     const entityInfo = {

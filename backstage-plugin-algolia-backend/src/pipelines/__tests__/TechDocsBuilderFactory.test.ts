@@ -48,7 +48,7 @@ describe('TechDocsBuilderFactory', () => {
       }))
     });
     const builderFactories = [TechDocsBuilderFactory.fromConfig(config, {
-      entityProvider: r => ({
+      entityProvider: r => Promise.resolve({
         ...r.entity,
         metadata: {
           ...r.entity.metadata,
