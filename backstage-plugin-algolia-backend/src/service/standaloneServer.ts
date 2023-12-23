@@ -8,6 +8,7 @@ import { ConfigReader } from '@backstage/config';
 import { Server } from 'http';
 import { Logger } from 'winston';
 import yn from 'yn';
+import { ClientFactory } from '../api/ClientFactory';
 import {
   Indexer,
   PipelineTrigger,
@@ -63,7 +64,7 @@ export async function startStandaloneServer(
     : ServerTokenManager.noop();
   const taskScheduler = TaskScheduler
     .fromConfig(config)
-    .forPlugin('algolia-backend');
+    .forPlugin('algolia');
   const trigger = new PipelineTrigger({
     logger,
     taskScheduler,
@@ -86,7 +87,10 @@ export async function startStandaloneServer(
     frequency: { minutes: 15 },
     timeout: { minutes: 5 },
   });
-  const router = await createRouter({ trigger });
+  const router = await createRouter({
+    clientFactory: ClientFactory.fromConfig(config),
+    trigger,
+  });
   let service = createServiceBuilder(module)
     .setPort(options.port)
     .addRouter('/api/algolia', router);

@@ -38,6 +38,7 @@
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",
     "p-limit": "^3.1.0",
+    "search-insights": "^2.13.0",
     "winston": "^3.2.1",
     "yn": "^4.0.0"
   },
