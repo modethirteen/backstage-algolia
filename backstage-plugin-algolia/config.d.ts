@@ -25,6 +25,6 @@ export interface Config {
      * @visibility frontend
      * @see https://www.algolia.com/doc/guides/building-search-ui/events/react/
      */
-    insights?: boolean;
+    insights?: 'frontend' | 'backend' | 'none';
   };
 }

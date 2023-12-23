@@ -1,4 +1,5 @@
-import { createComponentExtension, createPlugin } from '@backstage/core-plugin-api';
+import { createApiFactory, createComponentExtension, createPlugin, discoveryApiRef, fetchApiRef, identityApiRef } from '@backstage/core-plugin-api';
+import { BackendInsightClient, backendInsightsApiRef } from './api';
 import { rootRouteRef } from './routes';
 
 export const algoliaPlugin = createPlugin({
@@ -6,6 +7,13 @@ export const algoliaPlugin = createPlugin({
   routes: {
     root: rootRouteRef,
   },
+  apis: [
+    createApiFactory({
+      api: backendInsightsApiRef,
+      deps: { discoveryApi: discoveryApiRef, fetchApi: fetchApiRef, identityApi: identityApiRef },
+      factory: ({ discoveryApi, fetchApi, identityApi }) => new BackendInsightClient({ discoveryApi, fetchApi, identityApi }),
+    }),
+  ],
 });
 
 export const ClearRefinementsButton = algoliaPlugin.provide(
@@ -44,6 +52,16 @@ export const SearchBreadcrumb = algoliaPlugin.provide(
     component: {
       lazy: () => import('./components/SearchBreadcrumb')
         .then(m => m.SearchBreadcrumb)
+    },
+  }),
+);
+
+export const SearchContainer = algoliaPlugin.provide(
+  createComponentExtension({
+    name: 'SearchContainer',
+    component: {
+      lazy: () => import('./components/SearchContainer')
+        .then(m => m.SearchContainer)
     },
   }),
 );
