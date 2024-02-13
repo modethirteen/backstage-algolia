@@ -1,4 +1,5 @@
 import { Link } from '@backstage/core-components';
+import { AnalyticsContext } from '@backstage/core-plugin-api';
 import {
   Box,
   Button,
@@ -59,9 +60,11 @@ export const SearchHitList = (props: {
           const titleContent = (
             <>
               <Typography variant="h6">
-                <Link noTrack to={location} onClick={() => { sendEvent('click', h, 'Hit Clicked') }}>
-                  {highlight ? <Highlight attribute="title" hit={h} /> : title}
-                </Link>
+                <AnalyticsContext attributes={{ pluginId: 'algolia', extension: 'SearchHitList' }}>
+                  <Link noTrack to={location} onClick={() => { sendEvent('click', h, 'Hit Clicked') }}>
+                    {highlight ? <Highlight attribute="title" hit={h} /> : title}
+                  </Link>
+                </AnalyticsContext>
               </Typography>
               {path && (
                 <Typography

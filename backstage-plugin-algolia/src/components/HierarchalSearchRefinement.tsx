@@ -1,4 +1,4 @@
-import { IconComponent } from '@backstage/core-plugin-api';
+import { IconComponent, useAnalytics } from '@backstage/core-plugin-api';
 import {
   Chip,
   Typography,
@@ -107,6 +107,7 @@ export const HierarchalSearchRefinement = (props: {
   const { items, refine, canRefine } = useHierarchicalMenu({
     attributes,
   });
+  const analytics = useAnalytics();
   const { tree, nodeIds } = useMemo(() => {
     const nodeIds: string[] = [];
     const tree = items.map(i => buildTree({
@@ -128,6 +129,12 @@ export const HierarchalSearchRefinement = (props: {
           defaultEndIcon={Icon ? <Icon /> : undefined}
           onNodeSelect={(_: any, nodeId: string) => {
             refine(nodeId);
+            analytics.captureEvent('click', `Filter search by ${nodeId}`, {
+              attributes: {
+                pluginId: 'algolia',
+                extension: 'HierarchalSearchRefinement',
+              },
+            });
             if (onRefinement) {
               onRefinement(nodeId);
             }

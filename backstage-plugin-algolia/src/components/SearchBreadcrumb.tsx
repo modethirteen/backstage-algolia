@@ -1,4 +1,5 @@
 import { Breadcrumbs } from '@backstage/core-components';
+import { useAnalytics } from '@backstage/core-plugin-api';
 import { Box, Link, Typography, makeStyles } from '@material-ui/core';
 import React from 'react';
 import { useBreadcrumb } from 'react-instantsearch';
@@ -23,6 +24,7 @@ export const SearchBreadcrumb = (props: {
   transformItems?: (items: BreadcrumbItem[]) => BreadcrumbItem[];
 }) => {
   const { attributes, transformItems } = props;
+  const analytics = useAnalytics();
   const classes = useStyles();
   const { items, refine } = useBreadcrumb({ attributes });
   const transformedItems = transformItems ? transformItems(items) : items;
@@ -39,7 +41,15 @@ export const SearchBreadcrumb = (props: {
           <Link
             className={classes.segment}
             variant="body2"
-            onClick={() => refine(s.value)}
+            onClick={() => {
+              refine(s.value);
+              analytics.captureEvent('click', `Search breadcrumb ${s.value}`, {
+                attributes: {
+                  pluginId: 'algolia',
+                  extension: 'SearchBreadcrumbs',
+                },
+              });
+            }}
           >
             {s.label}
           </Link>

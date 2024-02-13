@@ -1,4 +1,4 @@
-import { IconComponent } from '@backstage/core-plugin-api';
+import { IconComponent, useAnalytics } from '@backstage/core-plugin-api';
 import {
   Checkbox,
   Chip,
@@ -68,6 +68,7 @@ export const SearchRefinement = (props: {
     attribute,
     sortBy,
   });
+  const analytics = useAnalytics();
   const classes = useStyles();
   const transformedItems = items.map(transformItems);
   return (
@@ -98,6 +99,12 @@ export const SearchRefinement = (props: {
               name={i.value}
               onChange={() => {
                 refine(i.value);
+                analytics.captureEvent('click', `Filter search by ${i.value}`, {
+                  attributes: {
+                    pluginId: 'algolia',
+                    extension: 'SearchRefinement',
+                  },
+                });
                 if (onRefinement) {
                   onRefinement(i.value);
                 }
