@@ -38,12 +38,14 @@ export const SearchHitList = (props: {
     object: IndexObjectWithIdAndTimestamp;
     promoted: boolean;
   }) => IndexObjectWithIdAndTimestamp;
+  noTrack?: boolean;
 }) => {
   const {
     HitTitleContent,
     HitDescriptionContent,
     highlight = false,
     transformObject,
+    noTrack = false,
   } = props;
   const { hits, isLastPage, showMore, sendEvent } = useInfiniteHits();
   const { nbHits: hitCount } = useStats();
@@ -61,7 +63,7 @@ export const SearchHitList = (props: {
             <>
               <Typography variant="h6">
                 <AnalyticsContext attributes={{ pluginId: 'algolia', extension: 'SearchHitList' }}>
-                  <Link noTrack to={location} onClick={() => { sendEvent('click', h, 'Hit Clicked') }}>
+                  <Link noTrack={noTrack} to={location} onClick={() => { sendEvent('click', h, 'Hit Clicked') }}>
                     {highlight ? <Highlight attribute="title" hit={h} /> : title}
                   </Link>
                 </AnalyticsContext>
