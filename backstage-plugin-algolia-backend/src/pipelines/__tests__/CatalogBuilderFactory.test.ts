@@ -21,7 +21,7 @@ describe('CatalogBuilderFactory', () => {
     });
     const builderFactories = [CatalogBuilderFactory.fromConfig(config)];
     const results = await testCollatingBuildingPipeline({ collatorFactory, builderFactories });
-    expect(results).toHaveLength(11);
+    expect(results).toHaveLength(13);
     expect(results).toEqual(expect.arrayContaining(mockPipelineResults));
   });
 

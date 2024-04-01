@@ -12,6 +12,7 @@ import {
   CollatorFactory,
   PipelineResult,
 } from './types';
+import { humanizeEntityName } from '../util';
 
 export interface CatalogCollatorFactoryOptions {
   catalogClient?: CatalogApi;
@@ -85,7 +86,7 @@ export class CatalogCollatorFactory implements CollatorFactory {
       const promises = entities.map((entity: Entity) => limit(async(): Promise<PipelineResult> => ({
         entity,
         doc: {
-          title: entity.metadata.title ?? entity.metadata.name,
+          title: humanizeEntityName(entity),
           text: entity.metadata.description ?? '',
           location: '',
         },

@@ -69,7 +69,7 @@ describe('CatalogCollatorFactory', () => {
     const factory = CatalogCollatorFactory.fromConfig(new ConfigReader({}), options);
     const results = await testCollatingBuildingPipeline({ collatorFactory: factory });
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
-    expect(results).toHaveLength(11);
+    expect(results).toHaveLength(13);
     expect(results).toEqual(expect.arrayContaining(mockPipelineResults.map(({ entity, doc, source }) => ({
       entity, doc, source,
     }))));

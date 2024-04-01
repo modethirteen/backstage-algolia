@@ -24,6 +24,8 @@ export interface IndexObject {
     domainRef?: CompoundEntityRef;
     system?: string;
     systemRef?: CompoundEntityRef;
+    memberOf?: string[];
+    memberOfRefs?: CompoundEntityRef[];
   };
 }
 

@@ -331,6 +331,60 @@
           "targetRef": "group:default/team-bazz"
         }
       ]
+    },
+    {
+      "apiVersion": "backstage.io/v1alpha1",
+      "kind": "User",
+      "metadata": {
+        "name": "fred.foo"
+      },
+      "spec": {
+        "profile": {
+          "displayName": "Fred Foo",
+          "email": "fred.foo@example.com"
+        },
+        "memberOf": [
+          "group:default/team-bazz"
+        ]
+      },
+      "relations": [
+        {
+          "type": "memberOf",
+          "targetRef": "group:default/team-bazz",
+          "target": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "team-bazz"
+          }
+        }
+      ]
+    },
+    {
+      "apiVersion": "backstage.io/v1alpha1",
+      "kind": "Group",
+      "metadata": {
+        "name": "team-bazz",
+        "description": "foo bar baz"
+      },
+      "spec": {
+        "profile": {
+          "displayName": "Team Bazz"
+        },
+        "parent": [
+          "group:default/engineering"
+        ]
+      },
+      "relations": [
+        {
+          "type": "childOf",
+          "targetRef": "group:default/engineering",
+          "target": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "engineering"
+          }
+        }
+      ]
     }
   ],
   "searchDocIndex": {
@@ -3393,6 +3447,120 @@
             "kind": "domain",
             "namespace": "default",
             "name": "secondary"
+          }
+        },
+        "topics": []
+      }
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "User",
+        "metadata": {
+          "name": "fred.foo"
+        },
+        "spec": {
+          "profile": {
+            "displayName": "Fred Foo",
+            "email": "fred.foo@example.com"
+          },
+          "memberOf": [
+            "group:default/team-bazz"
+          ]
+        },
+        "relations": [
+          {
+            "type": "memberOf",
+            "targetRef": "group:default/team-bazz",
+            "target": {
+              "kind": "group",
+              "namespace": "default",
+              "name": "team-bazz"
+            }
+          }
+        ]
+      },
+      "doc": {
+        "title": "Fred Foo",
+        "text": "",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "Fred Foo",
+        "text": "",
+        "location": "https://dev.example.com/catalog/default/User/fred.foo",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "User",
+          "namespace": "default",
+          "name": "fred.foo",
+          "memberOf": [
+            "team-bazz"
+          ],
+          "memberOfRefs": [
+            {
+              "kind": "group",
+              "namespace": "default",
+              "name": "team-bazz"
+            }
+          ]
+        },
+        "topics": []
+      }
+    },
+    {
+      "entity": {
+        "apiVersion": "backstage.io/v1alpha1",
+        "kind": "Group",
+        "metadata": {
+          "name": "team-bazz",
+          "description": "foo bar baz"
+        },
+        "spec": {
+          "profile": {
+            "displayName": "Team Bazz"
+          },
+          "parent": [
+            "group:default/engineering"
+          ]
+        },
+        "relations": [
+          {
+            "type": "childOf",
+            "targetRef": "group:default/engineering",
+            "target": {
+              "kind": "group",
+              "namespace": "default",
+              "name": "engineering"
+            }
+          }
+        ]
+      },
+      "doc": {
+        "title": "Team Bazz",
+        "text": "foo bar baz",
+        "location": ""
+      },
+      "source": "catalog",
+      "indexObject": {
+        "source": "catalog",
+        "title": "Team Bazz",
+        "text": "foo bar baz",
+        "location": "https://dev.example.com/catalog/default/Group/team-bazz",
+        "path": "",
+        "section": false,
+        "entity": {
+          "kind": "Group",
+          "namespace": "default",
+          "name": "team-bazz",
+          "parent": "engineering",
+          "parentRef": {
+            "kind": "group",
+            "namespace": "default",
+            "name": "engineering"
           }
         },
         "topics": []
