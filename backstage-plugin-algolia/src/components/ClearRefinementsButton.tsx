@@ -13,12 +13,11 @@ export const ClearRefinementsButton = (props: {
   const onClick = () => {
     refine();
     analytics.captureEvent('click', `Clear search filters`, {
-              attributes: {
-                pluginId: 'algolia',
-                extension: 'HierarchalSearchRefinement',
-              },
-            });
-
+      attributes: {
+        pluginId: 'algolia',
+        extension: 'HierarchalSearchRefinement',
+      },
+    });
     if (onClear) {
       onClear();
     }
