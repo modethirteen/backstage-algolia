@@ -1,7 +1,8 @@
 import { useAnalytics } from '@backstage/core-plugin-api';
 import { Button } from '@material-ui/core';
-import React from "react";
+import React, { useContext } from "react";
 import { useClearRefinements } from 'react-instantsearch';
+import { AlgoliaQueryIdContext } from './SearchContainer';
 
 export const ClearRefinementsButton = (props: {
   label: string;
@@ -9,15 +10,17 @@ export const ClearRefinementsButton = (props: {
 }) => {
   const { label, onClear } = props;
   const analytics = useAnalytics();
+  const { queryId } = useContext(AlgoliaQueryIdContext);
   const { refine } = useClearRefinements();
   const onClick = () => {
-    refine();
-    analytics.captureEvent('click', `Clear search filters`, {
+    analytics.captureEvent('click', `Clear search refinements`, {
       attributes: {
         pluginId: 'algolia',
-        extension: 'HierarchalSearchRefinement',
+        extension: 'ClearRefinementsButton',
+        algoliaQueryId: queryId,
       },
     });
+    refine();
     if (onClear) {
       onClear();
     }

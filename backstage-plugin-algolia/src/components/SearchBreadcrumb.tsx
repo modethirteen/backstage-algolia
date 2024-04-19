@@ -1,8 +1,14 @@
 import { Breadcrumbs } from '@backstage/core-components';
 import { useAnalytics } from '@backstage/core-plugin-api';
-import { Box, Link, Typography, makeStyles } from '@material-ui/core';
-import React from 'react';
+import {
+  Box,
+  Link,
+  Typography,
+  makeStyles,
+} from '@material-ui/core';
+import React, { useContext } from 'react';
 import { useBreadcrumb } from 'react-instantsearch';
+import { AlgoliaQueryIdContext } from './SearchContainer';
 
 export interface BreadcrumbItem {
   label: string;
@@ -24,11 +30,12 @@ export const SearchBreadcrumb = (props: {
   transformItems?: (items: BreadcrumbItem[]) => BreadcrumbItem[];
 }) => {
   const { attributes, transformItems } = props;
+  const { queryId } = useContext(AlgoliaQueryIdContext);
   const analytics = useAnalytics();
   const classes = useStyles();
   const { items, refine } = useBreadcrumb({ attributes });
   const transformedItems = transformItems ? transformItems(items) : items;
-  const segments = [ ...transformedItems.slice(0, -1)];
+  const segments = [...transformedItems.slice(0, -1)];
   const lastSegment = transformedItems[transformedItems.length - 1];
   return (
     <Box className={classes.box} display="flex" alignItems="center">
@@ -40,15 +47,19 @@ export const SearchBreadcrumb = (props: {
         {segments.map(s => (
           <Link
             className={classes.segment}
+            key={s.value}
             variant="body2"
-            onClick={() => {
-              refine(s.value);
-              analytics.captureEvent('click', `Search breadcrumb ${s.value}`, {
+            onClick={() => {              
+              analytics.captureEvent('click', 'Refine search', {
                 attributes: {
                   pluginId: 'algolia',
-                  extension: 'SearchBreadcrumbs',
+                  extension: 'SearchBreadcrumb',
+                  algoliaQueryId: queryId,
+                  algoliaSearchRefinementLabel: s.label,
+                  algoliaSearchRefinementValue: s.value ?? '',
                 },
               });
+              refine(s.value);
             }}
           >
             {s.label}

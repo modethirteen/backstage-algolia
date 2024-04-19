@@ -3,14 +3,18 @@ import {
   Chip,
   Typography,
   alpha,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import { TreeItem, TreeView } from '@material-ui/lab';
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useHierarchicalMenu } from 'react-instantsearch';
 import DefaultCheckedIcon from '../icons/checked.icon.svg';
 import DefaultIcon from '../icons/unchecked.icon.svg';
+import { AlgoliaQueryIdContext } from './SearchContainer';
+import { HierarchicalMenuItem } from 'instantsearch.js/es/connectors/hierarchical-menu/connectHierarchicalMenu';
+
+const flatten = (array: HierarchicalMenuItem[]): HierarchicalMenuItem[] => array.flatMap(i => Array.isArray(i.data) ? flatten(i.data) : i);
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -56,11 +60,15 @@ const buildTree = (options: {
   item: HierarchyNode;
   CheckedIcon?: IconComponent;
   nodeIds: string[];
+  refinedNodeIds: string[];
   classes: ClassNameMap;
 }) => {
-  const { item, CheckedIcon, nodeIds, classes } = options;
+  const { item, CheckedIcon, nodeIds, refinedNodeIds, classes } = options;
   const nodeId = item.value;
   nodeIds.push(nodeId);
+  if (item.isRefined) {
+    refinedNodeIds.push(nodeId);
+  }
   return (
     <TreeItem
       key={nodeId}
@@ -83,6 +91,7 @@ const buildTree = (options: {
         item: i,
         CheckedIcon,
         nodeIds,
+        refinedNodeIds,
         classes,
       })) : null}
     </TreeItem>
@@ -95,6 +104,7 @@ export const HierarchalSearchRefinement = (props: {
   CheckedIcon?: IconComponent;
   label: string;
   onRefinement?: (value: string) => void;
+  queryId?: string;
 }) => {
   const classes = useStyles();
   const {
@@ -108,15 +118,18 @@ export const HierarchalSearchRefinement = (props: {
     attributes,
   });
   const analytics = useAnalytics();
-  const { tree, nodeIds } = useMemo(() => {
+  const { queryId } = useContext(AlgoliaQueryIdContext);
+  const { tree, nodeIds, refinedNodeIds } = useMemo(() => {
     const nodeIds: string[] = [];
+    const refinedNodeIds: string[] = [];
     const tree = items.map(i => buildTree({
       item: i,
       CheckedIcon,
       nodeIds,
+      refinedNodeIds,
       classes,
     }));
-    return { tree, nodeIds };
+    return { tree, nodeIds, refinedNodeIds };
   }, [items]);
   return (
     <>
@@ -128,13 +141,16 @@ export const HierarchalSearchRefinement = (props: {
           defaultCollapseIcon={CheckedIcon ? <CheckedIcon /> : undefined}
           defaultEndIcon={Icon ? <Icon /> : undefined}
           onNodeSelect={(_: any, nodeId: string) => {
-            refine(nodeId);
-            analytics.captureEvent('click', `Filter search by ${nodeId}`, {
+            analytics.captureEvent('click', refinedNodeIds.includes(nodeId) ? 'Remove search refinement' : 'Refine search', {
               attributes: {
                 pluginId: 'algolia',
                 extension: 'HierarchalSearchRefinement',
+                algoliaQueryId: queryId,
+                algoliaSearchRefinementLabel: label,
+                algoliaSearchRefinementValue: nodeId,
               },
             });
+            refine(nodeId);
             if (onRefinement) {
               onRefinement(nodeId);
             }

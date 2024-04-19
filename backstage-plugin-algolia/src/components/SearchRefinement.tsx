@@ -8,9 +8,10 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
-import React from 'react';
+import React, { useContext } from 'react';
 import type { UseRefinementListProps } from 'react-instantsearch';
 import { useRefinementList } from 'react-instantsearch';
+import { AlgoliaQueryIdContext } from './SearchContainer';
 
 export interface SearchRefinementItem {
   value: string;
@@ -68,6 +69,7 @@ export const SearchRefinement = (props: {
     attribute,
     sortBy,
   });
+  const { queryId } = useContext(AlgoliaQueryIdContext);
   const analytics = useAnalytics();
   const classes = useStyles();
   const transformedItems = items.map(transformItems);
@@ -98,13 +100,16 @@ export const SearchRefinement = (props: {
               value={i.value}
               name={i.value}
               onChange={() => {
-                refine(i.value);
-                analytics.captureEvent('click', `Filter search by ${i.value}`, {
+                analytics.captureEvent('click', i.isRefined ? 'Remove search refinement' : 'Refine search', {
                   attributes: {
                     pluginId: 'algolia',
                     extension: 'SearchRefinement',
+                    algoliaQueryId: queryId,
+                    algoliaSearchRefinementLabel: label,
+                    algoliaSearchRefinementValue: i.value,
                   },
                 });
+                refine(i.value);
                 if (onRefinement) {
                   onRefinement(i.value);
                 }

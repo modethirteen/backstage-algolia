@@ -1,28 +1,25 @@
-import { configApiRef, useAnalytics, useApi } from '@backstage/core-plugin-api';
+import {
+  configApiRef,
+  useApi
+} from '@backstage/core-plugin-api';
 import { InsightsEvent, InsightsMethod } from 'instantsearch.js';
 import { InsightsProps } from 'instantsearch.js/es/middlewares';
-import React, { ReactNode, useEffect } from 'react';
-import { InstantSearch, InstantSearchProps, useStats } from 'react-instantsearch';
+import React, {
+  ReactNode,
+  createContext,
+  useState,
+} from 'react';
+import {
+  InstantSearch,
+  InstantSearchProps,
+} from 'react-instantsearch';
 import { Config } from '../../config';
 import { backendInsightsApiRef } from '../api';
 
-const SearchAnalytics = () => {
-  const stats = useStats();
-  const analytics = useAnalytics();
-  const { query, nbHits } = stats;
-  useEffect(() => {
-    if (query) {
-      analytics.captureEvent('search', query, {
-        value: nbHits,
-        attributes: {
-          pluginId: 'algolia',
-          extension: 'SearchContainer',
-        },
-      });
-    }
-  }, [query]);
-  return null;
-};
+export const AlgoliaQueryIdContext = createContext({
+  queryId: '',
+  setQueryId: (_: string) => {},
+});
 
 export const SearchContainer = (props: {
   children: ReactNode;
@@ -35,6 +32,10 @@ export const SearchContainer = (props: {
     userToken,
     ...rest
   } = props;
+
+  // allow SearchHitList to share query id with companion search components
+  const [queryId, setQueryId] = useState('');
+  const queryIdProvider = { queryId, setQueryId };
   const config = useApi(configApiRef);
   const api = useApi(backendInsightsApiRef);
   let insights: InsightsProps | boolean;
@@ -55,12 +56,13 @@ export const SearchContainer = (props: {
       insights = false;
   }
   return (
-    <InstantSearch
-      {...rest}
-      insights={insights}
-    >
-      <SearchAnalytics />
-      {children}
-    </InstantSearch>
+    <AlgoliaQueryIdContext.Provider value={queryIdProvider}>
+      <InstantSearch
+        {...rest}
+        insights={insights}
+      >
+        {children}
+      </InstantSearch>
+    </AlgoliaQueryIdContext.Provider>
   )
 };

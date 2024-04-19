@@ -1,5 +1,5 @@
 import { Link } from '@backstage/core-components';
-import { AnalyticsContext } from '@backstage/core-plugin-api';
+import { AnalyticsContext, useAnalytics } from '@backstage/core-plugin-api';
 import {
   Box,
   Button,
@@ -10,8 +10,18 @@ import {
   Typography,
 } from '@material-ui/core';
 import { IndexObjectWithIdAndTimestamp } from 'backstage-plugin-algolia-common';
-import React, { ComponentType, ReactNode } from 'react';
-import { Highlight, useInfiniteHits, useStats } from 'react-instantsearch';
+import React, {
+  ComponentType,
+  ReactNode,
+  useContext,
+  useEffect,
+} from 'react';
+import {
+  Highlight,
+  useInfiniteHits,
+  useStats,
+} from 'react-instantsearch';
+import { AlgoliaQueryIdContext } from './SearchContainer';
 
 const tryGetPath = (location: string) => {
   try {
@@ -38,17 +48,34 @@ export const SearchHitList = (props: {
     object: IndexObjectWithIdAndTimestamp;
     promoted: boolean;
   }) => IndexObjectWithIdAndTimestamp;
-  noTrack?: boolean;
 }) => {
   const {
     HitTitleContent,
     HitDescriptionContent,
     highlight = false,
     transformObject,
-    noTrack = false,
   } = props;
-  const { hits, isLastPage, showMore, sendEvent } = useInfiniteHits();
+  const { setQueryId } = useContext(AlgoliaQueryIdContext);
+  const { hits, results, isLastPage, showMore, sendEvent } = useInfiniteHits();
   const { nbHits: hitCount } = useStats();
+  const analytics = useAnalytics();
+  useEffect(() => {
+    if (results?.queryID) {
+
+      // provide all companion search components with query id context
+      setQueryId(results.queryID);
+    }
+    if (results?.query) {
+      analytics.captureEvent('search', results.query, {
+        value: hitCount,
+        attributes: {
+          pluginId: 'algolia',
+          extension: 'SearchContainer',
+          algoliaQueryId: results?.queryID ?? '',
+        },
+      });
+    }
+  }, [results]);
   return (
     <>
       <List subheader={<ListSubheader>{hitCount} results</ListSubheader>}>
@@ -62,8 +89,13 @@ export const SearchHitList = (props: {
           const titleContent = (
             <>
               <Typography variant="h6">
-                <AnalyticsContext attributes={{ pluginId: 'algolia', extension: 'SearchHitList' }}>
-                  <Link noTrack={noTrack} to={location} onClick={() => { sendEvent('click', h, 'Hit Clicked') }}>
+                <AnalyticsContext attributes={{
+                  pluginId: 'algolia',
+                  extension: 'SearchHitList',
+                  algoliaQueryId: results?.queryID ?? '',
+                  algoliaObjectId: objectID,
+                }}>
+                  <Link to={location} onClick={() => { sendEvent('click', h, 'Hit Clicked') }}>
                     {highlight ? <Highlight attribute="title" hit={h} /> : title}
                   </Link>
                 </AnalyticsContext>
@@ -98,8 +130,14 @@ export const SearchHitList = (props: {
           return (
             <ListItem key={objectID} divider>
               <ListItemText
-                primary={HitTitleContent ? <HitTitleContent object={object} promoted>{titleContent}</HitTitleContent> : titleContent}
-                secondary={HitDescriptionContent ? <HitDescriptionContent object={object} promoted>{descriptionContent}</HitDescriptionContent> : descriptionContent}
+                primary={HitTitleContent
+                  ? <HitTitleContent object={object} promoted>{titleContent}</HitTitleContent>
+                  : titleContent
+                }
+                secondary={HitDescriptionContent
+                  ? <HitDescriptionContent object={object} promoted>{descriptionContent}</HitDescriptionContent>
+                  : descriptionContent
+                }
               />
             </ListItem>
           );
