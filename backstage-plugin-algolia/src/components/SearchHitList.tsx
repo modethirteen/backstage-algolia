@@ -48,43 +48,49 @@ export const SearchHitList = (props: {
     object: IndexObjectWithIdAndTimestamp;
     promoted: boolean;
   }) => IndexObjectWithIdAndTimestamp;
+  onClick?: (data: {
+    event: React.MouseEvent<any, MouseEvent>;
+    object: IndexObjectWithIdAndTimestamp;
+    queryId: string;
+  }) => void;
 }) => {
   const {
     HitTitleContent,
     HitDescriptionContent,
     highlight = false,
     transformObject,
+    onClick,
   } = props;
   const { setQueryId } = useContext(AlgoliaQueryIdContext);
   const { hits, results, isLastPage, showMore, sendEvent } = useInfiniteHits();
   const { nbHits: hitCount } = useStats();
   const analytics = useAnalytics();
+  const queryId = results?.queryID ?? '';
   useEffect(() => {
-    if (results?.queryID) {
 
-      // provide all companion search components with query id context
-      setQueryId(results.queryID);
-    }
+    // provide all companion search components with query id context
+    setQueryId(queryId);
     if (results?.query) {
       analytics.captureEvent('search', results.query, {
         value: hitCount,
         attributes: {
           pluginId: 'algolia',
           extension: 'SearchContainer',
-          algoliaQueryId: results?.queryID ?? '',
+          algoliaQueryId: queryId,
         },
       });
     }
-  }, [results]);
+  }, [results, queryId]);
   return (
     <>
       <List subheader={<ListSubheader>{hitCount} results</ListSubheader>}>
         {hits.map(h => {
           const promoted = h._rankingInfo?.promoted ?? false;
           const object = h as unknown as IndexObjectWithIdAndTimestamp;
-          const { location, text, title, objectID } = transformObject
+          const transformedObject = transformObject
             ? transformObject({ object, promoted })
             : object;
+          const { location, text, title, objectID } = transformedObject;
           const path = tryGetPath(location);
           const titleContent = (
             <>
@@ -92,10 +98,15 @@ export const SearchHitList = (props: {
                 <AnalyticsContext attributes={{
                   pluginId: 'algolia',
                   extension: 'SearchHitList',
-                  algoliaQueryId: results?.queryID ?? '',
+                  algoliaQueryId: queryId,
                   algoliaObjectId: objectID,
                 }}>
-                  <Link to={location} onClick={() => { sendEvent('click', h, 'Hit Clicked') }}>
+                  <Link to={location} onClick={e => {
+                    sendEvent('click', h, 'Hit Clicked');
+                    if (onClick) {
+                      onClick({ event: e, object: transformedObject, queryId });
+                    }
+                  }}>
                     {highlight ? <Highlight attribute="title" hit={h} /> : title}
                   </Link>
                 </AnalyticsContext>
@@ -131,11 +142,11 @@ export const SearchHitList = (props: {
             <ListItem key={objectID} divider>
               <ListItemText
                 primary={HitTitleContent
-                  ? <HitTitleContent object={object} promoted>{titleContent}</HitTitleContent>
+                  ? <HitTitleContent object={transformedObject} promoted>{titleContent}</HitTitleContent>
                   : titleContent
                 }
                 secondary={HitDescriptionContent
-                  ? <HitDescriptionContent object={object} promoted>{descriptionContent}</HitDescriptionContent>
+                  ? <HitDescriptionContent object={transformedObject} promoted>{descriptionContent}</HitDescriptionContent>
                   : descriptionContent
                 }
               />
