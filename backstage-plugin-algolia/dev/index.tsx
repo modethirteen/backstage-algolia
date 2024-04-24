@@ -100,7 +100,9 @@ createDevApp()
                   </Paper>
                 </Grid>
                 <Grid item lg={9} md={8} sm={12} xs={12}>
-                  <SearchHitList />
+                  <SearchHitList
+                    onClick={({ object, queryId }) => console.log({ object, queryId })}
+                  />
                 </Grid>
               </SearchWrapper>
             </TestApiProvider>
