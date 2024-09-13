@@ -12,7 +12,7 @@ const isTextRemaining = (text: string) => text.replace(/^\s+|\s+$/g, '').length;
 
 export interface IndexerOptions {
   batchSize: number;
-  index: 'techdocs';
+  index: string;
   logger: Logger;
 }
 

@@ -19,7 +19,7 @@ export interface IndexManagerInterface {
 
 export interface IndexManagerOptions {
   date: Date;
-  index: 'techdocs';
+  index: string;
   logger: Logger;
 }
 

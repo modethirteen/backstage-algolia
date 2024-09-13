@@ -10,15 +10,11 @@ export interface Config {
      * @visibility frontend
      */
     applicationId: string;
-    indexes: {
-      techdocs: {
 
-        /**
-         * @visibility frontend
-         */
-        name: string;
-      };
-    };
+    /**
+     * @visibility frontend
+     */
+    index: string;
 
     /**
      * Enable Algolia event tracking
