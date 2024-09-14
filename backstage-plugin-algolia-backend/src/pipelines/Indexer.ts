@@ -107,8 +107,8 @@ export class Indexer extends Writable {
         const results: IndexObjectWithIdAndTimestamp[] = [];
         try {
           const { location  } = o;
-          if (this.chunk) {
-            let { text } = o;        
+          if (o.text && this.chunk) {
+            let { text } = o;
             let chunks = 0;
             while (isTextRemaining(text)) {
 

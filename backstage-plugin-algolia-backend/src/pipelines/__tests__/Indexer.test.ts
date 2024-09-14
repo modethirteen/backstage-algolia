@@ -195,4 +195,51 @@ describe('Indexer', () => {
     const results = Array.from(saveObjects.mock.calls[0][0])
     expect(results.length).toEqual(89);
   });
+
+  it('will include objects with empty text', async () => {
+    const objects = [{
+      source: 'bar',
+      title: 'bazz',
+      location: 'https://example.com/a/b/c',
+      path: 'a/b/c',
+      section: false,
+      text: '',
+      entity: {
+        kind: 'component',
+        namespace: 'default',
+        name: 'hydro',
+      },
+      parentTitles: [],
+    }, {
+      source: 'bar',
+      title: 'plugh',
+      location: 'https://example.com/d/e/f',
+      path: 'd/e/f',
+      section: false,
+      text: '',
+      entity: {
+        kind: 'component',
+        namespace: 'default',
+        name: 'flask',
+      },
+      parentTitles: [],
+    }];
+    const indexer = new Indexer({
+      batchSize: 2,
+      chunk: true,
+      logger: getVoidLogger(),
+      maxObjectSizeBytes: 5000,
+      now: new Date('2023-11-09T01:25:23+0000'),
+      searchIndex: { saveObjects } as unknown as SearchIndex,
+    });
+    await testIndexingPipeline({ results: objects.map(o => ({
+      indexObject: o,
+      doc: {} as IndexableDocument,
+      source: 'xyzzy',
+      entity: {} as Entity,
+    })), indexer });
+    expect(saveObjects).toHaveBeenCalled();
+    const results = Array.from(saveObjects.mock.calls[0][0])
+    expect(results.length).toEqual(2);
+  });
 });
