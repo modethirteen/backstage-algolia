@@ -12,7 +12,7 @@ import { ClientFactory } from '../api/ClientFactory';
 import {
   Indexer,
   PipelineTrigger,
-  TechDocsBuilderFactory,
+  TechDocsTransformerFactory,
   TechDocsCollatorFactory
 } from '../pipelines';
 import { createRouter } from './router';
@@ -76,8 +76,8 @@ export async function startStandaloneServer(
       logger,
       tokenManager,
     }),
-    builderFactories: [
-      TechDocsBuilderFactory.fromConfig(config),
+    transformerFactories: [
+      TechDocsTransformerFactory.fromConfig(config),
     ],
     indexer: Indexer.fromConfig(config, {
       batchSize: 10,

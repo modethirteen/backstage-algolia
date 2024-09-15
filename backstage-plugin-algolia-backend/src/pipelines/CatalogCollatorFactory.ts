@@ -85,12 +85,13 @@ export class CatalogCollatorFactory implements CollatorFactory {
       entitiesRetrieved += entities.length;
       const promises = entities.map((entity: Entity) => limit(async(): Promise<PipelineResult> => ({
         entity,
-        doc: {
+        indexObject: {
+          source: 'catalog',
           title: humanizeEntityName(entity),
           text: entity.metadata.description ?? '',
           location: '',
-        },
-        source: 'catalog',
+          keywords: [],
+        }
       })));
       yield * (await Promise.all(promises));
     }

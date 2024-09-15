@@ -1,14 +1,14 @@
 import { Readable, Writable, pipeline } from 'stream';
 import { Indexer } from '../pipelines';
-import { BuilderFactory, CollatorFactory, PipelineResult } from '../pipelines/types';
+import { TransformerFactory, CollatorFactory, PipelineResult } from '../pipelines/types';
 
-export const testCollatingBuildingPipeline = async (options: {
+export const testCollatingTransformingPipeline = async (options: {
   collatorFactory: CollatorFactory;
-  builderFactories?: BuilderFactory[];
+  transformerFactories?: TransformerFactory[];
 }) => {
-  const { builderFactories, collatorFactory } = options;
+  const { transformerFactories, collatorFactory } = options;
   const collator = await collatorFactory.newCollator();
-  const builders = await Promise.all((builderFactories ?? []).map(b => b.newBuilder()));
+  const transformers = await Promise.all((transformerFactories ?? []).map(b => b.newTransformer()));
   const results: PipelineResult[] = [];
   const collector = new Writable({
     objectMode: true,
@@ -22,7 +22,7 @@ export const testCollatingBuildingPipeline = async (options: {
     }
   })
   return new Promise<PipelineResult[]>(resolve => {
-    pipeline([collator, ...builders, collector], () => resolve(results));
+    pipeline([collator, ...transformers, collector], () => resolve(results));
   });
 };
 

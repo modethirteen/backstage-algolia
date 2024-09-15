@@ -1,16 +1,15 @@
+import { parseEntityRef } from '@backstage/catalog-model';
 import { Config } from '@backstage/config';
-import { unescape } from 'lodash';
 import * as url from 'url';
-import { BuilderBase } from './BuilderBase';
-import { entityRefsBuilder } from './entityRefsBuilder';
+import { TransformerBase } from './TransformerBase';
 import {
-  BuilderFactory,
+  TransformerFactory,
   EntityProvider,
   EntityProviderFactoryInterface,
   PipelineResult,
 } from './types';
 
-class CatalogBuilder extends BuilderBase {
+class TechDocsTransformer extends TransformerBase {
   private readonly entityProvider?: EntityProvider;
   private readonly locationTemplate: string;
 
@@ -24,48 +23,33 @@ class CatalogBuilder extends BuilderBase {
     this.locationTemplate = locationTemplate;
   }
 
-  public async build(result: PipelineResult): Promise<PipelineResult | undefined> {
+  public async transform(result: PipelineResult): Promise<PipelineResult | undefined> {
     result = {
       ...result,
       entity: this.entityProvider ? await this.entityProvider(result) : result.entity,
     };
-    const { doc, source, entity } = result;
-    const entityInfo = {
-      kind: entity.kind,
-      namespace: entity.metadata.namespace ?? 'default',
-      name: entity.metadata.name,
-    };
+    const { indexObject, entity } = result;
+    const techdocsEntityRef = entity.metadata.annotations?.['backstage.io/techdocs-entity'];
+    const techdocsEntityInfo = techdocsEntityRef
+      ? parseEntityRef(techdocsEntityRef)
+      : {
+        kind: entity.kind,
+        namespace: entity.metadata.namespace ?? 'default',
+        name: entity.metadata.name,
+      };
     let location = this.locationTemplate;
     for (const [key, value] of Object.entries({
-      ...entityInfo,
+      ...techdocsEntityInfo,
+      path: indexObject.location,
     })) {
       location = location.replace(`:${key}`, value);
     }
-    const refs = entityRefsBuilder(entity);
-    const resultWithIndexObject = {
+    return {
       ...result,
       indexObject: {
-        source,
-        title: unescape(doc.title),
-        text: unescape(doc.text ?? ''),
+        ...indexObject,
         location,
-        path: doc.location,
-        section: false,
-        entity: {
-          ...entityInfo,
-          title: entity.metadata.title ?? undefined,
-          type: entity.spec?.type?.toString() ?? undefined,
-          lifecycle: entity.spec?.lifecycle as string ?? undefined,
-          ...refs,
-        },
       },
-    };
-    return {
-      ...resultWithIndexObject,
-      indexObject: {
-        ...resultWithIndexObject.indexObject,
-        topics: entity.metadata.tags ?? [],
-      }
     };
   }
 
@@ -74,15 +58,15 @@ class CatalogBuilder extends BuilderBase {
   }
 }
 
-export class CatalogBuilderFactory implements BuilderFactory {
+export class TechDocsTransformerFactory implements TransformerFactory {
   public static fromConfig(config: Config, options?: {
     entityProviderFactory?: EntityProviderFactoryInterface;
   }) {
     const { entityProviderFactory } = options ?? {};
     const baseUrl = config.getString('app.baseUrl');
-    const locationTemplate = config.getOptionalString('algolia.backend.indexes.catalog.locationTemplate')
-      ?? url.resolve(baseUrl, '/catalog/:namespace/:kind/:name');
-    return new CatalogBuilderFactory({ entityProviderFactory, locationTemplate });
+    const locationTemplate = config.getOptionalString('algolia.backend.indexes.techdocs.locationTemplate')
+      ?? url.resolve(baseUrl, '/docs/:namespace/:kind/:name/:path');
+    return new TechDocsTransformerFactory({ entityProviderFactory, locationTemplate });
   }
 
   private readonly entityProviderFactory?: EntityProviderFactoryInterface;
@@ -97,8 +81,8 @@ export class CatalogBuilderFactory implements BuilderFactory {
     this.locationTemplate = locationTemplate;
   }
 
-  public async newBuilder(): Promise<BuilderBase> {
-    return new CatalogBuilder({
+  public async newTransformer(): Promise<TransformerBase> {
+    return new TechDocsTransformer({
       entityProvider: await this.entityProviderFactory?.newEntityProvider(),
       locationTemplate: this.locationTemplate,
     });

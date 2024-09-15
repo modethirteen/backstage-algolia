@@ -8,7 +8,7 @@ import { ConfigReader } from '@backstage/config';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { TechDocsCollatorFactory } from '../';
-import { testCollatingBuildingPipeline } from '../../dev';
+import { testCollatingTransformingPipeline } from '../../dev';
 import {
   entities as mockEntities,
   techdocsPipelineResults as mockPipelineResults,
@@ -70,12 +70,10 @@ describe('TechDocsCollatorFactory', () => {
   });
 
   it('fetches from the configured catalog and techdocs services', async () => {
-    const results = await testCollatingBuildingPipeline({ collatorFactory: factory });
+    const results = await testCollatingTransformingPipeline({ collatorFactory: factory });
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('techdocs');
     expect(results).toHaveLength(24);
-    expect(results).toEqual(expect.arrayContaining(mockPipelineResults.map(({ entity, doc, docs, source }) => ({
-      entity, doc, docs, source, metadata: { foo: 'bar' }   
-    }))));
+    expect(results).toEqual(expect.arrayContaining(mockPipelineResults));
   });
 });

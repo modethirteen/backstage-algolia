@@ -1,10 +1,10 @@
 import { Entity } from '@backstage/catalog-model';
 import { IndexObject } from 'backstage-plugin-algolia-common';
 import { Readable } from 'stream';
-import { BuilderBase } from './BuilderBase';
+import { TransformerBase } from './TransformerBase';
 
-export interface BuilderFactory {
-  newBuilder(): Promise<BuilderBase>;
+export interface TransformerFactory {
+  newTransformer(): Promise<TransformerBase>;
 }
 
 export interface CollatorFactory {
@@ -13,25 +13,12 @@ export interface CollatorFactory {
 
 export interface PipelineResult {
   entity: Entity;
-  doc: IndexableDocument;
-  docs?: IndexableDocument[];
-  source: string;
-  indexObject?: IndexObject;
-  metadata?: object;
-}
-
-export interface IndexableDocument {
-  title: string;
-  text: string;
-  location: string;
+  indexObject: IndexObject;
+  data?: object;
 }
 
 export type EntityProvider = (result: PipelineResult) => Promise<Entity>;
 
 export interface EntityProviderFactoryInterface {
   newEntityProvider(): Promise<EntityProvider>;
-}
-
-export interface TopicProviderInterface {
-  getTopics(options: { result: PipelineResult }): Promise<string[]>;
 }

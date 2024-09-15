@@ -8,7 +8,7 @@ import { ConfigReader } from '@backstage/config';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { CatalogCollatorFactory } from '../';
-import { testCollatingBuildingPipeline } from '../../dev';
+import { testCollatingTransformingPipeline } from '../../dev';
 import { compare } from '../../util';
 import {
   entities as mockEntities,
@@ -67,12 +67,10 @@ describe('CatalogCollatorFactory', () => {
 
   it('fetches from the configured catalog service', async () => {
     const factory = CatalogCollatorFactory.fromConfig(new ConfigReader({}), options);
-    const results = await testCollatingBuildingPipeline({ collatorFactory: factory });
+    const results = await testCollatingTransformingPipeline({ collatorFactory: factory });
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
     expect(results).toHaveLength(13);
-    expect(results).toEqual(expect.arrayContaining(mockPipelineResults.map(({ entity, doc, source }) => ({
-      entity, doc, source,
-    }))));
+    expect(results).toEqual(expect.arrayContaining(mockPipelineResults));
   });
 
   it('fetches configured kinds from the configured catalog service', async () => {
@@ -87,13 +85,11 @@ describe('CatalogCollatorFactory', () => {
         },
       },
     }), options);
-    const results = await testCollatingBuildingPipeline({ collatorFactory: factory });
+    const results = await testCollatingTransformingPipeline({ collatorFactory: factory });
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
     expect(results).toHaveLength(2);
     expect(results).toEqual(expect.arrayContaining(mockPipelineResults
       .filter(({ entity }) => compare(entity.kind, 'system'))
-      .map(({ entity, doc, source }) => ({
-        entity, doc, source,
-      }))));
+    ));
   });
 });

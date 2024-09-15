@@ -2,12 +2,12 @@ import { assertError } from '@backstage/errors';
 import { Transform } from 'stream';
 import { PipelineResult } from './types';
 
-export abstract class BuilderBase extends Transform {
+export abstract class TransformerBase extends Transform {
   public constructor() {
     super({ objectMode: true });
   }
 
-  public abstract build(result: PipelineResult): Promise<PipelineResult | undefined>;
+  public abstract transform(result: PipelineResult): Promise<PipelineResult | undefined>;
 
   public abstract finalize(): Promise<void>;
 
@@ -20,7 +20,7 @@ export abstract class BuilderBase extends Transform {
     done: (error?: Error | null) => void,
   ) {
     try {
-      const object = await this.build(result);
+      const object = await this.transform(result);
       if (typeof object === 'undefined') {
         done();
         return;

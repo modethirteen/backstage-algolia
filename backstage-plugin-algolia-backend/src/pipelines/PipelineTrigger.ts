@@ -3,7 +3,7 @@ import { assertError } from '@backstage/errors';
 import { Logger } from 'winston';
 import { Indexer } from './Indexer';
 import { Pipeline } from './Pipeline';
-import { BuilderFactory, CollatorFactory } from './types';
+import { TransformerFactory, CollatorFactory } from './types';
 
 export class PipelineTriggerError extends Error {
   public readonly id: string;
@@ -41,17 +41,17 @@ export class PipelineTrigger implements PipelineTriggerInterface {
   public addScheduledPipeline(options: {
     id: string;
     collatorFactory: CollatorFactory;
-    builderFactories: BuilderFactory[];
+    transformerFactories: TransformerFactory[];
     indexer: Indexer;
   } & TaskScheduleDefinition) {
-    const { id, collatorFactory, builderFactories, indexer } = options;
+    const { id, collatorFactory, transformerFactories, indexer } = options;
     this.taskScheduler.scheduleTask({
       ...options,
       id: `algolia-pipeline:${id}`,
       fn: async () => {
         const pipeline = new Pipeline({
           collatorFactory,
-          builderFactories,
+          transformerFactories,
           indexer,
         });
         try {

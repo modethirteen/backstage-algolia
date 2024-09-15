@@ -12,9 +12,49 @@ import { Readable } from 'stream';
 import { Logger } from 'winston';
 import {
   CollatorFactory,
-  IndexableDocument,
   PipelineResult,
 } from './types';
+import { unescape } from 'lodash';
+import * as url from 'url';
+
+const getKeywords = (doc: Document, docs: Document[]) => {
+  const { location } = doc;
+
+  // build list of parent paths to fetch parent paths and titles
+  const parts = location.split('/').filter(p => p);
+  const keywords: string[] = [...parts];
+  const root = docs.find(({ location }) => location === '')?.title;
+  if (root && root !== doc.title) {
+    keywords.push(root);
+  }
+  for (let i = 0; i < parts.length; i++) {
+    let path = parts.slice(0, i + 1).join('/');
+    if (!path.includes('#')) {
+      path = `${path}/`;
+    }
+    const title = docs.find(({ location }) => location === path)?.title;
+    if (title && title !== doc.title) {
+      keywords.push(title);
+    }
+  }
+  return Array.from(
+    new Set(
+      keywords
+        .map(t =>
+          t
+            .toLocaleLowerCase('en-US')
+            .replaceAll(/[^a-zA-Z']+/g, ' ')
+            .trim(),
+        )
+    ),
+  );
+}
+
+interface Document {
+  title: string;
+  text: string;
+  location: string;
+}
 
 export interface TechDocsCollatorFactoryOptions {
   catalogClient?: CatalogApi;
@@ -85,7 +125,7 @@ export class TechDocsCollatorFactory implements CollatorFactory {
               namespace: entity.metadata.namespace ?? 'default',
               name: entity.metadata.name,
             };
-            let searchIndex: { docs: IndexableDocument[] };
+            let searchIndex: { docs: Document[] };
             try {
               const response = await fetch(
                 `${techDocsBaseUrl}/static/docs/${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}/search/search_index.json`, {
@@ -100,7 +140,7 @@ export class TechDocsCollatorFactory implements CollatorFactory {
               return [];
             }
             this.logger.debug(`Retrieved ${searchIndex.docs.length} mkdocs search index items for entity ${stringifyEntityRef(entityInfo)}`);
-            let metadata: object = {};
+            let data: object = {};
             try {
               const response = await fetch(
                 `${techDocsBaseUrl}/static/docs/${entityInfo.namespace}/${entityInfo.kind}/${entityInfo.name}/techdocs_metadata.json`, {
@@ -108,18 +148,34 @@ export class TechDocsCollatorFactory implements CollatorFactory {
                   Authorization: `Bearer ${token}`,
                 },
               });
-              metadata = await response.json();
+              data = await response.json();
             } catch (e) {
               this.logger.warn(`Failed to retrieve techdocs metadata for entity ${stringifyEntityRef(entityInfo)}`, e);
             }
-            return searchIndex.docs.map(doc => ({
-              entity,
-              doc,
-              docs: searchIndex.docs.map(d => ({ ...d })),
-              source: 'mkdocs',
-              metadata,
-            }));
-          }),
+            return searchIndex.docs.map(doc => {
+              let section = false;
+              try {
+                section = new url.URL(location).hash !== '';
+              } catch(e) {
+                assertError(e);
+                this.logger.warn('Could not parse location URL to determine if location is a page section', e);
+              }
+              return {
+                entity,
+                indexObject: {
+                  source: 'mkdocs',
+                  title: unescape(doc.title),
+                  text: unescape(doc.text ?? ''),
+                  location: doc.location,
+                  keywords: getKeywords(doc, searchIndex.docs),
+                  data: {
+                    section,
+                  },
+                },
+                data,
+              };
+            });
+          })
         );
       yield * (await Promise.all(promises)).flat();
     }

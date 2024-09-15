@@ -1,7 +1,7 @@
 import { getVoidLogger } from '@backstage/backend-common';
 import { Entity } from '@backstage/catalog-model';
 import { SearchIndex } from 'algoliasearch';
-import { IndexableDocument, Indexer, PipelineResult } from '../';
+import { Indexer, PipelineResult } from '../';
 import { testIndexingPipeline } from '../../dev';
 import { techdocsPipelineResults as mockPipelineResults } from './mocks.json';
 
@@ -74,15 +74,13 @@ describe('Indexer', () => {
       source: 'bar',
       title: 'plugh',
       location: 'xyzzy',
-      path: 'fred',
-      section: false,
       text: generateText(200),
       entity: {
         kind: 'component',
         namespace: 'default',
         name: 'foobar',
       },
-      parentTitles: [],
+      keywords: [],
     };
     const indexer = new Indexer({
       batchSize: 1,
@@ -94,8 +92,6 @@ describe('Indexer', () => {
     });
     const result: PipelineResult = {
       indexObject: object,
-      doc: {} as IndexableDocument,
-      source: 'xyzzy',
       entity: {} as Entity,
     };
     await testIndexingPipeline({ results: [result], indexer });
@@ -107,28 +103,24 @@ describe('Indexer', () => {
       source: 'bar',
       title: 'bazz',
       location: 'https://example.com/a/b/c',
-      path: 'a/b/c',
-      section: false,
       text: generateText(4000),
       entity: {
         kind: 'component',
         namespace: 'default',
         name: 'hydro',
       },
-      parentTitles: [],
+      keywords: [],
     }, {
       source: 'bar',
       title: 'plugh',
       location: 'https://example.com/d/e/f',
-      path: 'd/e/f',
-      section: false,
       text: generateText(8000),
       entity: {
         kind: 'component',
         namespace: 'default',
         name: 'flask',
       },
-      parentTitles: [],
+      keywords: [],
     }];
     const indexer = new Indexer({
       batchSize: 2,
@@ -140,8 +132,6 @@ describe('Indexer', () => {
     });
     await testIndexingPipeline({ results: objects.map(o => ({
       indexObject: o,
-      doc: {} as IndexableDocument,
-      source: 'xyzzy',
       entity: {} as Entity,
     })), indexer });
     expect(saveObjects).toHaveBeenCalled();
@@ -154,7 +144,6 @@ describe('Indexer', () => {
       source: 'bar',
       title: 'bazz',
       location: 'https://example.com/a/b/c',
-      path: 'a/b/c',
       section: false,
       text: generateText(4000),
       entity: {
@@ -162,12 +151,11 @@ describe('Indexer', () => {
         namespace: 'default',
         name: 'hydro',
       },
-      parentTitles: [],
+      keywords: [],
     }, {
       source: 'bar',
       title: 'plugh',
       location: 'https://example.com/d/e/f',
-      path: 'd/e/f',
       section: false,
       text: generateText(8000),
       entity: {
@@ -175,7 +163,7 @@ describe('Indexer', () => {
         namespace: 'default',
         name: 'flask',
       },
-      parentTitles: [],
+      keywords: [],
     }];
     const indexer = new Indexer({
       batchSize: 2,
@@ -187,8 +175,6 @@ describe('Indexer', () => {
     });
     await testIndexingPipeline({ results: [...objects.map(o => ({
       indexObject: o,
-      doc: {} as IndexableDocument,
-      source: 'xyzzy',
       entity: {} as Entity,
     })), undefined], indexer });
     expect(saveObjects).toHaveBeenCalled();
@@ -201,28 +187,24 @@ describe('Indexer', () => {
       source: 'bar',
       title: 'bazz',
       location: 'https://example.com/a/b/c',
-      path: 'a/b/c',
-      section: false,
       text: '',
       entity: {
         kind: 'component',
         namespace: 'default',
         name: 'hydro',
       },
-      parentTitles: [],
+      keywords: [],
     }, {
       source: 'bar',
       title: 'plugh',
       location: 'https://example.com/d/e/f',
-      path: 'd/e/f',
-      section: false,
       text: '',
       entity: {
         kind: 'component',
         namespace: 'default',
         name: 'flask',
       },
-      parentTitles: [],
+      keywords: [],
     }];
     const indexer = new Indexer({
       batchSize: 2,
@@ -234,8 +216,6 @@ describe('Indexer', () => {
     });
     await testIndexingPipeline({ results: objects.map(o => ({
       indexObject: o,
-      doc: {} as IndexableDocument,
-      source: 'xyzzy',
       entity: {} as Entity,
     })), indexer });
     expect(saveObjects).toHaveBeenCalled();

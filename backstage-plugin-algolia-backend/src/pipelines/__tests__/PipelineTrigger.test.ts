@@ -24,7 +24,7 @@ describe('PipelineTrigger', () => {
     trigger.addScheduledPipeline({
       id: 'xyzzy',
       collatorFactory: {} as CollatorFactory,
-      builderFactories: [],
+      transformerFactories: [],
       indexer: {} as Indexer,
       frequency: { minutes: 60 },
       timeout: { minutes: 5 },

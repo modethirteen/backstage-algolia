@@ -1,11 +1,10 @@
-export * from './BuilderBase';
-export * from './CatalogBuilderFactory';
+export * from './TransformerBase';
+export * from './CatalogTransformerFactory';
 export * from './CatalogCollatorFactory';
 export * from './IndexManager';
 export * from './Indexer';
 export * from './Pipeline';
 export * from './PipelineTrigger';
-export * from './TechDocsBuilderFactory';
+export * from './TechDocsTransformerFactory';
 export * from './TechDocsCollatorFactory';
 export * from './types';
-
