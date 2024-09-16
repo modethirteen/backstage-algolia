@@ -15,7 +15,6 @@ import {
   PipelineResult,
 } from './types';
 import { unescape } from 'lodash';
-import * as url from 'url';
 
 const getKeywords = (doc: Document, docs: Document[]) => {
   const { location } = doc;
@@ -153,13 +152,6 @@ export class TechDocsCollatorFactory implements CollatorFactory {
               this.logger.warn(`Failed to retrieve techdocs metadata for entity ${stringifyEntityRef(entityInfo)}`, e);
             }
             return searchIndex.docs.map(doc => {
-              let section = false;
-              try {
-                section = new url.URL(location).hash !== '';
-              } catch(e) {
-                assertError(e);
-                this.logger.warn('Could not parse location URL to determine if location is a page section', e);
-              }
               return {
                 entity,
                 indexObject: {
@@ -168,9 +160,6 @@ export class TechDocsCollatorFactory implements CollatorFactory {
                   text: unescape(doc.text ?? ''),
                   location: doc.location,
                   keywords: getKeywords(doc, searchIndex.docs),
-                  data: {
-                    section,
-                  },
                 },
                 data,
               };

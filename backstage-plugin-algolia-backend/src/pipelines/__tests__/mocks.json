@@ -812,8 +812,7 @@
         "title": "Home",
         "text": "foo bar baz",
         "location": "",
-        "keywords": [],
-        "data": { "section": false }
+        "keywords": []
       },
       "data": { "foo": "bar" }
     },
@@ -844,8 +843,7 @@
         "title": "Front-end Development",
         "text": "fred bazz qux",
         "location": "xyzzy/",
-        "keywords": ["xyzzy", "home"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "home"]
       },
       "data": { "foo": "bar" }
     },
@@ -876,8 +874,7 @@
         "title": "Back-end Testing",
         "text": "foobar plugh",
         "location": "xyzzy/fred",
-        "keywords": ["xyzzy", "fred", "home", "front end development"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "fred", "home", "front end development"]
       },
       "data": { "foo": "bar" }
     },
@@ -908,8 +905,7 @@
         "title": "React",
         "text": "bazz dita fox",
         "location": "xyzzy/#plugh",
-        "keywords": ["xyzzy", "plugh", "home", "front end development"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "plugh", "home", "front end development"]
       },
       "data": { "foo": "bar" }
     },
@@ -943,8 +939,7 @@
         "title": "Home",
         "text": "foo bar baz",
         "location": "",
-        "keywords": [],
-        "data": { "section": false }
+        "keywords": []
       },
       "data": { "foo": "bar" }
     },
@@ -978,8 +973,7 @@
         "title": "Front-end Development",
         "text": "fred bazz qux",
         "location": "xyzzy/",
-        "keywords": ["xyzzy", "home"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "home"]
       },
       "data": { "foo": "bar" }
     },
@@ -1013,8 +1007,7 @@
         "title": "Back-end Testing",
         "text": "foobar plugh",
         "location": "xyzzy/fred",
-        "keywords": ["xyzzy", "fred", "home", "front end development"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "fred", "home", "front end development"]
       },
       "data": { "foo": "bar" }
     },
@@ -1048,8 +1041,7 @@
         "title": "React",
         "text": "bazz dita fox",
         "location": "xyzzy/#plugh",
-        "keywords": ["xyzzy", "plugh", "home", "front end development"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "plugh", "home", "front end development"]
       },
       "data": { "foo": "bar" }
     },
@@ -1080,8 +1072,7 @@
         "title": "Home",
         "text": "foo bar baz",
         "location": "",
-        "keywords": [],
-        "data": { "section": false }
+        "keywords": []
       },
       "data": { "foo": "bar" }
     },
@@ -1112,8 +1103,7 @@
         "title": "Front-end Development",
         "text": "fred bazz qux",
         "location": "xyzzy/",
-        "keywords": ["xyzzy", "home"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "home"]
       },
       "data": { "foo": "bar" }
     },
@@ -1144,8 +1134,7 @@
         "title": "Back-end Testing",
         "text": "foobar plugh",
         "location": "xyzzy/fred",
-        "keywords": ["xyzzy", "fred", "home", "front end development"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "fred", "home", "front end development"]
       },
       "data": { "foo": "bar" }
     },
@@ -1176,8 +1165,7 @@
         "title": "React",
         "text": "bazz dita fox",
         "location": "xyzzy/#plugh",
-        "keywords": ["xyzzy", "plugh", "home", "front end development"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "plugh", "home", "front end development"]
       },
       "data": { "foo": "bar" }
     },
@@ -1211,8 +1199,7 @@
         "title": "Home",
         "text": "foo bar baz",
         "location": "",
-        "keywords": [],
-        "data": { "section": false }
+        "keywords": []
       },
       "data": { "foo": "bar" }
     },
@@ -1246,8 +1233,7 @@
         "title": "Front-end Development",
         "text": "fred bazz qux",
         "location": "xyzzy/",
-        "keywords": ["xyzzy", "home"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "home"]
       },
       "data": { "foo": "bar" }
     },
@@ -1281,8 +1267,7 @@
         "title": "Back-end Testing",
         "text": "foobar plugh",
         "location": "xyzzy/fred",
-        "keywords": ["xyzzy", "fred", "home", "front end development"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "fred", "home", "front end development"]
       },
       "data": { "foo": "bar" }
     },
@@ -1316,8 +1301,7 @@
         "title": "React",
         "text": "bazz dita fox",
         "location": "xyzzy/#plugh",
-        "keywords": ["xyzzy", "plugh", "home", "front end development"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "plugh", "home", "front end development"]
       },
       "data": { "foo": "bar" }
     },
@@ -1348,8 +1332,7 @@
         "title": "Home",
         "text": "foo bar baz",
         "location": "",
-        "keywords": [],
-        "data": { "section": false }
+        "keywords": []
       },
       "data": { "foo": "bar" }
     },
@@ -1380,8 +1363,7 @@
         "title": "Front-end Development",
         "text": "fred bazz qux",
         "location": "xyzzy/",
-        "keywords": ["xyzzy", "home"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "home"]
       },
       "data": { "foo": "bar" }
     },
@@ -1412,8 +1394,7 @@
         "title": "Back-end Testing",
         "text": "foobar plugh",
         "location": "xyzzy/fred",
-        "keywords": ["xyzzy", "fred", "home", "front end development"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "fred", "home", "front end development"]
       },
       "data": { "foo": "bar" }
     },
@@ -1444,8 +1425,7 @@
         "title": "React",
         "text": "bazz dita fox",
         "location": "xyzzy/#plugh",
-        "keywords": ["xyzzy", "plugh", "home", "front end development"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "plugh", "home", "front end development"]
       },
       "data": { "foo": "bar" }
     },
@@ -1475,8 +1455,7 @@
         "title": "Home",
         "text": "foo bar baz",
         "location": "",
-        "keywords": [],
-        "data": { "section": false }
+        "keywords": []
       },
       "data": { "foo": "bar" }
     },
@@ -1506,8 +1485,7 @@
         "title": "Front-end Development",
         "text": "fred bazz qux",
         "location": "xyzzy/",
-        "keywords": ["xyzzy", "home"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "home"]
       },
       "data": { "foo": "bar" }
     },
@@ -1537,8 +1515,7 @@
         "title": "Back-end Testing",
         "text": "foobar plugh",
         "location": "xyzzy/fred",
-        "keywords": ["xyzzy", "fred", "home", "front end development"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "fred", "home", "front end development"]
       },
       "data": { "foo": "bar" }
     },
@@ -1568,8 +1545,7 @@
         "title": "React",
         "text": "bazz dita fox",
         "location": "xyzzy/#plugh",
-        "keywords": ["xyzzy", "plugh", "home", "front end development"],
-        "data": { "section": false }
+        "keywords": ["xyzzy", "plugh", "home", "front end development"]
       },
       "data": { "foo": "bar" }
     }
