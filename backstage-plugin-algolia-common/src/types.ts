@@ -4,7 +4,6 @@ export interface IndexObject {
   text: string;
   location: string;
   keywords: string[];
-  data?: object;
 }
 
 export interface IndexObjectWithIdAndTimestamp extends IndexObject {
