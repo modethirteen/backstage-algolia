@@ -159,6 +159,7 @@ export class TechDocsCollatorFactory implements CollatorFactory {
                   title: unescape(doc.title),
                   text: unescape(doc.text ?? ''),
                   location: doc.location,
+                  path: doc.location,
                   keywords: getKeywords(doc, searchIndex.docs),
                 },
                 data,

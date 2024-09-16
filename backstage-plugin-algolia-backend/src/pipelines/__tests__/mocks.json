@@ -414,6 +414,7 @@
         "title": "Backend Service",
         "text": "A backend microservice for user management",
         "location": "",
+        "path": "",
         "keywords": []
       }
     },
@@ -447,6 +448,7 @@
         "title": "API Backend",
         "text": "A RESTful backend service for inventory management",
         "location": "",
+        "path": "",
         "keywords": []
       }
     },
@@ -477,6 +479,7 @@
         "title": "Orders API Backend",
         "text": "A RESTful backend service for order processing",
         "location": "",
+        "path": "",
         "keywords": []
       }
     },
@@ -506,6 +509,7 @@
         "title": "React Frontend Service",
         "text": "A React frontend application for user dashboard",
         "location": "",
+        "path": "",
         "keywords": []
       }
     },
@@ -539,6 +543,7 @@
         "title": "Dashboard Frontend",
         "text": "A Vue.js frontend app for analytics dashboard",
         "location": "",
+        "path": "",
         "keywords": []
       }
     },
@@ -571,6 +576,7 @@
         "title": "Reporting Frontend",
         "text": "An Angular frontend app for reporting",
         "location": "",
+        "path": "",
         "keywords": []
       }
     },
@@ -600,6 +606,7 @@
         "title": "Portal Frontend",
         "text": "A Svelte frontend app for customer portal",
         "location": "",
+        "path": "",
         "keywords": []
       }
     },
@@ -630,6 +637,7 @@
         "title": "Data Microservice",
         "text": "A microservice for data processing",
         "location": "",
+        "path": "",
         "keywords": []
       }
     },
@@ -662,6 +670,7 @@
         "title": "Payment Processor Service",
         "text": "A microservice for payment processing",
         "location": "",
+        "path": "",
         "keywords": []
       }
     },
@@ -691,6 +700,7 @@
         "title": "Team Bazz",
         "text": "foo bar baz",
         "location": "",
+        "path": "",
         "keywords": []
       }
     },
@@ -719,6 +729,7 @@
         "title": "Inventory Managemnt",
         "text": "System for managing inventory and stock levels",
         "location": "",
+        "path": "",
         "keywords": []
       }
     },
@@ -748,6 +759,7 @@
         "title": "User Dashboard",
         "text": "System for displaying user-related data and statistics",
         "location": "",
+        "path": "",
         "keywords": []
       }
     },
@@ -780,6 +792,7 @@
         "title": "Fred Foo",
         "text": "",
         "location": "",
+        "path": "",
         "keywords": []
       }
     }
@@ -812,6 +825,7 @@
         "title": "Home",
         "text": "foo bar baz",
         "location": "",
+        "path": "",
         "keywords": []
       },
       "data": { "foo": "bar" }
@@ -843,6 +857,7 @@
         "title": "Front-end Development",
         "text": "fred bazz qux",
         "location": "xyzzy/",
+        "path": "xyzzy/",
         "keywords": ["xyzzy", "home"]
       },
       "data": { "foo": "bar" }
@@ -874,6 +889,7 @@
         "title": "Back-end Testing",
         "text": "foobar plugh",
         "location": "xyzzy/fred",
+        "path": "xyzzy/fred",
         "keywords": ["xyzzy", "fred", "home", "front end development"]
       },
       "data": { "foo": "bar" }
@@ -905,6 +921,7 @@
         "title": "React",
         "text": "bazz dita fox",
         "location": "xyzzy/#plugh",
+        "path": "xyzzy/#plugh",
         "keywords": ["xyzzy", "plugh", "home", "front end development"]
       },
       "data": { "foo": "bar" }
@@ -939,6 +956,7 @@
         "title": "Home",
         "text": "foo bar baz",
         "location": "",
+        "path": "",
         "keywords": []
       },
       "data": { "foo": "bar" }
@@ -973,6 +991,7 @@
         "title": "Front-end Development",
         "text": "fred bazz qux",
         "location": "xyzzy/",
+        "path": "xyzzy/",
         "keywords": ["xyzzy", "home"]
       },
       "data": { "foo": "bar" }
@@ -1007,6 +1026,7 @@
         "title": "Back-end Testing",
         "text": "foobar plugh",
         "location": "xyzzy/fred",
+        "path": "xyzzy/fred",
         "keywords": ["xyzzy", "fred", "home", "front end development"]
       },
       "data": { "foo": "bar" }
@@ -1041,6 +1061,7 @@
         "title": "React",
         "text": "bazz dita fox",
         "location": "xyzzy/#plugh",
+        "path": "xyzzy/#plugh",
         "keywords": ["xyzzy", "plugh", "home", "front end development"]
       },
       "data": { "foo": "bar" }
@@ -1072,6 +1093,7 @@
         "title": "Home",
         "text": "foo bar baz",
         "location": "",
+        "path": "",
         "keywords": []
       },
       "data": { "foo": "bar" }
@@ -1103,6 +1125,7 @@
         "title": "Front-end Development",
         "text": "fred bazz qux",
         "location": "xyzzy/",
+        "path": "xyzzy/",
         "keywords": ["xyzzy", "home"]
       },
       "data": { "foo": "bar" }
@@ -1134,6 +1157,7 @@
         "title": "Back-end Testing",
         "text": "foobar plugh",
         "location": "xyzzy/fred",
+        "path": "xyzzy/fred",
         "keywords": ["xyzzy", "fred", "home", "front end development"]
       },
       "data": { "foo": "bar" }
@@ -1165,6 +1189,7 @@
         "title": "React",
         "text": "bazz dita fox",
         "location": "xyzzy/#plugh",
+        "path": "xyzzy/#plugh",
         "keywords": ["xyzzy", "plugh", "home", "front end development"]
       },
       "data": { "foo": "bar" }
@@ -1199,6 +1224,7 @@
         "title": "Home",
         "text": "foo bar baz",
         "location": "",
+        "path": "",
         "keywords": []
       },
       "data": { "foo": "bar" }
@@ -1233,6 +1259,7 @@
         "title": "Front-end Development",
         "text": "fred bazz qux",
         "location": "xyzzy/",
+        "path": "xyzzy/",
         "keywords": ["xyzzy", "home"]
       },
       "data": { "foo": "bar" }
@@ -1267,6 +1294,7 @@
         "title": "Back-end Testing",
         "text": "foobar plugh",
         "location": "xyzzy/fred",
+        "path": "xyzzy/fred",
         "keywords": ["xyzzy", "fred", "home", "front end development"]
       },
       "data": { "foo": "bar" }
@@ -1301,6 +1329,7 @@
         "title": "React",
         "text": "bazz dita fox",
         "location": "xyzzy/#plugh",
+        "path": "xyzzy/#plugh",
         "keywords": ["xyzzy", "plugh", "home", "front end development"]
       },
       "data": { "foo": "bar" }
@@ -1332,6 +1361,7 @@
         "title": "Home",
         "text": "foo bar baz",
         "location": "",
+        "path": "",
         "keywords": []
       },
       "data": { "foo": "bar" }
@@ -1363,6 +1393,7 @@
         "title": "Front-end Development",
         "text": "fred bazz qux",
         "location": "xyzzy/",
+        "path": "xyzzy/",
         "keywords": ["xyzzy", "home"]
       },
       "data": { "foo": "bar" }
@@ -1394,6 +1425,7 @@
         "title": "Back-end Testing",
         "text": "foobar plugh",
         "location": "xyzzy/fred",
+        "path": "xyzzy/fred",
         "keywords": ["xyzzy", "fred", "home", "front end development"]
       },
       "data": { "foo": "bar" }
@@ -1425,6 +1457,7 @@
         "title": "React",
         "text": "bazz dita fox",
         "location": "xyzzy/#plugh",
+        "path": "xyzzy/#plugh",
         "keywords": ["xyzzy", "plugh", "home", "front end development"]
       },
       "data": { "foo": "bar" }
@@ -1455,6 +1488,7 @@
         "title": "Home",
         "text": "foo bar baz",
         "location": "",
+        "path": "",
         "keywords": []
       },
       "data": { "foo": "bar" }
@@ -1485,6 +1519,7 @@
         "title": "Front-end Development",
         "text": "fred bazz qux",
         "location": "xyzzy/",
+        "path": "xyzzy/",
         "keywords": ["xyzzy", "home"]
       },
       "data": { "foo": "bar" }
@@ -1515,6 +1550,7 @@
         "title": "Back-end Testing",
         "text": "foobar plugh",
         "location": "xyzzy/fred",
+        "path": "xyzzy/fred",
         "keywords": ["xyzzy", "fred", "home", "front end development"]
       },
       "data": { "foo": "bar" }
@@ -1545,6 +1581,7 @@
         "title": "React",
         "text": "bazz dita fox",
         "location": "xyzzy/#plugh",
+        "path": "xyzzy/#plugh",
         "keywords": ["xyzzy", "plugh", "home", "front end development"]
       },
       "data": { "foo": "bar" }

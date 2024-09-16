@@ -74,6 +74,7 @@ describe('Indexer', () => {
       source: 'bar',
       title: 'plugh',
       location: 'xyzzy',
+      path: 'xyzzy',
       text: generateText(200),
       entity: {
         kind: 'component',
@@ -103,6 +104,7 @@ describe('Indexer', () => {
       source: 'bar',
       title: 'bazz',
       location: 'https://example.com/a/b/c',
+      path: 'a/b/c',
       text: generateText(4000),
       entity: {
         kind: 'component',
@@ -114,6 +116,7 @@ describe('Indexer', () => {
       source: 'bar',
       title: 'plugh',
       location: 'https://example.com/d/e/f',
+      path: 'd/e/f',
       text: generateText(8000),
       entity: {
         kind: 'component',
@@ -144,6 +147,7 @@ describe('Indexer', () => {
       source: 'bar',
       title: 'bazz',
       location: 'https://example.com/a/b/c',
+      path: 'a/b/c',
       section: false,
       text: generateText(4000),
       entity: {
@@ -156,6 +160,7 @@ describe('Indexer', () => {
       source: 'bar',
       title: 'plugh',
       location: 'https://example.com/d/e/f',
+      path: 'd/e/f',
       section: false,
       text: generateText(8000),
       entity: {
@@ -187,6 +192,7 @@ describe('Indexer', () => {
       source: 'bar',
       title: 'bazz',
       location: 'https://example.com/a/b/c',
+      path: 'a/b/c',
       text: '',
       entity: {
         kind: 'component',
@@ -198,6 +204,7 @@ describe('Indexer', () => {
       source: 'bar',
       title: 'plugh',
       location: 'https://example.com/d/e/f',
+      path: 'd/e/f',
       text: '',
       entity: {
         kind: 'component',

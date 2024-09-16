@@ -90,6 +90,7 @@ export class CatalogCollatorFactory implements CollatorFactory {
           title: humanizeEntityName(entity),
           text: entity.metadata.description ?? '',
           location: '',
+          path: '',
           keywords: [],
         }
       })));
