@@ -3,6 +3,7 @@ export interface IndexObject {
   title: string;
   text: string;
   location: string;
+  path: string;
   keywords: string[];
 }
 
