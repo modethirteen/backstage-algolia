@@ -20,7 +20,7 @@ export const testCollatingTransformingPipeline = async (options: {
       results.push(result);
       done();
     }
-  })
+  });
   return new Promise<PipelineResult[]>(resolve => {
     pipeline([collator, ...transformers, collector], () => resolve(results));
   });

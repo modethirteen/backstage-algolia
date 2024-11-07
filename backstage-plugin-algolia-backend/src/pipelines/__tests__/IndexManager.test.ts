@@ -51,6 +51,41 @@ describe('IndexManager', () => {
     }]);
   });
 
+  it('can be constructed with filtered sources', () => {
+    const config = new ConfigReader({
+      algolia: {
+        backend: {
+          apikey: 'plugh',
+          applicationId: 'fred',
+          indexes: {
+            techdocs: {
+              name: 'xyzzy',
+              expirations: [{
+                source: 'mkdocs',
+                ttl: 'P6M',
+              }, {
+                source: 'coda',
+                ttl: 'P1D',
+              }],
+            },
+          },
+        },
+      },
+    });
+    const indexManager = IndexManager.fromConfig(config, {
+      date: new Date('2023-12-01T20:21:34Z'),
+      index: 'techdocs',
+      logger: getVoidLogger(),
+      filter: {
+        sources: ['coda'],
+      },
+    });
+    expect(indexManager.expirations).toEqual([{
+      source: 'coda',
+      ttl: 86400,
+    }]);
+  });
+
   it('can clean expired index objects', async () => {
     const indexManager = new IndexManager({
       expirations: [{

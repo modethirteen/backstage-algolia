@@ -43,28 +43,34 @@ export class PipelineTrigger implements PipelineTriggerInterface {
     collatorFactory: CollatorFactory;
     transformerFactories: TransformerFactory[];
     indexer: Indexer;
+    done?: () => Promise<void>;
   } & TaskScheduleDefinition) {
-    const { id, collatorFactory, transformerFactories, indexer } = options;
+    const { id, collatorFactory, transformerFactories, indexer, done } = options;
+    const fn = async () => {
+      const pipeline = new Pipeline({
+        collatorFactory,
+        transformerFactories,
+        indexer,
+      });
+      try {
+        this.logger.info(`Pipeline algolia-pipeline:${id} starting`);
+        await pipeline.execute();
+        this.logger.info(`Pipeline algolia-pipeline:${id} completed successfully`);
+      } catch(e) {
+        assertError(e);
+        this.logger.error(`Pipeline algolia-pipeline:${id} failed to complete successfully:`, e);
+        return;
+      }
+      if (done) {
+        await done();
+      }
+    };
     this.taskScheduler.scheduleTask({
       ...options,
       id: `algolia-pipeline:${id}`,
-      fn: async () => {
-        const pipeline = new Pipeline({
-          collatorFactory,
-          transformerFactories,
-          indexer,
-        });
-        try {
-          this.logger.info(`Pipeline algolia-pipeline:${id} starting`);
-          await pipeline.execute();
-          this.logger.info(`Pipeline algolia-pipeline:${id} completed successfully`);
-        } catch(e) {
-          assertError(e);
-          this.logger.error(`Pipeline algolia-pipeline:${id} failed to complete successfully:`, e);
-          return;
-        }
-      },
+      fn,
     });
+    return fn;
   }
 
   public async getPipelineIds() {

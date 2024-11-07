@@ -21,18 +21,24 @@ export interface IndexManagerOptions {
   date: Date;
   index: string;
   logger: Logger;
+  filter?: {
+    sources?: string[];
+  };
 }
 
 export class IndexManager implements IndexManagerInterface {
   public static fromConfig(config: Config, options: IndexManagerOptions) {
-    const { date, index, logger } = options;
+    const { date, index, logger, filter } = options;
     const client = ClientFactory.fromConfig(config).newClient();
+    const expirations: Expiration[] = config.getOptionalConfigArray(`algolia.backend.indexes.${index}.expirations`)
+      ?.map(c => ({
+        source: c.get('source'),
+        ttl: toSeconds(parse(c.get('ttl')), date),
+      })) ?? [];
     return new IndexManager({
-      expirations: config.getOptionalConfigArray(`algolia.backend.indexes.${index}.expirations`)
-        ?.map(c => ({
-          source: c.get('source'),
-          ttl: toSeconds(parse(c.get('ttl')), date),
-        })),
+      expirations: filter?.sources
+        ? expirations.filter(({ source }) => filter.sources?.includes(source))
+        : expirations,
       logger,
       now: new Date(),
       searchIndex: client.initIndex(config.getString(`algolia.backend.indexes.${index}.name`)),
@@ -45,13 +51,13 @@ export class IndexManager implements IndexManagerInterface {
   private readonly now: Date;
 
   public constructor(options: {
-    expirations?: Expiration[];
+    expirations: Expiration[];
     logger: Logger;
     now: Date;
     searchIndex: SearchIndex;
   }) {
     const { expirations, logger, now, searchIndex } = options;
-    this.expirations = expirations ?? [];
+    this.expirations = expirations;
     this.logger = logger;
     this.now = now;
     this.searchIndex = searchIndex;

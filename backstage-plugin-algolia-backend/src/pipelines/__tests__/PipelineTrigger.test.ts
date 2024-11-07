@@ -1,5 +1,6 @@
 import { getVoidLogger } from '@backstage/backend-common';
 import { CollatorFactory, Indexer, PipelineTrigger } from '../';
+import { Readable, Writable } from 'stream';
 
 const triggerTask = jest.fn();
 const getScheduledTasks = jest.fn();
@@ -16,7 +17,7 @@ const trigger = new PipelineTrigger({
 });
 
 describe('PipelineTrigger', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     jest.clearAllMocks();
   });
 
@@ -54,8 +55,28 @@ describe('PipelineTrigger', () => {
     }, {
       id: 'fred'
     }]);
-    await trigger.start({ ids: ['algolia-pipeline:bar' ]});
+    await trigger.start({ ids: [ 'algolia-pipeline:bar' ]});
     expect(getScheduledTasks).toHaveBeenCalled();
     expect(triggerTask).toHaveBeenCalledTimes(1);
+  });
+
+  it('can execute done callback', async () => {
+    const done = jest.fn();
+    const fn = trigger.addScheduledPipeline({
+      id: 'xyzzy',
+      collatorFactory: {
+        newCollator: jest.fn().mockResolvedValue(Readable.from([])),
+      },
+      transformerFactories: [],
+      indexer: new Writable({
+        objectMode: true,
+      }) as Indexer,
+      frequency: { minutes: 60 },
+      timeout: { minutes: 5 },
+      initialDelay: { seconds: 30 },
+      done,
+    });
+    await fn();
+    expect(done).toHaveBeenCalled();
   });
 });
