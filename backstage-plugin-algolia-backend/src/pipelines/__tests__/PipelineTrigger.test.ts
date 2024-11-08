@@ -62,7 +62,7 @@ describe('PipelineTrigger', () => {
 
   it('can execute done callback', async () => {
     const done = jest.fn();
-    const fn = trigger.addScheduledPipeline({
+    trigger.addScheduledPipeline({
       id: 'xyzzy',
       collatorFactory: {
         newCollator: jest.fn().mockResolvedValue(Readable.from([])),
@@ -76,6 +76,7 @@ describe('PipelineTrigger', () => {
       initialDelay: { seconds: 30 },
       done,
     });
+    const fn = scheduleTask.mock.calls[0][0].fn as () => Promise<void>;
     await fn();
     expect(done).toHaveBeenCalled();
   });
