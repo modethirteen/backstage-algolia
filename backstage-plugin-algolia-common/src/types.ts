@@ -5,6 +5,8 @@ export interface IndexObject {
   location: string;
   path: string;
   keywords: string[];
+  tags?: string[];
+  summary?: string;
 }
 
 export interface IndexObjectWithIdAndTimestamp extends IndexObject {
