@@ -92,6 +92,7 @@ export class CatalogCollatorFactory implements CollatorFactory {
           location: '',
           path: '',
           keywords: [],
+          ...(entity.metadata.tags ? { tags: entity.metadata.tags } : {}),
         }
       })));
       yield * (await Promise.all(promises));

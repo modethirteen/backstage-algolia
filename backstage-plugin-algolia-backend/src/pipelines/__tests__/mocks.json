@@ -415,7 +415,8 @@
         "text": "A backend microservice for user management",
         "location": "",
         "path": "",
-        "keywords": []
+        "keywords": [],
+        "tags": ["backend", "microservice"]
       }
     },
     {
@@ -449,7 +450,8 @@
         "text": "A RESTful backend service for inventory management",
         "location": "",
         "path": "",
-        "keywords": []
+        "keywords": [],
+        "tags": ["backend", "REST"]
       }
     },
     {
@@ -480,7 +482,8 @@
         "text": "A RESTful backend service for order processing",
         "location": "",
         "path": "",
-        "keywords": []
+        "keywords": [],
+        "tags": ["backend", "REST"]
       }
     },
     {
@@ -510,7 +513,8 @@
         "text": "A React frontend application for user dashboard",
         "location": "",
         "path": "",
-        "keywords": []
+        "keywords": [],
+        "tags": ["frontend", "React"]
       }
     },
     {
@@ -544,7 +548,8 @@
         "text": "A Vue.js frontend app for analytics dashboard",
         "location": "",
         "path": "",
-        "keywords": []
+        "keywords": [],
+        "tags": ["frontend", "Vue.js"]
       }
     },
     {
@@ -577,7 +582,8 @@
         "text": "An Angular frontend app for reporting",
         "location": "",
         "path": "",
-        "keywords": []
+        "keywords": [],
+        "tags": ["frontend", "Angular"]
       }
     },
     {
@@ -607,7 +613,8 @@
         "text": "A Svelte frontend app for customer portal",
         "location": "",
         "path": "",
-        "keywords": []
+        "keywords": [],
+        "tags": ["frontend", "Svelte"]
       }
     },
     {
@@ -638,7 +645,8 @@
         "text": "A microservice for data processing",
         "location": "",
         "path": "",
-        "keywords": []
+        "keywords": [],
+        "tags": ["backend", "microservice"]
       }
     },
     {
@@ -671,7 +679,8 @@
         "text": "A microservice for payment processing",
         "location": "",
         "path": "",
-        "keywords": []
+        "keywords": [],
+        "tags": ["backend", "microservice"]
       }
     },
     {
