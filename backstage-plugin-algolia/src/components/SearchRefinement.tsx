@@ -12,14 +12,7 @@ import React, { useContext } from 'react';
 import type { UseRefinementListProps } from 'react-instantsearch';
 import { useRefinementList } from 'react-instantsearch';
 import { AlgoliaQueryIdContext } from './SearchContainer';
-
-export interface SearchRefinementItem {
-  value: string;
-  label: string;
-  highlighted?: string;
-  count: number;
-  isRefined: boolean;
-}
+import { RefinementListRenderState } from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
 
 const useStyles = makeStyles({
   label: {
@@ -48,14 +41,20 @@ export const SearchRefinement = (props: UseRefinementListProps & {
   className?: string;
   label: string;
   onRefinement?: (value: string) => void;
+  onLoad?: (renderState: RefinementListRenderState) => void;
 }) => {
   const {
     className,
     label,
     onRefinement,
+    onLoad,
     ...rest
   } = props;
-  const { items, refine, canRefine } = useRefinementList(rest);
+  const renderState = useRefinementList(rest);
+  if (onLoad) {
+    onLoad(renderState);
+  }
+  const { items, refine, canRefine } = renderState;
   const { queryId } = useContext(AlgoliaQueryIdContext);
   const analytics = useAnalytics();
   const classes = useStyles();

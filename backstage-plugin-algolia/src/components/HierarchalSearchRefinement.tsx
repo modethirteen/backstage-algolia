@@ -12,9 +12,7 @@ import { useHierarchicalMenu, UseHierarchicalMenuProps } from 'react-instantsear
 import CheckedIcon from '../icons/checked.icon.svg';
 import UncheckedIcon from '../icons/unchecked.icon.svg';
 import { AlgoliaQueryIdContext } from './SearchContainer';
-import { HierarchicalMenuItem } from 'instantsearch.js/es/connectors/hierarchical-menu/connectHierarchicalMenu';
-
-const flatten = (array: HierarchicalMenuItem[]): HierarchicalMenuItem[] => array.flatMap(i => Array.isArray(i.data) ? flatten(i.data) : i);
+import { HierarchicalMenuRenderState } from 'instantsearch.js/es/connectors/hierarchical-menu/connectHierarchicalMenu';
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -99,14 +97,20 @@ const buildTree = (options: {
 export const HierarchalSearchRefinement = (props: UseHierarchicalMenuProps & {
   label: string;
   onRefinement?: (value: string) => void;
+  onLoad?: (renderState: HierarchicalMenuRenderState) => void;
 }) => {
   const classes = useStyles();
   const {
     label,
     onRefinement,
+    onLoad,
     ...rest
   } = props;
-  const { items, refine, canRefine } = useHierarchicalMenu(rest);
+  const renderState = useHierarchicalMenu(rest);
+  const { items, refine, canRefine } = renderState;
+  if (onLoad) {
+    onLoad(renderState);
+  }
   const analytics = useAnalytics();
   const { queryId } = useContext(AlgoliaQueryIdContext);
   const { tree, nodeIds, refinedNodeIds } = useMemo(() => {
