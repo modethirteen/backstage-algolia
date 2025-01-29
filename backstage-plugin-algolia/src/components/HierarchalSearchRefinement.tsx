@@ -1,4 +1,4 @@
-import { IconComponent, useAnalytics } from '@backstage/core-plugin-api';
+import { useAnalytics } from '@backstage/core-plugin-api';
 import {
   Chip,
   Typography,
@@ -8,9 +8,9 @@ import {
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import { TreeItem, TreeView } from '@material-ui/lab';
 import React, { useContext, useMemo } from 'react';
-import { useHierarchicalMenu } from 'react-instantsearch';
-import DefaultCheckedIcon from '../icons/checked.icon.svg';
-import DefaultIcon from '../icons/unchecked.icon.svg';
+import { useHierarchicalMenu, UseHierarchicalMenuProps } from 'react-instantsearch';
+import CheckedIcon from '../icons/checked.icon.svg';
+import UncheckedIcon from '../icons/unchecked.icon.svg';
 import { AlgoliaQueryIdContext } from './SearchContainer';
 import { HierarchicalMenuItem } from 'instantsearch.js/es/connectors/hierarchical-menu/connectHierarchicalMenu';
 
@@ -58,12 +58,11 @@ interface HierarchyNode {
 
 const buildTree = (options: {
   item: HierarchyNode;
-  CheckedIcon?: IconComponent;
   nodeIds: string[];
   refinedNodeIds: string[];
   classes: ClassNameMap;
 }) => {
-  const { item, CheckedIcon, nodeIds, refinedNodeIds, classes } = options;
+  const { item, nodeIds, refinedNodeIds, classes } = options;
   const nodeId = item.value;
   nodeIds.push(nodeId);
   if (item.isRefined) {
@@ -85,11 +84,10 @@ const buildTree = (options: {
           <Chip className={classes.chip} variant="outlined" size="small" label={item.count} />
         </Typography>
       }
-      icon={item.isRefined && CheckedIcon ? <CheckedIcon /> : undefined}
+      icon={item.isRefined ? <CheckedIcon /> : undefined}
     >
       {Array.isArray(item.data) ? item.data.map(i => buildTree({
         item: i,
-        CheckedIcon,
         nodeIds,
         refinedNodeIds,
         classes,
@@ -98,25 +96,17 @@ const buildTree = (options: {
   );
 };
 
-export const HierarchalSearchRefinement = (props: {
-  attributes: string[];
-  Icon?: IconComponent;
-  CheckedIcon?: IconComponent;
+export const HierarchalSearchRefinement = (props: UseHierarchicalMenuProps & {
   label: string;
   onRefinement?: (value: string) => void;
-  queryId?: string;
 }) => {
   const classes = useStyles();
   const {
-    attributes,
-    Icon = DefaultIcon as IconComponent,
-    CheckedIcon = DefaultCheckedIcon as IconComponent,
     label,
     onRefinement,
+    ...rest
   } = props;
-  const { items, refine, canRefine } = useHierarchicalMenu({
-    attributes,
-  });
+  const { items, refine, canRefine } = useHierarchicalMenu(rest);
   const analytics = useAnalytics();
   const { queryId } = useContext(AlgoliaQueryIdContext);
   const { tree, nodeIds, refinedNodeIds } = useMemo(() => {
@@ -124,7 +114,6 @@ export const HierarchalSearchRefinement = (props: {
     const refinedNodeIds: string[] = [];
     const tree = items.map(i => buildTree({
       item: i,
-      CheckedIcon,
       nodeIds,
       refinedNodeIds,
       classes,
@@ -138,8 +127,8 @@ export const HierarchalSearchRefinement = (props: {
         <TreeView
           expanded={nodeIds}
           disableSelection={!canRefine}
-          defaultCollapseIcon={CheckedIcon ? <CheckedIcon /> : undefined}
-          defaultEndIcon={Icon ? <Icon /> : undefined}
+          defaultCollapseIcon={<CheckedIcon />}
+          defaultEndIcon={<UncheckedIcon />}
           onNodeSelect={(_: any, nodeId: string) => {
             analytics.captureEvent('click', refinedNodeIds.includes(nodeId) ? 'Remove search refinement' : 'Refine search', {
               attributes: {

@@ -1,4 +1,4 @@
-import { IconComponent, useAnalytics } from '@backstage/core-plugin-api';
+import { useAnalytics } from '@backstage/core-plugin-api';
 import {
   Checkbox,
   Chip,
@@ -19,11 +19,6 @@ export interface SearchRefinementItem {
   highlighted?: string;
   count: number;
   isRefined: boolean;
-}
-
-export interface SearchRefinementItemWithIcons extends SearchRefinementItem {
-  CheckedIcon?: IconComponent;
-  Icon?: IconComponent;
 }
 
 const useStyles = makeStyles({
@@ -49,30 +44,21 @@ const useStyles = makeStyles({
   },
 });
 
-export const SearchRefinement = (props: {
-  attribute: string;
+export const SearchRefinement = (props: UseRefinementListProps & {
   className?: string;
   label: string;
-  transformItems?: (item: SearchRefinementItem) => SearchRefinementItemWithIcons;
   onRefinement?: (value: string) => void;
-  sortBy?: UseRefinementListProps['sortBy'];
 }) => {
   const {
-    attribute,
     className,
     label,
-    transformItems = i => i as SearchRefinementItemWithIcons,
     onRefinement,
-    sortBy,
+    ...rest
   } = props;
-  const { items, refine, canRefine } = useRefinementList({
-    attribute,
-    sortBy,
-  });
+  const { items, refine, canRefine } = useRefinementList(rest);
   const { queryId } = useContext(AlgoliaQueryIdContext);
   const analytics = useAnalytics();
   const classes = useStyles();
-  const transformedItems = items.map(transformItems);
   return (
     <FormControl
       fullWidth
@@ -80,7 +66,7 @@ export const SearchRefinement = (props: {
       className={className}
     >
       <FormLabel className={classes.label}>{label}</FormLabel>
-      {transformedItems.length > 0 && transformedItems.map(i => (
+      {items.length > 0 && items.map(i => (
         <FormControlLabel
           key={i.value}
           classes={{
@@ -115,13 +101,11 @@ export const SearchRefinement = (props: {
                 }
               }}
               checked={i.isRefined}
-              icon={i.Icon ? <i.Icon /> : undefined}
-              checkedIcon={i.CheckedIcon ? <i.CheckedIcon /> : undefined}
             />
           }
         />
       ))}
-      {transformedItems.length <= 0 && <em>Not available with selected filters or query</em>}
+      {items.length <= 0 && <em>Not available with selected filters or query</em>}
     </FormControl>
   );
 };
