@@ -1,17 +1,17 @@
 import { useAnalytics } from '@backstage/core-plugin-api';
 import { Button } from '@material-ui/core';
 import React, { useContext } from "react";
-import { useClearRefinements } from 'react-instantsearch';
+import { ClearRefinementsProps, useClearRefinements } from 'react-instantsearch';
 import { AlgoliaQueryIdContext } from './SearchContainer';
 
-export const ClearRefinementsButton = (props: {
+export const ClearRefinementsButton = (props: ClearRefinementsProps & {
   label: string;
   onClear?: () => void;
 }) => {
-  const { label, onClear } = props;
+  const { label, onClear, ...rest } = props;
   const analytics = useAnalytics();
   const { queryId } = useContext(AlgoliaQueryIdContext);
-  const { refine } = useClearRefinements();
+  const { refine } = useClearRefinements(rest);
   const onClick = () => {
     analytics.captureEvent('click', `Clear search refinements`, {
       attributes: {

@@ -9,18 +9,19 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { useSearchBox } from 'react-instantsearch';
+import { useSearchBox, UseSearchBoxProps } from 'react-instantsearch';
 import useDebounce from 'react-use/lib/useDebounce';
 
-export const SearchBar = (props: {
+export const SearchBar = (props: UseSearchBoxProps & {
   debounceTime?: number;
   placeholder?: string;
 }) => {
   const {
     debounceTime = 200,
     placeholder = 'What can we help you find?',
+    ...rest
   } = props;
-  const { query, refine, clear } = useSearchBox();
+  const { query, refine, clear } = useSearchBox(rest);
   const [value, setValue] = useState<string>('');
   const [debouncedValue, setDebouncedValue] = useState<string>('');
   useDebounce(

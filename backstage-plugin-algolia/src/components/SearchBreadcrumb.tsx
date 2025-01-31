@@ -9,6 +9,7 @@ import {
 import React, { useContext } from 'react';
 import { useBreadcrumb } from 'react-instantsearch';
 import { AlgoliaQueryIdContext } from './SearchContainer';
+import type { BreadcrumbProps } from 'react-instantsearch';
 
 export interface BreadcrumbItem {
   label: string;
@@ -25,18 +26,13 @@ const useStyles = makeStyles(({
   },
 }));
 
-export const SearchBreadcrumb = (props: {
-  attributes: string[];
-  transformItems?: (items: BreadcrumbItem[]) => BreadcrumbItem[];
-}) => {
-  const { attributes, transformItems } = props;
+export const SearchBreadcrumb = (props: BreadcrumbProps) => {
   const { queryId } = useContext(AlgoliaQueryIdContext);
   const analytics = useAnalytics();
   const classes = useStyles();
-  const { items, refine } = useBreadcrumb({ attributes });
-  const transformedItems = transformItems ? transformItems(items) : items;
-  const segments = [...transformedItems.slice(0, -1)];
-  const lastSegment = transformedItems[transformedItems.length - 1];
+  const { items, refine } = useBreadcrumb(props);
+  const segments = [...items.slice(0, -1)];
+  const lastSegment = items[items.length - 1];
   return (
     <Box className={classes.box} display="flex" alignItems="center">
       <Typography variant="body2">

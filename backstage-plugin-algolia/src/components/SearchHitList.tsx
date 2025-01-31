@@ -19,9 +19,11 @@ import React, {
 import {
   Highlight,
   useInfiniteHits,
+  UseInfiniteHitsProps,
   useStats,
 } from 'react-instantsearch';
 import { AlgoliaQueryIdContext } from './SearchContainer';
+import { InfiniteHitsRenderState } from 'instantsearch.js/es/connectors/infinite-hits/connectInfiniteHits';
 
 const tryGetPath = (location: string) => {
   try {
@@ -32,7 +34,7 @@ const tryGetPath = (location: string) => {
   }
 }
 
-export const SearchHitList = (props: {
+export const SearchHitList = (props: UseInfiniteHitsProps & {
   highlight?: boolean;
   HitTitleContent?: ComponentType<{
     object: IndexObjectWithIdAndTimestamp,
@@ -44,25 +46,27 @@ export const SearchHitList = (props: {
     promoted: boolean;
     children: ReactNode,
   }>;
-  transformObject?: (options: {
-    object: IndexObjectWithIdAndTimestamp;
-    promoted: boolean;
-  }) => IndexObjectWithIdAndTimestamp;
   onClick?: (data: {
     event: React.MouseEvent<any, MouseEvent>;
     object: IndexObjectWithIdAndTimestamp;
     queryId: string;
   }) => void;
+  onLoad?: (renderState: InfiniteHitsRenderState) => void;
 }) => {
   const {
     HitTitleContent,
     HitDescriptionContent,
     highlight = false,
-    transformObject,
     onClick,
+    onLoad,
+    ...rest
   } = props;
   const { setQueryId } = useContext(AlgoliaQueryIdContext);
-  const { hits, results, isLastPage, showMore, sendEvent } = useInfiniteHits();
+  const renderState = useInfiniteHits(rest);
+  if (onLoad) {
+    onLoad({ ...renderState });
+  }
+  const { hits, results, isLastPage, showMore, sendEvent } = renderState;
   const { nbHits: hitCount } = useStats();
   const analytics = useAnalytics();
   const queryId = results?.queryID ?? '';
@@ -85,12 +89,8 @@ export const SearchHitList = (props: {
     <>
       <List subheader={<ListSubheader>{hitCount} results</ListSubheader>}>
         {hits.map(h => {
-          const promoted = h._rankingInfo?.promoted ?? false;
           const object = h as unknown as IndexObjectWithIdAndTimestamp;
-          const transformedObject = transformObject
-            ? transformObject({ object, promoted })
-            : object;
-          const { location, text, title, objectID } = transformedObject;
+          const { location, text, title, objectID } = object;
           const path = tryGetPath(location);
           const titleContent = (
             <>
@@ -104,7 +104,7 @@ export const SearchHitList = (props: {
                   <Link to={location} onClick={e => {
                     sendEvent('click', h, 'Hit Clicked');
                     if (onClick) {
-                      onClick({ event: e, object: transformedObject, queryId });
+                      onClick({ event: e, object, queryId });
                     }
                   }}>
                     {highlight ? <Highlight attribute="title" hit={h} /> : title}
@@ -142,11 +142,11 @@ export const SearchHitList = (props: {
             <ListItem key={objectID} divider>
               <ListItemText
                 primary={HitTitleContent
-                  ? <HitTitleContent object={transformedObject} promoted>{titleContent}</HitTitleContent>
+                  ? <HitTitleContent object={object} promoted>{titleContent}</HitTitleContent>
                   : titleContent
                 }
                 secondary={HitDescriptionContent
-                  ? <HitDescriptionContent object={transformedObject} promoted>{descriptionContent}</HitDescriptionContent>
+                  ? <HitDescriptionContent object={object} promoted>{descriptionContent}</HitDescriptionContent>
                   : descriptionContent
                 }
               />

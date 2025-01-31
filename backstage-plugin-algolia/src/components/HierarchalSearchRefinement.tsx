@@ -107,10 +107,10 @@ export const HierarchalSearchRefinement = (props: UseHierarchicalMenuProps & {
     ...rest
   } = props;
   const renderState = useHierarchicalMenu(rest);
-  const { items, refine, canRefine } = renderState;
   if (onLoad) {
-    onLoad(renderState);
+    onLoad({ ...renderState });
   }
+  const { items, refine, canRefine } = renderState;
   const analytics = useAnalytics();
   const { queryId } = useContext(AlgoliaQueryIdContext);
   const { tree, nodeIds, refinedNodeIds } = useMemo(() => {

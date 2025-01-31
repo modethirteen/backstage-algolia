@@ -52,7 +52,7 @@ export const SearchRefinement = (props: UseRefinementListProps & {
   } = props;
   const renderState = useRefinementList(rest);
   if (onLoad) {
-    onLoad(renderState);
+    onLoad({ ...renderState });
   }
   const { items, refine, canRefine } = renderState;
   const { queryId } = useContext(AlgoliaQueryIdContext);
