@@ -51,7 +51,8 @@ export const SearchHitList = (props: UseInfiniteHitsProps & {
     object: IndexObjectWithIdAndTimestamp;
     queryId: string;
   }) => void;
-  onLoad?: (renderState: InfiniteHitsRenderState) => void;
+  onLoad?: (renderState: InfiniteHitsRenderState) => InfiniteHitsRenderState | void;
+  initialState?: InfiniteHitsRenderState;
 }) => {
   const {
     HitTitleContent,
@@ -59,12 +60,16 @@ export const SearchHitList = (props: UseInfiniteHitsProps & {
     highlight = false,
     onClick,
     onLoad,
+    initialState,
     ...rest
   } = props;
   const { setQueryId } = useContext(AlgoliaQueryIdContext);
-  const renderState = useInfiniteHits(rest);
+  let renderState = initialState ?? useInfiniteHits(rest);
   if (onLoad) {
-    onLoad({ ...renderState });
+    const onLoadResult = onLoad({ ...renderState });
+    if (onLoadResult) {
+      renderState = onLoadResult;
+    }
   }
   const { hits, results, isLastPage, showMore, sendEvent } = renderState;
   const { nbHits: hitCount } = useStats();

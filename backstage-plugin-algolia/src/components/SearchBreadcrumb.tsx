@@ -10,6 +10,7 @@ import React, { useContext } from 'react';
 import { useBreadcrumb } from 'react-instantsearch';
 import { AlgoliaQueryIdContext } from './SearchContainer';
 import type { BreadcrumbProps } from 'react-instantsearch';
+import { BreadcrumbRenderState } from 'instantsearch.js/es/connectors/breadcrumb/connectBreadcrumb';
 
 export interface BreadcrumbItem {
   label: string;
@@ -26,11 +27,22 @@ const useStyles = makeStyles(({
   },
 }));
 
-export const SearchBreadcrumb = (props: BreadcrumbProps) => {
+export const SearchBreadcrumb = (props: BreadcrumbProps & {
+  onLoad?: (renderState: BreadcrumbRenderState) => BreadcrumbRenderState | void;
+  initialState?: BreadcrumbRenderState;
+}) => {
+  const { onLoad, initialState, ...rest } = props;
   const { queryId } = useContext(AlgoliaQueryIdContext);
   const analytics = useAnalytics();
   const classes = useStyles();
-  const { items, refine } = useBreadcrumb(props);
+  let renderState = initialState ?? useBreadcrumb(rest);
+  if (onLoad) {
+    const onLoadResult = onLoad({ ...renderState });
+    if (onLoadResult) {
+      renderState = onLoadResult;
+    }
+  }
+  const { items, refine } = renderState;
   const segments = [...items.slice(0, -1)];
   const lastSegment = items[items.length - 1];
   return (

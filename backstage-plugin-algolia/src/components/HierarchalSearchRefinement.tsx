@@ -97,18 +97,23 @@ const buildTree = (options: {
 export const HierarchalSearchRefinement = (props: UseHierarchicalMenuProps & {
   label: string;
   onRefinement?: (value: string) => void;
-  onLoad?: (renderState: HierarchicalMenuRenderState) => void;
+  onLoad?: (renderState: HierarchicalMenuRenderState) => HierarchicalMenuRenderState | void;
+  initialState?: HierarchicalMenuRenderState;
 }) => {
   const classes = useStyles();
   const {
     label,
     onRefinement,
     onLoad,
+    initialState,
     ...rest
   } = props;
-  const renderState = useHierarchicalMenu(rest);
+  let renderState = initialState ?? useHierarchicalMenu(rest);
   if (onLoad) {
-    onLoad({ ...renderState });
+    const onLoadResult = onLoad({ ...renderState });
+    if (onLoadResult) {
+      renderState = onLoadResult;
+    }
   }
   const { items, refine, canRefine } = renderState;
   const analytics = useAnalytics();

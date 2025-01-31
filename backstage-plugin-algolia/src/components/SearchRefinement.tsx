@@ -41,18 +41,23 @@ export const SearchRefinement = (props: UseRefinementListProps & {
   className?: string;
   label: string;
   onRefinement?: (value: string) => void;
-  onLoad?: (renderState: RefinementListRenderState) => void;
+  onLoad?: (renderState: RefinementListRenderState) => RefinementListRenderState | void;
+  initialState?: RefinementListRenderState;
 }) => {
   const {
     className,
     label,
     onRefinement,
     onLoad,
+    initialState,
     ...rest
   } = props;
-  const renderState = useRefinementList(rest);
+  let renderState = initialState ?? useRefinementList(rest);
   if (onLoad) {
-    onLoad({ ...renderState });
+    const onLoadResult = onLoad({ ...renderState });
+    if (onLoadResult) {
+      renderState = onLoadResult;
+    }
   }
   const { items, refine, canRefine } = renderState;
   const { queryId } = useContext(AlgoliaQueryIdContext);
