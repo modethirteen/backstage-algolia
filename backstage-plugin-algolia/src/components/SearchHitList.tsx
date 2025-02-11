@@ -24,6 +24,7 @@ import {
 } from 'react-instantsearch';
 import { AlgoliaQueryIdContext } from './SearchContainer';
 import { InfiniteHitsRenderState } from 'instantsearch.js/es/connectors/infinite-hits/connectInfiniteHits';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const tryGetPath = (location: string) => {
   try {
@@ -169,6 +170,7 @@ export const SearchHitList = (props: UseInfiniteHitsProps & {
           color="primary"
           variant="contained"
           onClick={() => showMore()}
+          endIcon={<ExpandMoreIcon />}
         >
           Show more results
         </Button>

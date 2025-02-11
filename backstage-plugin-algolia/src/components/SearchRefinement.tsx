@@ -1,18 +1,22 @@
 import { useAnalytics } from '@backstage/core-plugin-api';
 import {
+  Box,
+  Button,
   Checkbox,
   Chip,
   FormControl,
   FormControlLabel,
   FormLabel,
+  TextField,
   Typography,
   makeStyles,
 } from '@material-ui/core';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import type { UseRefinementListProps } from 'react-instantsearch';
 import { useRefinementList } from 'react-instantsearch';
 import { AlgoliaQueryIdContext } from './SearchContainer';
 import { RefinementListRenderState } from 'instantsearch.js/es/connectors/refinement-list/connectRefinementList';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles({
   label: {
@@ -35,6 +39,11 @@ const useStyles = makeStyles({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
+  showMoreButton: {
+    display: 'flex',
+    justifyContent: 'center',
+    width: '100%',
+  },
 });
 
 export const SearchRefinement = (props: UseRefinementListProps & {
@@ -43,6 +52,7 @@ export const SearchRefinement = (props: UseRefinementListProps & {
   onRefinement?: (value: string) => void;
   onLoad?: (renderState: RefinementListRenderState) => RefinementListRenderState | void;
   initialState?: RefinementListRenderState;
+  includeSearch?: boolean;
 }) => {
   const {
     className,
@@ -50,8 +60,11 @@ export const SearchRefinement = (props: UseRefinementListProps & {
     onRefinement,
     onLoad,
     initialState,
+    includeSearch = false,
     ...rest
   } = props;
+  const { showMore } = props;
+  const [searchValue, setSearchValue] = useState('');
   let renderState = initialState ?? useRefinementList(rest);
   if (onLoad) {
     const onLoadResult = onLoad({ ...renderState });
@@ -59,7 +72,7 @@ export const SearchRefinement = (props: UseRefinementListProps & {
       renderState = onLoadResult;
     }
   }
-  const { items, refine, canRefine } = renderState;
+  const { items, refine, canRefine, searchForItems, canToggleShowMore, toggleShowMore, isShowingMore } = renderState;
   const { queryId } = useContext(AlgoliaQueryIdContext);
   const analytics = useAnalytics();
   const classes = useStyles();
@@ -70,6 +83,22 @@ export const SearchRefinement = (props: UseRefinementListProps & {
       className={className}
     >
       <FormLabel className={classes.label}>{label}</FormLabel>
+      {includeSearch && (
+        <TextField
+          fullWidth
+          variant="outlined"
+          size="small"
+          placeholder="Search..."
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            const value = event.target.value
+            setSearchValue(value);
+            searchForItems(value);
+          }}
+          value={searchValue}
+          disabled={!canRefine}
+          margin="dense"
+        />
+      )}
       {items.length > 0 && items.map(i => (
         <FormControlLabel
           key={i.value}
@@ -100,6 +129,7 @@ export const SearchRefinement = (props: UseRefinementListProps & {
                   },
                 });
                 refine(i.value);
+                setSearchValue('');
                 if (onRefinement) {
                   onRefinement(i.value);
                 }
@@ -109,7 +139,18 @@ export const SearchRefinement = (props: UseRefinementListProps & {
           }
         />
       ))}
-      {items.length <= 0 && <em>Not available with selected filters or query</em>}
+      {items.length <= 0 && <Box mt={1} mb={1}><Typography variant="body2"><em>Not available with selected filters or query</em></Typography></Box>}
+      {showMore && canToggleShowMore && !isShowingMore && (
+        <Button
+          color="default"
+          variant="outlined"
+          size="small"
+          onClick={() => toggleShowMore()}
+          className={classes.showMoreButton}
+        >
+          <ExpandMoreIcon />
+        </Button>
+      )}
     </FormControl>
   );
 };
