@@ -85,3 +85,13 @@ export const SearchRefinement = algoliaPlugin.provide(
     },
   }),
 );
+
+export const SearchProgress = algoliaPlugin.provide(
+  createComponentExtension({
+    name: 'SearchProgress',
+    component: {
+      lazy: () => import('./components/SearchProgress')
+        .then(m => m.SearchProgress)
+    },
+  }),
+);
