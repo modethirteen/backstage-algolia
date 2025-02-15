@@ -98,17 +98,15 @@ export const HierarchalSearchRefinement = (props: UseHierarchicalMenuProps & {
   label: string;
   onRefinement?: (value: string) => void;
   onLoad?: (renderState: HierarchicalMenuRenderState) => HierarchicalMenuRenderState | void;
-  initialState?: HierarchicalMenuRenderState;
 }) => {
   const classes = useStyles();
   const {
     label,
     onRefinement,
     onLoad,
-    initialState,
     ...rest
   } = props;
-  let renderState = initialState ?? useHierarchicalMenu(rest);
+  let renderState = useHierarchicalMenu(rest);
   if (onLoad) {
     const onLoadResult = onLoad({ ...renderState });
     if (onLoadResult) {

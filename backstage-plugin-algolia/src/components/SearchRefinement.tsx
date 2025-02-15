@@ -51,7 +51,6 @@ export const SearchRefinement = (props: UseRefinementListProps & {
   label: string;
   onRefinement?: (value: string) => void;
   onLoad?: (renderState: RefinementListRenderState) => RefinementListRenderState | void;
-  initialState?: RefinementListRenderState;
   includeSearch?: boolean;
 }) => {
   const {
@@ -59,13 +58,12 @@ export const SearchRefinement = (props: UseRefinementListProps & {
     label,
     onRefinement,
     onLoad,
-    initialState,
     includeSearch = false,
     ...rest
   } = props;
   const { showMore } = props;
   const [searchValue, setSearchValue] = useState('');
-  let renderState = initialState ?? useRefinementList(rest);
+  let renderState = useRefinementList(rest);
   if (onLoad) {
     const onLoadResult = onLoad({ ...renderState });
     if (onLoadResult) {

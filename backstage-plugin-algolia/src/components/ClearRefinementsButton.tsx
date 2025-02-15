@@ -9,18 +9,16 @@ export const ClearRefinementsButton = (props: ClearRefinementsProps & {
   label: string;
   onClear?: () => void;
   onLoad?: (renderState: ClearRefinementsRenderState) => ClearRefinementsRenderState | void;
-  initialState?: ClearRefinementsRenderState;
 }) => {
   const {
     label,
     onClear,
     onLoad,
-    initialState,
     ...rest
   } = props;
   const analytics = useAnalytics();
   const { queryId } = useContext(AlgoliaQueryIdContext);
-  let renderState = initialState ?? useClearRefinements(rest);
+  let renderState = useClearRefinements(rest);
   if (onLoad) {
     const onLoadResult = onLoad({ ...renderState });
     if (onLoadResult) {

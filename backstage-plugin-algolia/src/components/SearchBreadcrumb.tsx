@@ -29,13 +29,12 @@ const useStyles = makeStyles(({
 
 export const SearchBreadcrumb = (props: BreadcrumbProps & {
   onLoad?: (renderState: BreadcrumbRenderState) => BreadcrumbRenderState | void;
-  initialState?: BreadcrumbRenderState;
 }) => {
-  const { onLoad, initialState, ...rest } = props;
+  const { onLoad, ...rest } = props;
   const { queryId } = useContext(AlgoliaQueryIdContext);
   const analytics = useAnalytics();
   const classes = useStyles();
-  let renderState = initialState ?? useBreadcrumb(rest);
+  let renderState = useBreadcrumb(rest);
   if (onLoad) {
     const onLoadResult = onLoad({ ...renderState });
     if (onLoadResult) {
