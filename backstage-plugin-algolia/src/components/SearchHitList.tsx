@@ -96,7 +96,7 @@ export const SearchHitList = (props: UseInfiniteHitsProps & {
       <List subheader={<ListSubheader>{hitCount} results</ListSubheader>}>
         {hits.map(h => {
           const object = h as unknown as IndexObjectWithIdAndTimestamp;
-          const { location, text, title, objectID } = object;
+          const { location, text, title, objectID, displayTitle } = object;
           const path = tryGetPath(location);
           const titleContent = (
             <>
@@ -113,14 +113,14 @@ export const SearchHitList = (props: UseInfiniteHitsProps & {
                       onClick({ event: e, object, queryId });
                     }
                   }}>
-                    {highlight ? <Highlight attribute="title" hit={h} /> : title}
+                    {highlight ? <Highlight attribute="title" hit={h} /> : displayTitle ?? title}
                   </Link>
                 </AnalyticsContext>
               </Typography>
               {path && (
                 <Typography
                   variant="body2"
-                  gutterBottom={true}
+                  gutterBottom
                 >
                   {path}
                 </Typography>
