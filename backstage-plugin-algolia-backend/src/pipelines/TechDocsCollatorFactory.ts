@@ -16,39 +16,6 @@ import {
 } from './types';
 import { unescape } from 'lodash';
 
-const getKeywords = (doc: Document, docs: Document[]) => {
-  const { location } = doc;
-
-  // build list of parent paths to fetch parent paths and titles
-  const parts = location.split('/').filter(p => p);
-  const keywords: string[] = [...parts];
-  const root = docs.find(({ location }) => location === '')?.title;
-  if (root && root !== doc.title) {
-    keywords.push(root);
-  }
-  for (let i = 0; i < parts.length; i++) {
-    let path = parts.slice(0, i + 1).join('/');
-    if (!path.includes('#')) {
-      path = `${path}/`;
-    }
-    const title = docs.find(({ location }) => location === path)?.title;
-    if (title && title !== doc.title) {
-      keywords.push(title);
-    }
-  }
-  return Array.from(
-    new Set(
-      keywords
-        .map(t =>
-          t
-            .toLocaleLowerCase('en-US')
-            .replaceAll(/[^a-zA-Z']+/g, ' ')
-            .trim(),
-        )
-    ),
-  );
-}
-
 interface Document {
   title: string;
   text: string;
@@ -160,7 +127,7 @@ export class TechDocsCollatorFactory implements CollatorFactory {
                   text: unescape(doc.text ?? ''),
                   location: doc.location,
                   path: doc.location,
-                  keywords: getKeywords(doc, searchIndex.docs),
+                  keywords: [],
                 },
                 data,
               };
