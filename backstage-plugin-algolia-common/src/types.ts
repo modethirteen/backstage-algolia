@@ -7,6 +7,7 @@ export interface IndexObject {
   keywords: string[];
   tags?: string[];
   summary?: string;
+  displayTitle?: string;
 }
 
 export interface IndexObjectWithIdAndTimestamp extends IndexObject {
