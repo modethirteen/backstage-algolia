@@ -25,7 +25,10 @@ export class SearchProxyClient implements SearchProxyApi {
   ) {
     const { skipEmptyQueries = false } = options ?? {};
     const { requests } = request;
-    if (skipEmptyQueries && requests.every(({ params }) => !params?.query)) {
+    if (
+      skipEmptyQueries &&
+      requests.every(({ params }) => !params?.facetQuery && !params?.query)
+    ) {
       return Promise.resolve({
         results: requests.map(() => ({
           hits: [],

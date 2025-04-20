@@ -22,6 +22,7 @@ const SearchWrapper = (props: { children: ReactNode }) => {
       }}
       authenticatedUserToken="user-dev"
       userToken="anonymous-dev"
+      skipEmptyQueries={true}
     >
       {children}
     </SearchContainer>
