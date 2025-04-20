@@ -18,7 +18,8 @@
     "lint:all": "backstage-cli repo lint",
     "prettier:check": "prettier --check .",
     "prettier:format": "prettier --loglevel warn --write .",
-    "new": "backstage-cli new"
+    "new": "backstage-cli new",
+    "debug": "concurrently \"yarn workspace backstage-plugin-algolia-backend debug\" \"yarn workspace backstage-plugin-algolia start\""
   },
   "workspaces": {
     "packages": [
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@backstage/cli": "^0.22.14",
+    "concurrently": "^8.0.0",
     "node-gyp": "^10.0.0",
     "prettier": "^2.3.2",
     "typescript": "~5.3.0"

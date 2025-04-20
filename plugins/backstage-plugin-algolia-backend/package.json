@@ -21,6 +21,7 @@
   },
   "scripts": {
     "start": "backstage-cli package start",
+    "debug": "PLUGIN_CORS=TRUE backstage-cli package start --inspect",
     "build": "backstage-cli package build",
     "lint": "backstage-cli package lint",
     "test": "backstage-cli package test",
