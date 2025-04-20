@@ -87,10 +87,13 @@ export async function createRouter(
       const response = await client.search(requests);
       res.json(
         queryResultsHandler
-          ? await queryResultsHandler(
-              response.results as SearchResponse<IndexObjectWithIdAndTimestamp>[],
-              options,
-            )
+          ? { 
+              ...response,
+              results: await queryResultsHandler(
+                response.results as SearchResponse<IndexObjectWithIdAndTimestamp>[],
+                options,
+              )
+            }
           : response,
       );
     },
