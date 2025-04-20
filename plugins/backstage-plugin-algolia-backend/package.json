@@ -11,7 +11,13 @@
     "registry": "https://registry.npmjs.org"
   },
   "backstage": {
-    "role": "backend-plugin"
+    "role": "backend-plugin",
+    "pluginId": "algolia",
+    "pluginPackages": [
+      "backstage-plugin-algolia",
+      "backstage-plugin-algolia-backend",
+      "backstage-plugin-algolia-common"
+    ]
   },
   "scripts": {
     "start": "backstage-cli package start",

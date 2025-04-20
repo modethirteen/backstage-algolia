@@ -13,7 +13,13 @@
     "registry": "https://registry.npmjs.org"
   },
   "backstage": {
-    "role": "common-library"
+    "role": "common-library",
+    "pluginId": "algolia",
+    "pluginPackages": [
+      "backstage-plugin-algolia",
+      "backstage-plugin-algolia-backend",
+      "backstage-plugin-algolia-common"
+    ]
   },
   "sideEffects": false,
   "scripts": {
