@@ -8,3 +8,4 @@ export * from './PipelineTrigger';
 export * from './TechDocsTransformerFactory';
 export * from './TechDocsCollatorFactory';
 export * from './types';
+export * from './testUtils';
