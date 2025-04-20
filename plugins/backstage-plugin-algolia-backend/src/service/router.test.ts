@@ -291,9 +291,7 @@ describe('createRouter', () => {
     });
 
     it('proxies search requests to Algolia API', async () => {
-      const queryResultsHandler = jest
-        .fn()
-        .mockResolvedValue(['qux']);
+      const queryResultsHandler = jest.fn().mockResolvedValue(['qux']);
       search.mockResolvedValue({ results: ['bar'] });
       const router = await createRouter({
         trigger: { start, getPipelineIds },

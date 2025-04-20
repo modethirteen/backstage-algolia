@@ -12,7 +12,10 @@ import {
   SearchProxyRequest,
   searchProxyRequestSchema,
 } from 'backstage-plugin-algolia-common';
-import { SearchResponse } from '@algolia/client-search';
+import {
+  SearchForFacetValuesResponse,
+  SearchResponse,
+} from '@algolia/client-search';
 import { z } from 'zod';
 
 const pipelinesRequestSchema = z.object({
@@ -23,9 +26,17 @@ export interface RouterOptions {
   clientFactory: ClientFactoryInterface;
   trigger: PipelineTriggerInterface;
   queryResultsHandler?: (
-    results: SearchResponse<IndexObjectWithIdAndTimestamp>[],
+    results: (
+      | SearchForFacetValuesResponse
+      | SearchResponse<IndexObjectWithIdAndTimestamp>
+    )[],
     options?: SearchProxyRequest['options'],
-  ) => Promise<SearchResponse<IndexObjectWithIdAndTimestamp>[]>;
+  ) => Promise<
+    (
+      | SearchForFacetValuesResponse
+      | SearchResponse<IndexObjectWithIdAndTimestamp>
+    )[]
+  >;
 }
 
 export async function createRouter(
@@ -70,11 +81,9 @@ export async function createRouter(
         authenticatedUserToken,
         userToken,
       });
-      res
-        .status(202)
-        .json({
-          message: `Dispatched ${insightsMethod} payload to Algolia Insights API`,
-        });
+      res.status(202).json({
+        message: `Dispatched ${insightsMethod} payload to Algolia Insights API`,
+      });
     },
   );
 
@@ -87,12 +96,15 @@ export async function createRouter(
       const response = await client.search(requests);
       res.json(
         queryResultsHandler
-          ? { 
+          ? {
               ...response,
               results: await queryResultsHandler(
-                response.results as SearchResponse<IndexObjectWithIdAndTimestamp>[],
+                response.results as (
+                  | SearchForFacetValuesResponse
+                  | SearchResponse<IndexObjectWithIdAndTimestamp>
+                )[],
                 options,
-              )
+              ),
             }
           : response,
       );
