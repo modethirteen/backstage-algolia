@@ -22,10 +22,14 @@ class CatalogTransformer extends TransformerBase {
     this.locationTemplate = locationTemplate;
   }
 
-  public async transform(result: PipelineResult): Promise<PipelineResult | undefined> {
+  public async transform(
+    result: PipelineResult,
+  ): Promise<PipelineResult | undefined> {
     result = {
       ...result,
-      entity: this.entityProvider ? await this.entityProvider(result) : result.entity,
+      entity: this.entityProvider
+        ? await this.entityProvider(result)
+        : result.entity,
     };
     const { indexObject, entity } = result;
     const entityInfo = {
@@ -54,14 +58,22 @@ class CatalogTransformer extends TransformerBase {
 }
 
 export class CatalogTransformerFactory implements TransformerFactory {
-  public static fromConfig(config: Config, options?: {
-    entityProviderFactory?: EntityProviderFactoryInterface;
-  }) {
+  public static fromConfig(
+    config: Config,
+    options?: {
+      entityProviderFactory?: EntityProviderFactoryInterface;
+    },
+  ) {
     const { entityProviderFactory } = options ?? {};
     const baseUrl = config.getString('app.baseUrl');
-    const locationTemplate = config.getOptionalString('algolia.backend.indexes.catalog.locationTemplate')
-      ?? url.resolve(baseUrl, '/catalog/:namespace/:kind/:name');
-    return new CatalogTransformerFactory({ entityProviderFactory, locationTemplate });
+    const locationTemplate =
+      config.getOptionalString(
+        'algolia.backend.indexes.catalog.locationTemplate',
+      ) ?? url.resolve(baseUrl, '/catalog/:namespace/:kind/:name');
+    return new CatalogTransformerFactory({
+      entityProviderFactory,
+      locationTemplate,
+    });
   }
 
   private readonly entityProviderFactory?: EntityProviderFactoryInterface;

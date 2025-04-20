@@ -46,13 +46,17 @@ const useStyles = makeStyles({
   },
 });
 
-export const SearchRefinement = (props: UseRefinementListProps & {
-  className?: string;
-  label: string;
-  onRefinement?: (value: string) => void;
-  onLoad?: (renderState: RefinementListRenderState) => RefinementListRenderState | void;
-  includeSearch?: boolean;
-}) => {
+export const SearchRefinement = (
+  props: UseRefinementListProps & {
+    className?: string;
+    label: string;
+    onRefinement?: (value: string) => void;
+    onLoad?: (
+      renderState: RefinementListRenderState,
+    ) => RefinementListRenderState | void;
+    includeSearch?: boolean;
+  },
+) => {
   const {
     className,
     label,
@@ -70,16 +74,20 @@ export const SearchRefinement = (props: UseRefinementListProps & {
       renderState = onLoadResult;
     }
   }
-  const { items, refine, canRefine, searchForItems, canToggleShowMore, toggleShowMore, isShowingMore } = renderState;
+  const {
+    items,
+    refine,
+    canRefine,
+    searchForItems,
+    canToggleShowMore,
+    toggleShowMore,
+    isShowingMore,
+  } = renderState;
   const { queryId } = useContext(AlgoliaQueryIdContext);
   const analytics = useAnalytics();
   const classes = useStyles();
   return (
-    <FormControl
-      fullWidth
-      disabled={!canRefine}
-      className={className}
-    >
+    <FormControl fullWidth disabled={!canRefine} className={className}>
       <FormLabel className={classes.label}>{label}</FormLabel>
       {includeSearch && (
         <TextField
@@ -88,7 +96,7 @@ export const SearchRefinement = (props: UseRefinementListProps & {
           size="small"
           placeholder="Search..."
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            const value = event.target.value
+            const value = event.target.value;
             setSearchValue(value);
             searchForItems(value);
           }}
@@ -97,47 +105,63 @@ export const SearchRefinement = (props: UseRefinementListProps & {
           margin="dense"
         />
       )}
-      {items.length > 0 && items.map(i => (
-        <FormControlLabel
-          key={i.value}
-          classes={{
-            root: classes.checkboxWrapper,
-            label: classes.textWrapper,
-          }}
-          label={
-            <Typography variant="body2" noWrap>
-              {i.label}
-              <Chip className={classes.chip} variant="outlined" size="small" label={i.count} />
-            </Typography>
-          }
-          control={
-            <Checkbox
-              color="default"
-              size="small"
-              value={i.value}
-              name={i.value}
-              onChange={() => {
-                analytics.captureEvent('click', i.isRefined ? 'Remove search refinement' : 'Refine search', {
-                  attributes: {
-                    pluginId: 'algolia',
-                    extension: 'SearchRefinement',
-                    algoliaQueryId: queryId,
-                    algoliaSearchRefinementLabel: label,
-                    algoliaSearchRefinementValue: i.value,
-                  },
-                });
-                refine(i.value);
-                setSearchValue('');
-                if (onRefinement) {
-                  onRefinement(i.value);
-                }
-              }}
-              checked={i.isRefined}
-            />
-          }
-        />
-      ))}
-      {items.length <= 0 && <Box mt={1} mb={1}><Typography variant="body2"><em>Not available with selected filters or query</em></Typography></Box>}
+      {items.length > 0 &&
+        items.map(i => (
+          <FormControlLabel
+            key={i.value}
+            classes={{
+              root: classes.checkboxWrapper,
+              label: classes.textWrapper,
+            }}
+            label={
+              <Typography variant="body2" noWrap>
+                {i.label}
+                <Chip
+                  className={classes.chip}
+                  variant="outlined"
+                  size="small"
+                  label={i.count}
+                />
+              </Typography>
+            }
+            control={
+              <Checkbox
+                color="default"
+                size="small"
+                value={i.value}
+                name={i.value}
+                onChange={() => {
+                  analytics.captureEvent(
+                    'click',
+                    i.isRefined ? 'Remove search refinement' : 'Refine search',
+                    {
+                      attributes: {
+                        pluginId: 'algolia',
+                        extension: 'SearchRefinement',
+                        algoliaQueryId: queryId,
+                        algoliaSearchRefinementLabel: label,
+                        algoliaSearchRefinementValue: i.value,
+                      },
+                    },
+                  );
+                  refine(i.value);
+                  setSearchValue('');
+                  if (onRefinement) {
+                    onRefinement(i.value);
+                  }
+                }}
+                checked={i.isRefined}
+              />
+            }
+          />
+        ))}
+      {items.length <= 0 && (
+        <Box mt={1} mb={1}>
+          <Typography variant="body2">
+            <em>Not available with selected filters or query</em>
+          </Typography>
+        </Box>
+      )}
       {showMore && canToggleShowMore && !isShowingMore && (
         <Button
           color="default"

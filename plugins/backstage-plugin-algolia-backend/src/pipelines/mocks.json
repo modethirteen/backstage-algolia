@@ -7,10 +7,7 @@
         "name": "backend-service-1",
         "title": "Backend Service",
         "description": "A backend microservice for user management",
-        "tags": [
-          "backend",
-          "microservice"
-        ],
+        "tags": ["backend", "microservice"],
         "annotations": {
           "backstage.io/techdocs-ref": "dir:."
         }
@@ -39,10 +36,7 @@
         "name": "frontend-app-1",
         "title": "React Frontend Service",
         "description": "A React frontend application for user dashboard",
-        "tags": [
-          "frontend",
-          "React"
-        ]
+        "tags": ["frontend", "React"]
       },
       "spec": {
         "owner": "team-xyzzy",
@@ -68,10 +62,7 @@
         "name": "microservice-2",
         "title": "Data Microservice",
         "description": "A microservice for data processing",
-        "tags": [
-          "backend",
-          "microservice"
-        ],
+        "tags": ["backend", "microservice"],
         "annotations": {
           "backstage.io/techdocs-ref": "dir:."
         }
@@ -100,10 +91,7 @@
         "name": "frontend-app-2",
         "title": "Dashboard Frontend",
         "description": "A Vue.js frontend app for analytics dashboard",
-        "tags": [
-          "frontend",
-          "Vue.js"
-        ],
+        "tags": ["frontend", "Vue.js"],
         "annotations": {
           "backstage.io/techdocs-ref": "dir:."
         }
@@ -132,10 +120,7 @@
         "name": "backend-service-2",
         "title": "API Backend",
         "description": "A RESTful backend service for inventory management",
-        "tags": [
-          "backend",
-          "REST"
-        ],
+        "tags": ["backend", "REST"],
         "annotations": {
           "backstage.io/techdocs-ref": "dir:."
         }
@@ -164,10 +149,7 @@
         "name": "frontend-app-3",
         "title": "Reporting Frontend",
         "description": "An Angular frontend app for reporting",
-        "tags": [
-          "frontend",
-          "Angular"
-        ],
+        "tags": ["frontend", "Angular"],
         "annotations": {
           "backstage.io/techdocs-entity": "component:default/backend-service-2"
         }
@@ -196,10 +178,7 @@
         "name": "microservice-3",
         "title": "Payment Processor Service",
         "description": "A microservice for payment processing",
-        "tags": [
-          "backend",
-          "microservice"
-        ]
+        "tags": ["backend", "microservice"]
       },
       "spec": {
         "owner": "team-bazz",
@@ -225,10 +204,7 @@
         "name": "frontend-app-4",
         "title": "Portal Frontend",
         "description": "A Svelte frontend app for customer portal",
-        "tags": [
-          "frontend",
-          "Svelte"
-        ]
+        "tags": ["frontend", "Svelte"]
       },
       "spec": {
         "owner": "team-foobar",
@@ -254,10 +230,7 @@
         "name": "backend-service-3",
         "title": "Orders API Backend",
         "description": "A RESTful backend service for order processing",
-        "tags": [
-          "backend",
-          "REST"
-        ],
+        "tags": ["backend", "REST"],
         "annotations": {
           "backstage.io/techdocs-ref": "dir:."
         }
@@ -343,9 +316,7 @@
           "displayName": "Fred Foo",
           "email": "fred.foo@example.com"
         },
-        "memberOf": [
-          "group:default/team-bazz"
-        ]
+        "memberOf": ["group:default/team-bazz"]
       },
       "relations": [
         {
@@ -370,9 +341,7 @@
         "profile": {
           "displayName": "Team Bazz"
         },
-        "parent": [
-          "group:default/engineering"
-        ]
+        "parent": ["group:default/engineering"]
       },
       "relations": [
         {
@@ -389,9 +358,7 @@
   ],
   "searchDocIndex": {
     "config": {
-      "lang": [
-        "en"
-      ],
+      "lang": ["en"],
       "min_search_length": 3,
       "prebuild_index": false,
       "separator": "[\\s\\-]+"
@@ -428,10 +395,7 @@
           "name": "backend-service-1",
           "title": "Backend Service",
           "description": "A backend microservice for user management",
-          "tags": [
-            "backend",
-            "microservice"
-          ],
+          "tags": ["backend", "microservice"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -460,10 +424,7 @@
         "location": "",
         "path": "",
         "keywords": [],
-        "tags": [
-          "backend",
-          "microservice"
-        ]
+        "tags": ["backend", "microservice"]
       }
     },
     {
@@ -474,10 +435,7 @@
           "name": "backend-service-2",
           "title": "API Backend",
           "description": "A RESTful backend service for inventory management",
-          "tags": [
-            "backend",
-            "REST"
-          ],
+          "tags": ["backend", "REST"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -506,10 +464,7 @@
         "location": "",
         "path": "",
         "keywords": [],
-        "tags": [
-          "backend",
-          "REST"
-        ]
+        "tags": ["backend", "REST"]
       }
     },
     {
@@ -520,10 +475,7 @@
           "name": "backend-service-3",
           "title": "Orders API Backend",
           "description": "A RESTful backend service for order processing",
-          "tags": [
-            "backend",
-            "REST"
-          ],
+          "tags": ["backend", "REST"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -552,10 +504,7 @@
         "location": "",
         "path": "",
         "keywords": [],
-        "tags": [
-          "backend",
-          "REST"
-        ]
+        "tags": ["backend", "REST"]
       }
     },
     {
@@ -566,10 +515,7 @@
           "name": "frontend-app-1",
           "title": "React Frontend Service",
           "description": "A React frontend application for user dashboard",
-          "tags": [
-            "frontend",
-            "React"
-          ]
+          "tags": ["frontend", "React"]
         },
         "spec": {
           "owner": "team-xyzzy",
@@ -595,10 +541,7 @@
         "location": "",
         "path": "",
         "keywords": [],
-        "tags": [
-          "frontend",
-          "React"
-        ]
+        "tags": ["frontend", "React"]
       }
     },
     {
@@ -609,10 +552,7 @@
           "name": "frontend-app-2",
           "title": "Dashboard Frontend",
           "description": "A Vue.js frontend app for analytics dashboard",
-          "tags": [
-            "frontend",
-            "Vue.js"
-          ],
+          "tags": ["frontend", "Vue.js"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -641,10 +581,7 @@
         "location": "",
         "path": "",
         "keywords": [],
-        "tags": [
-          "frontend",
-          "Vue.js"
-        ]
+        "tags": ["frontend", "Vue.js"]
       }
     },
     {
@@ -655,10 +592,7 @@
           "name": "frontend-app-3",
           "title": "Reporting Frontend",
           "description": "An Angular frontend app for reporting",
-          "tags": [
-            "frontend",
-            "Angular"
-          ],
+          "tags": ["frontend", "Angular"],
           "annotations": {
             "backstage.io/techdocs-entity": "component:default/backend-service-2"
           }
@@ -687,10 +621,7 @@
         "location": "",
         "path": "",
         "keywords": [],
-        "tags": [
-          "frontend",
-          "Angular"
-        ]
+        "tags": ["frontend", "Angular"]
       }
     },
     {
@@ -701,10 +632,7 @@
           "name": "frontend-app-4",
           "title": "Portal Frontend",
           "description": "A Svelte frontend app for customer portal",
-          "tags": [
-            "frontend",
-            "Svelte"
-          ]
+          "tags": ["frontend", "Svelte"]
         },
         "spec": {
           "owner": "team-foobar",
@@ -730,10 +658,7 @@
         "location": "",
         "path": "",
         "keywords": [],
-        "tags": [
-          "frontend",
-          "Svelte"
-        ]
+        "tags": ["frontend", "Svelte"]
       }
     },
     {
@@ -744,10 +669,7 @@
           "name": "microservice-2",
           "title": "Data Microservice",
           "description": "A microservice for data processing",
-          "tags": [
-            "backend",
-            "microservice"
-          ],
+          "tags": ["backend", "microservice"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -776,10 +698,7 @@
         "location": "",
         "path": "",
         "keywords": [],
-        "tags": [
-          "backend",
-          "microservice"
-        ]
+        "tags": ["backend", "microservice"]
       }
     },
     {
@@ -790,10 +709,7 @@
           "name": "microservice-3",
           "title": "Payment Processor Service",
           "description": "A microservice for payment processing",
-          "tags": [
-            "backend",
-            "microservice"
-          ]
+          "tags": ["backend", "microservice"]
         },
         "spec": {
           "owner": "team-bazz",
@@ -819,10 +735,7 @@
         "location": "",
         "path": "",
         "keywords": [],
-        "tags": [
-          "backend",
-          "microservice"
-        ]
+        "tags": ["backend", "microservice"]
       }
     },
     {
@@ -837,9 +750,7 @@
           "profile": {
             "displayName": "Team Bazz"
           },
-          "parent": [
-            "group:default/engineering"
-          ]
+          "parent": ["group:default/engineering"]
         },
         "relations": [
           {
@@ -947,9 +858,7 @@
             "displayName": "Fred Foo",
             "email": "fred.foo@example.com"
           },
-          "memberOf": [
-            "group:default/team-bazz"
-          ]
+          "memberOf": ["group:default/team-bazz"]
         },
         "relations": [
           {
@@ -982,10 +891,7 @@
           "name": "backend-service-1",
           "title": "Backend Service",
           "description": "A backend microservice for user management",
-          "tags": [
-            "backend",
-            "microservice"
-          ],
+          "tags": ["backend", "microservice"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1027,10 +933,7 @@
           "name": "backend-service-1",
           "title": "Backend Service",
           "description": "A backend microservice for user management",
-          "tags": [
-            "backend",
-            "microservice"
-          ],
+          "tags": ["backend", "microservice"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1072,10 +975,7 @@
           "name": "backend-service-1",
           "title": "Backend Service",
           "description": "A backend microservice for user management",
-          "tags": [
-            "backend",
-            "microservice"
-          ],
+          "tags": ["backend", "microservice"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1117,10 +1017,7 @@
           "name": "backend-service-1",
           "title": "Backend Service",
           "description": "A backend microservice for user management",
-          "tags": [
-            "backend",
-            "microservice"
-          ],
+          "tags": ["backend", "microservice"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1162,10 +1059,7 @@
           "name": "backend-service-2",
           "title": "API Backend",
           "description": "A RESTful backend service for inventory management",
-          "tags": [
-            "backend",
-            "REST"
-          ],
+          "tags": ["backend", "REST"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1207,10 +1101,7 @@
           "name": "backend-service-2",
           "title": "API Backend",
           "description": "A RESTful backend service for inventory management",
-          "tags": [
-            "backend",
-            "REST"
-          ],
+          "tags": ["backend", "REST"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1252,10 +1143,7 @@
           "name": "backend-service-2",
           "title": "API Backend",
           "description": "A RESTful backend service for inventory management",
-          "tags": [
-            "backend",
-            "REST"
-          ],
+          "tags": ["backend", "REST"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1297,10 +1185,7 @@
           "name": "backend-service-2",
           "title": "API Backend",
           "description": "A RESTful backend service for inventory management",
-          "tags": [
-            "backend",
-            "REST"
-          ],
+          "tags": ["backend", "REST"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1342,10 +1227,7 @@
           "name": "backend-service-3",
           "title": "Orders API Backend",
           "description": "A RESTful backend service for order processing",
-          "tags": [
-            "backend",
-            "REST"
-          ],
+          "tags": ["backend", "REST"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1387,10 +1269,7 @@
           "name": "backend-service-3",
           "title": "Orders API Backend",
           "description": "A RESTful backend service for order processing",
-          "tags": [
-            "backend",
-            "REST"
-          ],
+          "tags": ["backend", "REST"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1432,10 +1311,7 @@
           "name": "backend-service-3",
           "title": "Orders API Backend",
           "description": "A RESTful backend service for order processing",
-          "tags": [
-            "backend",
-            "REST"
-          ],
+          "tags": ["backend", "REST"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1477,10 +1353,7 @@
           "name": "backend-service-3",
           "title": "Orders API Backend",
           "description": "A RESTful backend service for order processing",
-          "tags": [
-            "backend",
-            "REST"
-          ],
+          "tags": ["backend", "REST"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1522,10 +1395,7 @@
           "name": "frontend-app-2",
           "title": "Dashboard Frontend",
           "description": "A Vue.js frontend app for analytics dashboard",
-          "tags": [
-            "frontend",
-            "Vue.js"
-          ],
+          "tags": ["frontend", "Vue.js"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1567,10 +1437,7 @@
           "name": "frontend-app-2",
           "title": "Dashboard Frontend",
           "description": "A Vue.js frontend app for analytics dashboard",
-          "tags": [
-            "frontend",
-            "Vue.js"
-          ],
+          "tags": ["frontend", "Vue.js"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1612,10 +1479,7 @@
           "name": "frontend-app-2",
           "title": "Dashboard Frontend",
           "description": "A Vue.js frontend app for analytics dashboard",
-          "tags": [
-            "frontend",
-            "Vue.js"
-          ],
+          "tags": ["frontend", "Vue.js"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1657,10 +1521,7 @@
           "name": "frontend-app-2",
           "title": "Dashboard Frontend",
           "description": "A Vue.js frontend app for analytics dashboard",
-          "tags": [
-            "frontend",
-            "Vue.js"
-          ],
+          "tags": ["frontend", "Vue.js"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1702,10 +1563,7 @@
           "name": "microservice-2",
           "title": "Data Microservice",
           "description": "A microservice for data processing",
-          "tags": [
-            "backend",
-            "microservice"
-          ],
+          "tags": ["backend", "microservice"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1747,10 +1605,7 @@
           "name": "microservice-2",
           "title": "Data Microservice",
           "description": "A microservice for data processing",
-          "tags": [
-            "backend",
-            "microservice"
-          ],
+          "tags": ["backend", "microservice"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1792,10 +1647,7 @@
           "name": "microservice-2",
           "title": "Data Microservice",
           "description": "A microservice for data processing",
-          "tags": [
-            "backend",
-            "microservice"
-          ],
+          "tags": ["backend", "microservice"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }
@@ -1837,10 +1689,7 @@
           "name": "microservice-2",
           "title": "Data Microservice",
           "description": "A microservice for data processing",
-          "tags": [
-            "backend",
-            "microservice"
-          ],
+          "tags": ["backend", "microservice"],
           "annotations": {
             "backstage.io/techdocs-ref": "dir:."
           }

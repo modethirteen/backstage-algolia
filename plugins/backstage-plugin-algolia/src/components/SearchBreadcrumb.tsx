@@ -1,11 +1,6 @@
 import { Breadcrumbs } from '@backstage/core-components';
 import { useAnalytics } from '@backstage/core-plugin-api';
-import {
-  Box,
-  Link,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
+import { Box, Link, Typography, makeStyles } from '@material-ui/core';
 import React, { useContext } from 'react';
 import { useBreadcrumb } from 'react-instantsearch';
 import { AlgoliaQueryIdContext } from './SearchContainer';
@@ -17,7 +12,7 @@ export interface BreadcrumbItem {
   value: string | null;
 }
 
-const useStyles = makeStyles(({
+const useStyles = makeStyles({
   box: {
     marginTop: 8,
   },
@@ -25,11 +20,15 @@ const useStyles = makeStyles(({
     textDecoration: 'underline',
     cursor: 'pointer',
   },
-}));
+});
 
-export const SearchBreadcrumb = (props: BreadcrumbProps & {
-  onLoad?: (renderState: BreadcrumbRenderState) => BreadcrumbRenderState | void;
-}) => {
+export const SearchBreadcrumb = (
+  props: BreadcrumbProps & {
+    onLoad?: (
+      renderState: BreadcrumbRenderState,
+    ) => BreadcrumbRenderState | void;
+  },
+) => {
   const { onLoad, ...rest } = props;
   const { queryId } = useContext(AlgoliaQueryIdContext);
   const analytics = useAnalytics();
@@ -46,9 +45,7 @@ export const SearchBreadcrumb = (props: BreadcrumbProps & {
   const lastSegment = items[items.length - 1];
   return (
     <Box className={classes.box} display="flex" alignItems="center">
-      <Typography variant="body2">
-        Searching in
-      </Typography>
+      <Typography variant="body2">Searching in</Typography>
       <span>&nbsp;</span>
       <Breadcrumbs color="primaryText">
         {segments.map(s => (
@@ -56,7 +53,7 @@ export const SearchBreadcrumb = (props: BreadcrumbProps & {
             className={classes.segment}
             key={s.value}
             variant="body2"
-            onClick={() => {              
+            onClick={() => {
               analytics.captureEvent('click', 'Refine search', {
                 attributes: {
                   pluginId: 'algolia',
@@ -72,7 +69,9 @@ export const SearchBreadcrumb = (props: BreadcrumbProps & {
             {s.label}
           </Link>
         ))}
-        {lastSegment && <Typography variant="body2">{lastSegment.label}</Typography> }
+        {lastSegment && (
+          <Typography variant="body2">{lastSegment.label}</Typography>
+        )}
       </Breadcrumbs>
     </Box>
   );

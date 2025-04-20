@@ -1,21 +1,23 @@
 import { useAnalytics } from '@backstage/core-plugin-api';
 import { Button } from '@material-ui/core';
-import React, { useContext } from "react";
-import { ClearRefinementsProps, useClearRefinements } from 'react-instantsearch';
+import React, { useContext } from 'react';
+import {
+  ClearRefinementsProps,
+  useClearRefinements,
+} from 'react-instantsearch';
 import { AlgoliaQueryIdContext } from './SearchContainer';
 import { ClearRefinementsRenderState } from 'instantsearch.js/es/connectors/clear-refinements/connectClearRefinements';
 
-export const ClearRefinementsButton = (props: ClearRefinementsProps & {
-  label: string;
-  onClear?: () => void;
-  onLoad?: (renderState: ClearRefinementsRenderState) => ClearRefinementsRenderState | void;
-}) => {
-  const {
-    label,
-    onClear,
-    onLoad,
-    ...rest
-  } = props;
+export const ClearRefinementsButton = (
+  props: ClearRefinementsProps & {
+    label: string;
+    onClear?: () => void;
+    onLoad?: (
+      renderState: ClearRefinementsRenderState,
+    ) => ClearRefinementsRenderState | void;
+  },
+) => {
+  const { label, onClear, onLoad, ...rest } = props;
   const analytics = useAnalytics();
   const { queryId } = useContext(AlgoliaQueryIdContext);
   let renderState = useClearRefinements(rest);
@@ -39,5 +41,9 @@ export const ClearRefinementsButton = (props: ClearRefinementsProps & {
       onClear();
     }
   };
-  return <Button variant="outlined" onClick={onClick} disabled={!canRefine}>{label}</Button>;
+  return (
+    <Button variant="outlined" onClick={onClick} disabled={!canRefine}>
+      {label}
+    </Button>
+  );
 };

@@ -10,12 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { IndexObjectWithIdAndTimestamp } from 'backstage-plugin-algolia-common';
-import React, {
-  ComponentType,
-  ReactNode,
-  useContext,
-  useEffect,
-} from 'react';
+import React, { ComponentType, ReactNode, useContext, useEffect } from 'react';
 import {
   Highlight,
   useInfiniteHits,
@@ -33,27 +28,31 @@ const tryGetPath = (location: string) => {
   } catch (_) {
     return null;
   }
-}
+};
 
-export const SearchHitList = (props: UseInfiniteHitsProps & {
-  highlight?: boolean;
-  HitTitleContent?: ComponentType<{
-    object: IndexObjectWithIdAndTimestamp,
-    promoted: boolean;
-    children: ReactNode,
-  }>;
-  HitDescriptionContent?: ComponentType<{
-    object: IndexObjectWithIdAndTimestamp,
-    promoted: boolean;
-    children: ReactNode,
-  }>;
-  onClick?: (data: {
-    event: React.MouseEvent<any, MouseEvent>;
-    object: IndexObjectWithIdAndTimestamp;
-    queryId: string;
-  }) => void;
-  onLoad?: (renderState: InfiniteHitsRenderState) => InfiniteHitsRenderState | void;
-}) => {
+export const SearchHitList = (
+  props: UseInfiniteHitsProps & {
+    highlight?: boolean;
+    HitTitleContent?: ComponentType<{
+      object: IndexObjectWithIdAndTimestamp;
+      promoted: boolean;
+      children: ReactNode;
+    }>;
+    HitDescriptionContent?: ComponentType<{
+      object: IndexObjectWithIdAndTimestamp;
+      promoted: boolean;
+      children: ReactNode;
+    }>;
+    onClick?: (data: {
+      event: React.MouseEvent<any, MouseEvent>;
+      object: IndexObjectWithIdAndTimestamp;
+      queryId: string;
+    }) => void;
+    onLoad?: (
+      renderState: InfiniteHitsRenderState,
+    ) => InfiniteHitsRenderState | void;
+  },
+) => {
   const {
     HitTitleContent,
     HitDescriptionContent,
@@ -75,7 +74,6 @@ export const SearchHitList = (props: UseInfiniteHitsProps & {
   const analytics = useAnalytics();
   const queryId = results?.queryID ?? '';
   useEffect(() => {
-
     // provide all companion search components with query id context
     setQueryId(queryId);
     if (results?.query) {
@@ -99,27 +97,33 @@ export const SearchHitList = (props: UseInfiniteHitsProps & {
           const titleContent = (
             <>
               <Typography variant="h6">
-                <AnalyticsContext attributes={{
-                  pluginId: 'algolia',
-                  extension: 'SearchHitList',
-                  algoliaQueryId: queryId,
-                  algoliaObjectId: objectID,
-                }}>
-                  <Link to={location} onClick={e => {
-                    sendEvent('click', h, 'Hit Clicked');
-                    if (onClick) {
-                      onClick({ event: e, object, queryId });
-                    }
-                  }}>
-                    {highlight ? <Highlight attribute="title" hit={h} /> : displayTitle ?? title}
+                <AnalyticsContext
+                  attributes={{
+                    pluginId: 'algolia',
+                    extension: 'SearchHitList',
+                    algoliaQueryId: queryId,
+                    algoliaObjectId: objectID,
+                  }}
+                >
+                  <Link
+                    to={location}
+                    onClick={e => {
+                      sendEvent('click', h, 'Hit Clicked');
+                      if (onClick) {
+                        onClick({ event: e, object, queryId });
+                      }
+                    }}
+                  >
+                    {highlight ? (
+                      <Highlight attribute="title" hit={h} />
+                    ) : (
+                      displayTitle ?? title
+                    )}
                   </Link>
                 </AnalyticsContext>
               </Typography>
               {path && (
-                <Typography
-                  variant="body2"
-                  gutterBottom
-                >
+                <Typography variant="body2" gutterBottom>
                   {path}
                 </Typography>
               )}
@@ -145,24 +149,30 @@ export const SearchHitList = (props: UseInfiniteHitsProps & {
           return (
             <ListItem key={objectID} divider>
               <ListItemText
-                primary={HitTitleContent
-                  ? <HitTitleContent object={object} promoted>{titleContent}</HitTitleContent>
-                  : titleContent
+                primary={
+                  HitTitleContent ? (
+                    <HitTitleContent object={object} promoted>
+                      {titleContent}
+                    </HitTitleContent>
+                  ) : (
+                    titleContent
+                  )
                 }
-                secondary={HitDescriptionContent
-                  ? <HitDescriptionContent object={object} promoted>{descriptionContent}</HitDescriptionContent>
-                  : descriptionContent
+                secondary={
+                  HitDescriptionContent ? (
+                    <HitDescriptionContent object={object} promoted>
+                      {descriptionContent}
+                    </HitDescriptionContent>
+                  ) : (
+                    descriptionContent
+                  )
                 }
               />
             </ListItem>
           );
         })}
       </List>
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center">
         <Button
           disabled={isLastPage}
           color="primary"
@@ -174,5 +184,5 @@ export const SearchHitList = (props: UseInfiniteHitsProps & {
         </Button>
       </Box>
     </>
-  )
+  );
 };

@@ -1,4 +1,7 @@
-import { PluginTaskScheduler, TaskScheduleDefinition } from '@backstage/backend-tasks';
+import {
+  PluginTaskScheduler,
+  TaskScheduleDefinition,
+} from '@backstage/backend-tasks';
 import { assertError } from '@backstage/errors';
 import { Logger } from 'winston';
 import { Indexer } from './Indexer';
@@ -22,7 +25,7 @@ interface PipelineTriggerResult {
 
 export interface PipelineTriggerInterface {
   getPipelineIds(): Promise<string[]>;
-  start(options?: { ids?: string[]; }): Promise<PipelineTriggerResult[]>;
+  start(options?: { ids?: string[] }): Promise<PipelineTriggerResult[]>;
 }
 
 export class PipelineTrigger implements PipelineTriggerInterface {
@@ -38,14 +41,17 @@ export class PipelineTrigger implements PipelineTriggerInterface {
     this.taskScheduler = taskScheduler;
   }
 
-  public addScheduledPipeline(options: {
-    id: string;
-    collatorFactory: CollatorFactory;
-    transformerFactories: TransformerFactory[];
-    indexer: Indexer;
-    done?: () => Promise<void>;
-  } & TaskScheduleDefinition) {
-    const { id, collatorFactory, transformerFactories, indexer, done } = options;
+  public addScheduledPipeline(
+    options: {
+      id: string;
+      collatorFactory: CollatorFactory;
+      transformerFactories: TransformerFactory[];
+      indexer: Indexer;
+      done?: () => Promise<void>;
+    } & TaskScheduleDefinition,
+  ) {
+    const { id, collatorFactory, transformerFactories, indexer, done } =
+      options;
     this.taskScheduler.scheduleTask({
       ...options,
       id: `algolia-pipeline:${id}`,
@@ -58,10 +64,15 @@ export class PipelineTrigger implements PipelineTriggerInterface {
         try {
           this.logger.info(`Pipeline algolia-pipeline:${id} starting`);
           await pipeline.execute();
-          this.logger.info(`Pipeline algolia-pipeline:${id} completed successfully`);
-        } catch(e) {
+          this.logger.info(
+            `Pipeline algolia-pipeline:${id} completed successfully`,
+          );
+        } catch (e) {
           assertError(e);
-          this.logger.error(`Pipeline algolia-pipeline:${id} failed to complete successfully:`, e);
+          this.logger.error(
+            `Pipeline algolia-pipeline:${id} failed to complete successfully:`,
+            e,
+          );
           return;
         }
         if (done) {
@@ -77,11 +88,12 @@ export class PipelineTrigger implements PipelineTriggerInterface {
       .map(({ id }) => id);
   }
 
-  public async start(options?: { ids?: string[]; }) {
+  public async start(options?: { ids?: string[] }) {
     const { ids = [] } = options ?? {};
     const results: PipelineTriggerResult[] = [];
-    const pipelineIds = (await this.getPipelineIds())
-      .filter(id => ids.length ? ids.includes(id) : true);
+    const pipelineIds = (await this.getPipelineIds()).filter(id =>
+      ids.length ? ids.includes(id) : true,
+    );
     for (const id of pipelineIds) {
       try {
         await this.taskScheduler.triggerTask(id);

@@ -7,7 +7,9 @@ export abstract class TransformerBase extends Transform {
     super({ objectMode: true });
   }
 
-  public abstract transform(result: PipelineResult): Promise<PipelineResult | undefined>;
+  public abstract transform(
+    result: PipelineResult,
+  ): Promise<PipelineResult | undefined>;
 
   public abstract finalize(): Promise<void>;
 

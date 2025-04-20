@@ -19,7 +19,7 @@ const createApp = async () => {
     },
   });
   return express().use(router);
-}
+};
 
 describe('createRouter', () => {
   beforeEach(async () => {
@@ -45,8 +45,8 @@ describe('createRouter', () => {
       getPipelineIds.mockResolvedValue(['foo', 'bar', 'xyzzy']);
       const response = await request(app).get(endpoint);
       expect(response.status).toEqual(200);
-      expect(response.body).toEqual({ pipelines: ['foo', 'bar', 'xyzzy'] });     
-    })
+      expect(response.body).toEqual({ pipelines: ['foo', 'bar', 'xyzzy'] });
+    });
   });
 
   describe('POST /pipelines', () => {
@@ -67,13 +67,16 @@ describe('createRouter', () => {
     });
 
     it('returns requested pipelines if pipelines registered', async () => {
-      const results = [{
-        id: 'plugh',
-        status: 'ok',
-      }, {
-        id: 'baz',
-        status: 'ok',       
-      }];
+      const results = [
+        {
+          id: 'plugh',
+          status: 'ok',
+        },
+        {
+          id: 'baz',
+          status: 'ok',
+        },
+      ];
       start.mockResolvedValue(results);
       const response = await request(app)
         .post(endpoint)
@@ -83,55 +86,68 @@ describe('createRouter', () => {
     });
 
     it('trigger all pipelines and return all pipelines', async () => {
-      const results = [{
-        id: 'plugh',
-        status: 'ok',
-      }, {
-        id: 'baz',
-        status: 'ok',
-      }, {
-        id: 'fred',
-        status: 'ok',
-      }, {
-        id: 'bar',
-        status: 'ok',
-      }];
+      const results = [
+        {
+          id: 'plugh',
+          status: 'ok',
+        },
+        {
+          id: 'baz',
+          status: 'ok',
+        },
+        {
+          id: 'fred',
+          status: 'ok',
+        },
+        {
+          id: 'bar',
+          status: 'ok',
+        },
+      ];
       start.mockResolvedValue(results);
-      const response = await request(app)
-        .post(endpoint);
+      const response = await request(app).post(endpoint);
       expect(response.status).toEqual(200);
       expect(response.body).toEqual({ pipelines: results });
     });
 
     it('trigger some pipelines and return pipelines with errors', async () => {
-      const results = [{
-        id: 'foo',
-        status: 'error',
-        error: new PipelineTriggerError('foo', 'bar'),
-      }, {
-        id: 'xyzzy',
-        status: 'error',
-        error: new PipelineTriggerError('xyzzy', 'plugh'),
-      }, {
-        id: 'fred',
-        status: 'ok',
-      }];
+      const results = [
+        {
+          id: 'foo',
+          status: 'error',
+          error: new PipelineTriggerError('foo', 'bar'),
+        },
+        {
+          id: 'xyzzy',
+          status: 'error',
+          error: new PipelineTriggerError('xyzzy', 'plugh'),
+        },
+        {
+          id: 'fred',
+          status: 'ok',
+        },
+      ];
       start.mockResolvedValue(results);
-      const response = await request(app)
-        .post(endpoint);
+      const response = await request(app).post(endpoint);
       expect(response.status).toEqual(207);
-      expect(response.body).toEqual({ pipelines: [{
-        id: 'foo',
-        status: 'error',
-        message: 'bar',
-      }, {
-        id: 'xyzzy',
-        status: 'error',
-        message: 'plugh',
-      }, {
-        id: 'fred',
-        status: 'ok',
-      }]});
+      expect(response.body).toEqual({
+        pipelines: [
+          {
+            id: 'foo',
+            status: 'error',
+            message: 'bar',
+          },
+          {
+            id: 'xyzzy',
+            status: 'error',
+            message: 'plugh',
+          },
+          {
+            id: 'fred',
+            status: 'ok',
+          },
+        ],
+      });
     });
 
     it('returns bad request if payload does not contain list', async () => {
@@ -167,11 +183,14 @@ describe('createRouter', () => {
           userToken: 'qux',
         });
       expect(response.status).toEqual(202);
-      expect(insightsClient).toHaveBeenCalledWith('foo', expect.objectContaining({
-        data: 'bar',
-        authenticatedUserToken: 'baz',
-        userToken: 'qux',
-      }));
+      expect(insightsClient).toHaveBeenCalledWith(
+        'foo',
+        expect.objectContaining({
+          data: 'bar',
+          authenticatedUserToken: 'baz',
+          userToken: 'qux',
+        }),
+      );
     });
 
     it('returns bad request if insightsMethod is missing', async () => {
@@ -198,71 +217,59 @@ describe('createRouter', () => {
     });
 
     it('returns bad request if payload is missing', async () => {
-      const response = await request(app)
-        .post(endpoint)
-        .send({
-          insightsMethod: 'foo',
-          authenticatedUserToken: 'baz',
-          userToken: 'qux',
-        });
+      const response = await request(app).post(endpoint).send({
+        insightsMethod: 'foo',
+        authenticatedUserToken: 'baz',
+        userToken: 'qux',
+      });
       expect(response.status).toEqual(400);
     });
 
     it('returns bad request if payload is not an object', async () => {
-      const response = await request(app)
-        .post(endpoint)
-        .send({
-          insightsMethod: 'foo',
-          payload: 'bar',
-          authenticatedUserToken: 'baz',
-          userToken: 'qux',
-        });
+      const response = await request(app).post(endpoint).send({
+        insightsMethod: 'foo',
+        payload: 'bar',
+        authenticatedUserToken: 'baz',
+        userToken: 'qux',
+      });
       expect(response.status).toEqual(400);
     });
 
     it('returns bad request if payload is missing', async () => {
-      const response = await request(app)
-        .post(endpoint)
-        .send({
-          insightsMethod: 'foo',
-          authenticatedUserToken: 'baz',
-          userToken: 'qux',
-        });
+      const response = await request(app).post(endpoint).send({
+        insightsMethod: 'foo',
+        authenticatedUserToken: 'baz',
+        userToken: 'qux',
+      });
       expect(response.status).toEqual(400);
     });
 
     it('returns bad request if userToken is missing', async () => {
-      const response = await request(app)
-        .post(endpoint)
-        .send({
-          insightsMethod: 'foo',
-          payload: 'bar',
-          authenticatedUserToken: 'baz',
-        });
+      const response = await request(app).post(endpoint).send({
+        insightsMethod: 'foo',
+        payload: 'bar',
+        authenticatedUserToken: 'baz',
+      });
       expect(response.status).toEqual(400);
     });
 
     it('returns bad request if userToken is not a string or number', async () => {
-      const response = await request(app)
-        .post(endpoint)
-        .send({
-          insightsMethod: 'foo',
-          payload: 'bar',
-          authenticatedUserToken: 'baz',
-          userToken: true,
-        });
+      const response = await request(app).post(endpoint).send({
+        insightsMethod: 'foo',
+        payload: 'bar',
+        authenticatedUserToken: 'baz',
+        userToken: true,
+      });
       expect(response.status).toEqual(400);
     });
 
     it('returns bad request if authenticatedUserToken is not a string or number', async () => {
-      const response = await request(app)
-        .post(endpoint)
-        .send({
-          insightsMethod: 'foo',
-          payload: 'bar',
-          authenticatedUserToken: true,
-          userToken: 'qux',
-        });
+      const response = await request(app).post(endpoint).send({
+        insightsMethod: 'foo',
+        payload: 'bar',
+        authenticatedUserToken: true,
+        userToken: 'qux',
+      });
       expect(response.status).toEqual(400);
     });
   });
@@ -284,7 +291,9 @@ describe('createRouter', () => {
     });
 
     it('proxies search requests to Algolia API', async () => {
-      const queryResultsHandler = jest.fn().mockResolvedValue({ results: ['qux'] });
+      const queryResultsHandler = jest
+        .fn()
+        .mockResolvedValue({ results: ['qux'] });
       search.mockResolvedValue({ results: ['bar'] });
       const router = await createRouter({
         trigger: { start, getPipelineIds },
@@ -303,7 +312,9 @@ describe('createRouter', () => {
         });
       expect(response.status).toEqual(200);
       expect(response.body).toEqual({ results: ['qux'] });
-      expect(queryResultsHandler).toHaveBeenCalledWith(['bar'], { plugh: 'xyzzy' });
+      expect(queryResultsHandler).toHaveBeenCalledWith(['bar'], {
+        plugh: 'xyzzy',
+      });
       expect(search).toHaveBeenCalledWith(['foo']);
     });
   });

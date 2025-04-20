@@ -2,7 +2,7 @@ import {
   HostDiscovery,
   ServerTokenManager,
   createServiceBuilder,
-  loadBackendConfig
+  loadBackendConfig,
 } from '@backstage/backend-common';
 import { TaskScheduler } from '@backstage/backend-tasks';
 import { Server } from 'http';
@@ -13,7 +13,7 @@ import {
   Indexer,
   PipelineTrigger,
   TechDocsTransformerFactory,
-  TechDocsCollatorFactory
+  TechDocsCollatorFactory,
 } from '../src/pipelines';
 import { createRouter } from '../src/service/router';
 
@@ -33,9 +33,7 @@ export async function startStandaloneServer(
   const tokenManager = yn(process.env.PLUGIN_BACKEND_AUTH, { default: false })
     ? ServerTokenManager.fromConfig(config, { logger })
     : ServerTokenManager.noop();
-  const taskScheduler = TaskScheduler
-    .fromConfig(config)
-    .forPlugin('algolia');
+  const taskScheduler = TaskScheduler.fromConfig(config).forPlugin('algolia');
   const trigger = new PipelineTrigger({
     logger,
     taskScheduler,
@@ -47,9 +45,7 @@ export async function startStandaloneServer(
       logger,
       tokenManager,
     }),
-    transformerFactories: [
-      TechDocsTransformerFactory.fromConfig(config),
-    ],
+    transformerFactories: [TechDocsTransformerFactory.fromConfig(config)],
     indexer: Indexer.fromConfig(config, {
       batchSize: 10,
       index: 'techdocs',

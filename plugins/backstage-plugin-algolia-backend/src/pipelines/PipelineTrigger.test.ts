@@ -35,27 +35,35 @@ describe('PipelineTrigger', () => {
   });
 
   it('can trigger pipelines', async () => {
-    getScheduledTasks.mockResolvedValue([{
-      id: 'algolia-pipeline:foo'
-    }, {
-      id: 'algolia-pipeline:bar'
-    }, {
-      id: 'fred'
-    }]);
+    getScheduledTasks.mockResolvedValue([
+      {
+        id: 'algolia-pipeline:foo',
+      },
+      {
+        id: 'algolia-pipeline:bar',
+      },
+      {
+        id: 'fred',
+      },
+    ]);
     await trigger.start();
     expect(getScheduledTasks).toHaveBeenCalled();
     expect(triggerTask).toHaveBeenCalledTimes(2);
   });
 
   it('can trigger pipelines by ids', async () => {
-    getScheduledTasks.mockResolvedValue([{
-      id: 'algolia-pipeline:foo'
-    }, {
-      id: 'algolia-pipeline:bar'
-    }, {
-      id: 'fred'
-    }]);
-    await trigger.start({ ids: [ 'algolia-pipeline:bar' ]});
+    getScheduledTasks.mockResolvedValue([
+      {
+        id: 'algolia-pipeline:foo',
+      },
+      {
+        id: 'algolia-pipeline:bar',
+      },
+      {
+        id: 'fred',
+      },
+    ]);
+    await trigger.start({ ids: ['algolia-pipeline:bar'] });
     expect(getScheduledTasks).toHaveBeenCalled();
     expect(triggerTask).toHaveBeenCalledTimes(1);
   });

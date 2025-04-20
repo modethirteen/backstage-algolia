@@ -1,6 +1,6 @@
 import React from 'react';
 import { Progress } from '@backstage/core-components';
-import { useInstantSearch } from "react-instantsearch";
+import { useInstantSearch } from 'react-instantsearch';
 
 export const SearchProgress = () => {
   const { status } = useInstantSearch();

@@ -1,14 +1,12 @@
 import { useAnalytics } from '@backstage/core-plugin-api';
-import {
-  Chip,
-  Typography,
-  alpha,
-  makeStyles,
-} from '@material-ui/core';
+import { Chip, Typography, alpha, makeStyles } from '@material-ui/core';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import { TreeItem, TreeView } from '@material-ui/lab';
 import React, { useContext, useMemo } from 'react';
-import { useHierarchicalMenu, UseHierarchicalMenuProps } from 'react-instantsearch';
+import {
+  useHierarchicalMenu,
+  UseHierarchicalMenuProps,
+} from 'react-instantsearch';
 import CheckedIcon from '../icons/checked.icon.svg';
 import UncheckedIcon from '../icons/unchecked.icon.svg';
 import { AlgoliaQueryIdContext } from './SearchContainer';
@@ -79,33 +77,41 @@ const buildTree = (options: {
       label={
         <Typography variant="body2" noWrap>
           {item.label}
-          <Chip className={classes.chip} variant="outlined" size="small" label={item.count} />
+          <Chip
+            className={classes.chip}
+            variant="outlined"
+            size="small"
+            label={item.count}
+          />
         </Typography>
       }
       icon={item.isRefined ? <CheckedIcon /> : undefined}
     >
-      {Array.isArray(item.data) ? item.data.map(i => buildTree({
-        item: i,
-        nodeIds,
-        refinedNodeIds,
-        classes,
-      })) : null}
+      {Array.isArray(item.data)
+        ? item.data.map(i =>
+            buildTree({
+              item: i,
+              nodeIds,
+              refinedNodeIds,
+              classes,
+            }),
+          )
+        : null}
     </TreeItem>
   );
 };
 
-export const HierarchalSearchRefinement = (props: UseHierarchicalMenuProps & {
-  label: string;
-  onRefinement?: (value: string) => void;
-  onLoad?: (renderState: HierarchicalMenuRenderState) => HierarchicalMenuRenderState | void;
-}) => {
+export const HierarchalSearchRefinement = (
+  props: UseHierarchicalMenuProps & {
+    label: string;
+    onRefinement?: (value: string) => void;
+    onLoad?: (
+      renderState: HierarchicalMenuRenderState,
+    ) => HierarchicalMenuRenderState | void;
+  },
+) => {
   const classes = useStyles();
-  const {
-    label,
-    onRefinement,
-    onLoad,
-    ...rest
-  } = props;
+  const { label, onRefinement, onLoad, ...rest } = props;
   let renderState = useHierarchicalMenu(rest);
   if (onLoad) {
     const onLoadResult = onLoad({ ...renderState });
@@ -119,17 +125,21 @@ export const HierarchalSearchRefinement = (props: UseHierarchicalMenuProps & {
   const { tree, nodeIds, refinedNodeIds } = useMemo(() => {
     const nodeIds: string[] = [];
     const refinedNodeIds: string[] = [];
-    const tree = items.map(i => buildTree({
-      item: i,
-      nodeIds,
-      refinedNodeIds,
-      classes,
-    }));
+    const tree = items.map(i =>
+      buildTree({
+        item: i,
+        nodeIds,
+        refinedNodeIds,
+        classes,
+      }),
+    );
     return { tree, nodeIds, refinedNodeIds };
   }, [items]);
   return (
     <>
-      <Typography variant="body1" className={classes.label}>{label}</Typography>
+      <Typography variant="body1" className={classes.label}>
+        {label}
+      </Typography>
       {nodeIds.length > 0 && (
         <TreeView
           expanded={nodeIds}
@@ -137,15 +147,21 @@ export const HierarchalSearchRefinement = (props: UseHierarchicalMenuProps & {
           defaultCollapseIcon={<CheckedIcon />}
           defaultEndIcon={<UncheckedIcon />}
           onNodeSelect={(_: any, nodeId: string) => {
-            analytics.captureEvent('click', refinedNodeIds.includes(nodeId) ? 'Remove search refinement' : 'Refine search', {
-              attributes: {
-                pluginId: 'algolia',
-                extension: 'HierarchalSearchRefinement',
-                algoliaQueryId: queryId,
-                algoliaSearchRefinementLabel: label,
-                algoliaSearchRefinementValue: nodeId,
+            analytics.captureEvent(
+              'click',
+              refinedNodeIds.includes(nodeId)
+                ? 'Remove search refinement'
+                : 'Refine search',
+              {
+                attributes: {
+                  pluginId: 'algolia',
+                  extension: 'HierarchalSearchRefinement',
+                  algoliaQueryId: queryId,
+                  algoliaSearchRefinementLabel: label,
+                  algoliaSearchRefinementValue: nodeId,
+                },
               },
-            });
+            );
             refine(nodeId);
             if (onRefinement) {
               onRefinement(nodeId);
@@ -155,7 +171,9 @@ export const HierarchalSearchRefinement = (props: UseHierarchicalMenuProps & {
           {tree}
         </TreeView>
       )}
-      {nodeIds.length <= 0 && <em>Not available with selected filters or query</em>}
+      {nodeIds.length <= 0 && (
+        <em>Not available with selected filters or query</em>
+      )}
     </>
   );
 };

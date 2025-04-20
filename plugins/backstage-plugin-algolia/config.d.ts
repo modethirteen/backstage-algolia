@@ -1,6 +1,5 @@
 export interface Config {
   algolia: {
-
     /**
      * @visibility frontend
      */

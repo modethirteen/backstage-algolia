@@ -1,25 +1,28 @@
 import { ResponseError } from '@backstage/errors';
 import { SearchProxyApi } from './SearchProxyApi';
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api';
-import { InsightsProxyRequest, SearchProxyRequest } from 'backstage-plugin-algolia-common';
+import {
+  InsightsProxyRequest,
+  SearchProxyRequest,
+} from 'backstage-plugin-algolia-common';
 import { InsightsEvent, InsightsMethod } from 'instantsearch.js';
 
 export class SearchProxyClient implements SearchProxyApi {
   private readonly discoveryApi: DiscoveryApi;
   private readonly fetchApi: FetchApi;
 
-  public constructor(deps: {
-    discoveryApi: DiscoveryApi;
-    fetchApi: FetchApi;
-  }) {
+  public constructor(deps: { discoveryApi: DiscoveryApi; fetchApi: FetchApi }) {
     const { discoveryApi, fetchApi } = deps;
     this.discoveryApi = discoveryApi;
     this.fetchApi = fetchApi;
   }
 
-  public async search(request: SearchProxyRequest, options?: {
-    skipEmptyQueries?: boolean;
-  }) {
+  public async search(
+    request: SearchProxyRequest,
+    options?: {
+      skipEmptyQueries?: boolean;
+    },
+  ) {
     const { skipEmptyQueries = false } = options ?? {};
     const { requests } = request;
     if (skipEmptyQueries && requests.every(({ params }) => !params?.query)) {

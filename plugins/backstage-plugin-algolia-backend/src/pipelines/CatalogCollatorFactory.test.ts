@@ -38,19 +38,17 @@ describe('CatalogCollatorFactory', () => {
       rest.get('http://backend.example.com/entities', (req, res, ctx) => {
         const filter = req.url.searchParams.get('filter');
         const kinds = filter
-          ? filter.match(/kind=([^,]+)/g)?.map(m => m.split('=')[1].toLocaleLowerCase('en-US')) ?? []
+          ? filter
+              .match(/kind=([^,]+)/g)
+              ?.map(m => m.split('=')[1].toLocaleLowerCase('en-US')) ?? []
           : [];
         const entities = kinds.length
-          ? mockEntities.filter(m => kinds.includes(m.kind.toLocaleLowerCase('en-US')))
+          ? mockEntities.filter(m =>
+              kinds.includes(m.kind.toLocaleLowerCase('en-US')),
+            )
           : mockEntities;
-        const offset = parseInt(
-          req.url.searchParams.get('offset') || '0',
-          10,
-        );
-        const limit = parseInt(
-          req.url.searchParams.get('limit') || '500',
-          10,
-        );
+        const offset = parseInt(req.url.searchParams.get('offset') || '0', 10);
+        const limit = parseInt(req.url.searchParams.get('limit') || '500', 10);
         if (limit === 50) {
           if (offset === 0) {
             return res(ctx.status(200), ctx.json(Array(50).fill({})));
@@ -66,30 +64,44 @@ describe('CatalogCollatorFactory', () => {
   });
 
   it('fetches from the configured catalog service', async () => {
-    const factory = CatalogCollatorFactory.fromConfig(new ConfigReader({}), options);
-    const results = await testCollatingTransformingPipeline({ collatorFactory: factory });
+    const factory = CatalogCollatorFactory.fromConfig(
+      new ConfigReader({}),
+      options,
+    );
+    const results = await testCollatingTransformingPipeline({
+      collatorFactory: factory,
+    });
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
     expect(results).toHaveLength(13);
     expect(results).toEqual(expect.arrayContaining(mockPipelineResults));
   });
 
   it('fetches configured kinds from the configured catalog service', async () => {
-    const factory = CatalogCollatorFactory.fromConfig(new ConfigReader({
-      algolia: {
-        backend: {
-          indexes: {
-            catalog: {
-              kinds: ['system'],
+    const factory = CatalogCollatorFactory.fromConfig(
+      new ConfigReader({
+        algolia: {
+          backend: {
+            indexes: {
+              catalog: {
+                kinds: ['system'],
+              },
             },
           },
         },
-      },
-    }), options);
-    const results = await testCollatingTransformingPipeline({ collatorFactory: factory });
+      }),
+      options,
+    );
+    const results = await testCollatingTransformingPipeline({
+      collatorFactory: factory,
+    });
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
     expect(results).toHaveLength(2);
-    expect(results).toEqual(expect.arrayContaining(mockPipelineResults
-      .filter(({ entity }) => compare(entity.kind, 'system'))
-    ));
+    expect(results).toEqual(
+      expect.arrayContaining(
+        mockPipelineResults.filter(({ entity }) =>
+          compare(entity.kind, 'system'),
+        ),
+      ),
+    );
   });
 });

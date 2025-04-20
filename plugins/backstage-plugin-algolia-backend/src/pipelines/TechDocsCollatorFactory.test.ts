@@ -36,25 +36,25 @@ describe('TechDocsCollatorFactory', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     factory = TechDocsCollatorFactory.fromConfig(new ConfigReader({}), options);
-    const entities = mockEntities.filter(e => e.metadata.annotations?.['backstage.io/techdocs-ref']);
+    const entities = mockEntities.filter(
+      e => e.metadata.annotations?.['backstage.io/techdocs-ref'],
+    );
     worker.use(
-      ...entities.map(e => rest.get(
-        `http://backend.example.com/static/docs/default/${e.kind}/${e.metadata.name}/search/search_index.json`,
-        (_, res, ctx) => res(ctx.status(200), ctx.json(mockSearchDocIndex)),
-      )),
-      ...entities.map(e => rest.get(
-        `http://backend.example.com/static/docs/default/${e.kind}/${e.metadata.name}/techdocs_metadata.json`,
-        (_, res, ctx) => res(ctx.status(200), ctx.json({ foo: 'bar' }))
-      )),
+      ...entities.map(e =>
+        rest.get(
+          `http://backend.example.com/static/docs/default/${e.kind}/${e.metadata.name}/search/search_index.json`,
+          (_, res, ctx) => res(ctx.status(200), ctx.json(mockSearchDocIndex)),
+        ),
+      ),
+      ...entities.map(e =>
+        rest.get(
+          `http://backend.example.com/static/docs/default/${e.kind}/${e.metadata.name}/techdocs_metadata.json`,
+          (_, res, ctx) => res(ctx.status(200), ctx.json({ foo: 'bar' })),
+        ),
+      ),
       rest.get('http://backend.example.com/entities', (req, res, ctx) => {
-        const offset = parseInt(
-          req.url.searchParams.get('offset') || '0',
-          10,
-        );
-        const limit = parseInt(
-          req.url.searchParams.get('limit') || '500',
-          10,
-        );
+        const offset = parseInt(req.url.searchParams.get('offset') || '0', 10);
+        const limit = parseInt(req.url.searchParams.get('limit') || '500', 10);
         if (limit === 50) {
           if (offset === 0) {
             return res(ctx.status(200), ctx.json(Array(50).fill({})));
@@ -70,7 +70,9 @@ describe('TechDocsCollatorFactory', () => {
   });
 
   it('fetches from the configured catalog and techdocs services', async () => {
-    const results = await testCollatingTransformingPipeline({ collatorFactory: factory });
+    const results = await testCollatingTransformingPipeline({
+      collatorFactory: factory,
+    });
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('catalog');
     expect(mockDiscoveryApi.getBaseUrl).toHaveBeenCalledWith('techdocs');
     expect(results).toHaveLength(24);

@@ -23,20 +23,25 @@ class TechDocsTransformer extends TransformerBase {
     this.locationTemplate = locationTemplate;
   }
 
-  public async transform(result: PipelineResult): Promise<PipelineResult | undefined> {
+  public async transform(
+    result: PipelineResult,
+  ): Promise<PipelineResult | undefined> {
     result = {
       ...result,
-      entity: this.entityProvider ? await this.entityProvider(result) : result.entity,
+      entity: this.entityProvider
+        ? await this.entityProvider(result)
+        : result.entity,
     };
     const { indexObject, entity } = result;
-    const techdocsEntityRef = entity.metadata.annotations?.['backstage.io/techdocs-entity'];
+    const techdocsEntityRef =
+      entity.metadata.annotations?.['backstage.io/techdocs-entity'];
     const techdocsEntityInfo = techdocsEntityRef
       ? parseEntityRef(techdocsEntityRef)
       : {
-        kind: entity.kind,
-        namespace: entity.metadata.namespace ?? 'default',
-        name: entity.metadata.name,
-      };
+          kind: entity.kind,
+          namespace: entity.metadata.namespace ?? 'default',
+          name: entity.metadata.name,
+        };
     let location = this.locationTemplate;
     for (const [key, value] of Object.entries({
       ...techdocsEntityInfo,
@@ -59,14 +64,22 @@ class TechDocsTransformer extends TransformerBase {
 }
 
 export class TechDocsTransformerFactory implements TransformerFactory {
-  public static fromConfig(config: Config, options?: {
-    entityProviderFactory?: EntityProviderFactoryInterface;
-  }) {
+  public static fromConfig(
+    config: Config,
+    options?: {
+      entityProviderFactory?: EntityProviderFactoryInterface;
+    },
+  ) {
     const { entityProviderFactory } = options ?? {};
     const baseUrl = config.getString('app.baseUrl');
-    const locationTemplate = config.getOptionalString('algolia.backend.indexes.techdocs.locationTemplate')
-      ?? url.resolve(baseUrl, '/docs/:namespace/:kind/:name/:path');
-    return new TechDocsTransformerFactory({ entityProviderFactory, locationTemplate });
+    const locationTemplate =
+      config.getOptionalString(
+        'algolia.backend.indexes.techdocs.locationTemplate',
+      ) ?? url.resolve(baseUrl, '/docs/:namespace/:kind/:name/:path');
+    return new TechDocsTransformerFactory({
+      entityProviderFactory,
+      locationTemplate,
+    });
   }
 
   private readonly entityProviderFactory?: EntityProviderFactoryInterface;

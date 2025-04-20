@@ -21,12 +21,15 @@ export class Pipeline {
   }
 
   public async execute() {
-    const transformers = await Promise.all(this.transformerFactories.map(b => b.newTransformer()));
+    const transformers = await Promise.all(
+      this.transformerFactories.map(b => b.newTransformer()),
+    );
     const collator = await this.collatorFactory.newCollator();
     return new Promise<void>((resolve, reject) => {
       try {
         pipeline(
-          [collator, ...transformers, this.indexer], (error: NodeJS.ErrnoException | null) => {
+          [collator, ...transformers, this.indexer],
+          (error: NodeJS.ErrnoException | null) => {
             if (error) {
               reject(error);
             } else {
@@ -34,7 +37,7 @@ export class Pipeline {
             }
           },
         );
-      } catch(e) {
+      } catch (e) {
         reject(e);
       }
     });

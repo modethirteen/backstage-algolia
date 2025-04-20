@@ -1,7 +1,6 @@
 export interface Config {
   algolia: {
     backend: {
-      
       /**
        * @visibility secret
        */
@@ -34,7 +33,7 @@ export interface Config {
       };
       maxObjectSizeBytes: number;
       chunk: boolean;
-    }
+    };
     insights?: boolean;
     index: string;
   };

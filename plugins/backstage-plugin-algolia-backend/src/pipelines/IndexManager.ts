@@ -14,7 +14,7 @@ interface Expiration {
 export interface IndexManagerInterface {
   readonly searchIndex: SearchIndex;
   readonly expirations: Expiration[];
-  clean(): Promise<void>;  
+  clean(): Promise<void>;
 }
 
 export interface IndexManagerOptions {
@@ -30,18 +30,22 @@ export class IndexManager implements IndexManagerInterface {
   public static fromConfig(config: Config, options: IndexManagerOptions) {
     const { date, index, logger, filter } = options;
     const client = ClientFactory.fromConfig(config).newSearchClient();
-    const expirations: Expiration[] = config.getOptionalConfigArray(`algolia.backend.indexes.${index}.expirations`)
-      ?.map(c => ({
-        source: c.get('source'),
-        ttl: toSeconds(parse(c.get('ttl')), date),
-      })) ?? [];
+    const expirations: Expiration[] =
+      config
+        .getOptionalConfigArray(`algolia.backend.indexes.${index}.expirations`)
+        ?.map(c => ({
+          source: c.get('source'),
+          ttl: toSeconds(parse(c.get('ttl')), date),
+        })) ?? [];
     return new IndexManager({
       expirations: filter?.sources
         ? expirations.filter(({ source }) => filter.sources?.includes(source))
         : expirations,
       logger,
       now: new Date(),
-      searchIndex: client.initIndex(config.getString(`algolia.backend.indexes.${index}.name`)),
+      searchIndex: client.initIndex(
+        config.getString(`algolia.backend.indexes.${index}.name`),
+      ),
     });
   }
 
@@ -68,19 +72,22 @@ export class IndexManager implements IndexManagerInterface {
       await this.searchIndex.browseObjects({
         query: '',
         filters: `source:${source}`,
-        attributesToRetrieve: [
-          'timestamp',
-        ],
+        attributesToRetrieve: ['timestamp'],
         batch: batch => {
-          const expiredObjectIDs = batch.filter(o => {
-            const { objectID, timestamp } = o as IndexObjectWithIdAndTimestamp;
-            const indexDate = new Date(timestamp);
-            if (!isValid(indexDate)) {
-              this.logger.warn(`Algolia object ${objectID} does not have a valid indexing timestamp and cannot be expired or cleaned`);
-              return false;
-            }
-            return differenceInSeconds(this.now, indexDate) >= ttl;
-          }).map(o => o.objectID);
+          const expiredObjectIDs = batch
+            .filter(o => {
+              const { objectID, timestamp } =
+                o as IndexObjectWithIdAndTimestamp;
+              const indexDate = new Date(timestamp);
+              if (!isValid(indexDate)) {
+                this.logger.warn(
+                  `Algolia object ${objectID} does not have a valid indexing timestamp and cannot be expired or cleaned`,
+                );
+                return false;
+              }
+              return differenceInSeconds(this.now, indexDate) >= ttl;
+            })
+            .map(o => o.objectID);
           this.searchIndex.deleteObjects(expiredObjectIDs);
         },
       });

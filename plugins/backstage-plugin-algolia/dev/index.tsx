@@ -13,9 +13,7 @@ import {
   algoliaPlugin,
 } from '../src/plugin';
 
-const SearchWrapper = (props: {
-  children: ReactNode;
-}) => {
+const SearchWrapper = (props: { children: ReactNode }) => {
   const { children } = props;
   return (
     <SearchContainer
@@ -27,7 +25,7 @@ const SearchWrapper = (props: {
     >
       {children}
     </SearchContainer>
-  )
+  );
 };
 
 createDevApp()
@@ -55,7 +53,11 @@ createDevApp()
                   <SearchRefinement label="Source" attribute="source" />
                 </Paper>
                 <Paper>
-                  <SearchRefinement label="Tags" attribute="tags" includeSearch={true} />
+                  <SearchRefinement
+                    label="Tags"
+                    attribute="tags"
+                    includeSearch={true}
+                  />
                 </Paper>
                 <Paper>
                   <HierarchalSearchRefinement
@@ -70,9 +72,7 @@ createDevApp()
                 </Paper>
               </Grid>
               <Grid item lg={9} md={8} sm={12} xs={12}>
-                <SearchHitList
-                  onClick={e => console.log(e)}
-                />
+                <SearchHitList onClick={e => console.log(e)} />
               </Grid>
             </SearchWrapper>
           </Grid>

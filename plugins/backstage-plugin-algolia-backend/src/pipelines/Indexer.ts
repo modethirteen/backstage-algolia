@@ -1,7 +1,10 @@
 import { Config } from '@backstage/config';
 import { assertError } from '@backstage/errors';
 import { SearchIndex } from 'algoliasearch';
-import { IndexObject, IndexObjectWithIdAndTimestamp } from 'backstage-plugin-algolia-common';
+import {
+  IndexObject,
+  IndexObjectWithIdAndTimestamp,
+} from 'backstage-plugin-algolia-common';
 import crypto from 'crypto';
 import { Writable } from 'stream';
 import { Logger } from 'winston';
@@ -24,9 +27,13 @@ export class Indexer extends Writable {
       batchSize,
       chunk: config.getOptionalBoolean('algolia.backend.chunk') ?? false,
       logger,
-      maxObjectSizeBytes: config.getNumber('algolia.backend.maxObjectSizeBytes'),
+      maxObjectSizeBytes: config.getNumber(
+        'algolia.backend.maxObjectSizeBytes',
+      ),
       now: new Date(),
-      searchIndex: client.initIndex(config.getString(`algolia.backend.indexes.${index}.name`)),
+      searchIndex: client.initIndex(
+        config.getString(`algolia.backend.indexes.${index}.name`),
+      ),
     });
   }
 
@@ -47,7 +54,8 @@ export class Indexer extends Writable {
     searchIndex: SearchIndex;
   }) {
     super({ objectMode: true });
-    const { batchSize, chunk, logger, maxObjectSizeBytes, now, searchIndex } = options;
+    const { batchSize, chunk, logger, maxObjectSizeBytes, now, searchIndex } =
+      options;
     this.batchSize = batchSize;
     this.chunk = chunk;
     this.logger = logger;
@@ -101,56 +109,73 @@ export class Indexer extends Writable {
   }
 
   private async index(objects: IndexObject[]): Promise<void> {
-    this.logger.debug(`Preparing to send ${objects.length} object(s) to Algolia`);
+    this.logger.debug(
+      `Preparing to send ${objects.length} object(s) to Algolia`,
+    );
     const filteredObjects = objects
       .map(o => {
         const results: IndexObjectWithIdAndTimestamp[] = [];
         try {
-          const { location  } = o;
+          const { location } = o;
           if (o.text && this.chunk) {
             let { text } = o;
             let chunks = 0;
             while (isTextRemaining(text)) {
-
               // extract chunk without splitting words
-              const chunk = text.replace(/^(.{1000}[^\s]*).*/, '$1');          
+              const chunk = text.replace(/^(.{1000}[^\s]*).*/, '$1');
               text = text.substring(chunk.length);
 
               // ensure object is unique by original location and chunk cursor. the location
               // is the distinct field that unifies chunks in the index under one search result
-              results.push(this.newIndexObjectWithIdAndTimestamp(location + chunks, {
-                ...o,
-                text: chunk,
-              }));
+              results.push(
+                this.newIndexObjectWithIdAndTimestamp(location + chunks, {
+                  ...o,
+                  text: chunk,
+                }),
+              );
               chunks++;
             }
           } else {
             results.push(this.newIndexObjectWithIdAndTimestamp(location, o));
           }
-        } catch(e) {
+        } catch (e) {
           assertError(e);
-          this.logger.warn(`Object with location ${o.location ?? 'unknown'} could not be prepared for sending to Algolia`, e);
+          this.logger.warn(
+            `Object with location ${
+              o.location ?? 'unknown'
+            } could not be prepared for sending to Algolia`,
+            e,
+          );
           return [];
         }
 
         // filter out any objects that are still too large for enforced index record size
-        return results.map(r => {
-          const length = Buffer.from(JSON.stringify(r), 'utf-8').length;
-          if (length <= this.maxObjectSizeBytes) {
-            return r;
-          }
-          this.logger.debug(`Object ${r.objectID} with location ${r.location} is ${length} bytes and larger than the maximum allowed length of ${this.maxObjectSizeBytes} bytes`);
-          return undefined;
-        }).filter(r => r);
+        return results
+          .map(r => {
+            const length = Buffer.from(JSON.stringify(r), 'utf-8').length;
+            if (length <= this.maxObjectSizeBytes) {
+              return r;
+            }
+            this.logger.debug(
+              `Object ${r.objectID} with location ${r.location} is ${length} bytes and larger than the maximum allowed length of ${this.maxObjectSizeBytes} bytes`,
+            );
+            return undefined;
+          })
+          .filter(r => r);
       })
       .flat() as IndexObjectWithIdAndTimestamp[];
     if (filteredObjects.length) {
-      this.logger.debug(`Sending ${filteredObjects.length} object(s) to Algolia`);
+      this.logger.debug(
+        `Sending ${filteredObjects.length} object(s) to Algolia`,
+      );
       await this.searchIndex.saveObjects(filteredObjects);
     }
   }
 
-  private newIndexObjectWithIdAndTimestamp(key: string, object: IndexObject): IndexObjectWithIdAndTimestamp {
+  private newIndexObjectWithIdAndTimestamp(
+    key: string,
+    object: IndexObject,
+  ): IndexObjectWithIdAndTimestamp {
     const hash = crypto.createHash('sha256');
     hash.update(key);
     const objectID = hash.digest('hex');
@@ -158,6 +183,6 @@ export class Indexer extends Writable {
       ...object,
       objectID,
       timestamp: this.now.toISOString(),
-    };  
+    };
   }
 }

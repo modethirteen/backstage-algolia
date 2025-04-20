@@ -21,18 +21,16 @@ export const testCollatingTransformingPipeline = async (options: {
 }) => {
   const { transformerFactories, collatorFactory } = options;
   const collator = await collatorFactory.newCollator();
-  const transformers = await Promise.all((transformerFactories ?? []).map(b => b.newTransformer()));
+  const transformers = await Promise.all(
+    (transformerFactories ?? []).map(b => b.newTransformer()),
+  );
   const results: PipelineResult[] = [];
   const collector = new Writable({
     objectMode: true,
-    write(
-      result: PipelineResult,
-      _e: any,
-      done: () => void,
-    ) {
+    write(result: PipelineResult, _e: any, done: () => void) {
       results.push(result);
       done();
-    }
+    },
   });
   return new Promise<PipelineResult[]>(resolve => {
     pipeline([collator, ...transformers, collector], () => resolve(results));
@@ -53,7 +51,7 @@ export const testIndexingPipeline = async (options: {
     },
   });
   await new Promise<void>((resolve, reject) => {
-    pipeline(objectStream, indexer, (e) => {
+    pipeline(objectStream, indexer, e => {
       if (e) {
         reject(e);
       } else {

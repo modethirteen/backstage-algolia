@@ -5,17 +5,16 @@ import {
   TextField,
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchBox, UseSearchBoxProps } from 'react-instantsearch';
 import useDebounce from 'react-use/lib/useDebounce';
 
-export const SearchBar = (props: UseSearchBoxProps & {
-  debounceTime?: number;
-  placeholder?: string;
-}) => {
+export const SearchBar = (
+  props: UseSearchBoxProps & {
+    debounceTime?: number;
+    placeholder?: string;
+  },
+) => {
   const {
     debounceTime = 200,
     placeholder = 'What can we help you find?',
@@ -24,11 +23,7 @@ export const SearchBar = (props: UseSearchBoxProps & {
   const { query, refine, clear } = useSearchBox(rest);
   const [value, setValue] = useState<string>('');
   const [debouncedValue, setDebouncedValue] = useState<string>('');
-  useDebounce(
-    () => setDebouncedValue(value),
-    debounceTime,
-    [value],
-  );
+  useDebounce(() => setDebouncedValue(value), debounceTime, [value]);
   useEffect(() => {
     if (debouncedValue.length > 2 || debouncedValue === '') {
       refine(debouncedValue);
