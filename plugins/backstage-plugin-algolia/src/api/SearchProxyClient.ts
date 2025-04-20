@@ -57,7 +57,7 @@ export class SearchProxyClient implements SearchProxyApi {
     if (!response.ok) {
       throw await ResponseError.fromResponse(response);
     }
-    return await response.json();
+    return response.json();
   }
 
   public async sendInsightsEvent(

@@ -2,7 +2,10 @@ import { configApiRef, useApi } from '@backstage/core-plugin-api';
 import React, { ReactNode, createContext, useMemo, useState } from 'react';
 import { InstantSearch, InstantSearchProps } from 'react-instantsearch';
 import { searchProxyApiRef } from '../api';
-import { MultipleQueriesQuery } from '@algolia/client-search';
+import {
+  MultipleQueriesQuery,
+  MultipleQueriesResponse,
+} from '@algolia/client-search';
 
 export const AlgoliaQueryIdContext = createContext({
   queryId: '',
@@ -28,18 +31,26 @@ export const SearchContainer = (
   const algolia = useApi(searchProxyApiRef);
 
   // memoize search client
-  const searchClient = useMemo(
-    () => ({
+  const searchClient = useMemo(() => {
+    const cache = new Map();
+    return {
       // the insights middleware expects the search client to provide an
       // appid and apikey, even if it is proxying requests to a backend
       appId: 'dummy',
       apiKey: 'dummy',
-      search: (requests: MultipleQueriesQuery[]) => {
-        return algolia.search({ requests }, { skipEmptyQueries });
+      search: async (requests: MultipleQueriesQuery[]) => {
+        const key = `search:${JSON.stringify(requests)}`;
+        let response: MultipleQueriesResponse<any> = cache.get(key);
+        if (response !== undefined) {
+          return response;
+        }
+        return algolia.search({ requests }, { skipEmptyQueries }).then(r => {
+          cache.set(key, r);
+          return r;
+        });
       },
-    }),
-    [skipEmptyQueries],
-  );
+    };
+  }, [skipEmptyQueries]);
 
   // allow SearchHitList to share query id with companion search components
   const [queryId, setQueryId] = useState('');
