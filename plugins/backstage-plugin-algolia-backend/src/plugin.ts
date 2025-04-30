@@ -46,62 +46,74 @@ export const algoliaPlugin = createBackendPlugin({
         scheduler: coreServices.scheduler,
       },
       async init({ auth, config, discovery, httpRouter, logger, scheduler }) {
+        const indexes = config.getConfig('algolia.backend.indexes');
         if (!initialPipelines) {
           initialPipelines = [
-            {
-              id: 'techdocs',
-              collatorFactory: TechDocsCollatorFactory.fromConfig(config, {
-                auth,
-                discovery,
-                logger,
-              }),
-              transformerFactories: [
-                TechDocsTransformerFactory.fromConfig(config),
-              ],
-              indexer: Indexer.fromConfig(config, {
-                batchSize: 50,
-                index: 'techdocs',
-                logger,
-              }),
-              frequency: { minutes: 60 },
-              timeout: { minutes: 15 },
-              initialDelay: { seconds: 30 },
-              done: async () => {
-                const manager = IndexManager.fromConfig(config, {
-                  index: 'techdocs',
-                  logger,
-                  date: new Date(),
-                });
-                await manager.clean();
-              },
-            },
-            {
-              id: 'catalog',
-              collatorFactory: CatalogCollatorFactory.fromConfig(config, {
-                auth,
-                discovery,
-                logger,
-              }),
-              transformerFactories: [
-                CatalogTransformerFactory.fromConfig(config),
-              ],
-              indexer: Indexer.fromConfig(config, {
-                batchSize: 50,
-                index: 'catalog',
-                logger,
-              }),
-              frequency: { minutes: 60 },
-              timeout: { minutes: 15 },
-              initialDelay: { seconds: 30 },
-              done: async () => {
-                const manager = IndexManager.fromConfig(config, {
-                  index: 'catalog',
-                  logger,
-                  date: new Date(),
-                });
-                await manager.clean();
-              },
-            },
+            ...(indexes.has('techdocs')
+              ? [
+                  {
+                    id: 'techdocs',
+                    collatorFactory: TechDocsCollatorFactory.fromConfig(
+                      config,
+                      {
+                        auth,
+                        discovery,
+                        logger,
+                      },
+                    ),
+                    transformerFactories: [
+                      TechDocsTransformerFactory.fromConfig(config),
+                    ],
+                    indexer: Indexer.fromConfig(config, {
+                      batchSize: 50,
+                      index: 'techdocs',
+                      logger,
+                    }),
+                    frequency: { minutes: 60 },
+                    timeout: { minutes: 15 },
+                    initialDelay: { seconds: 30 },
+                    done: async () => {
+                      const manager = IndexManager.fromConfig(config, {
+                        index: 'techdocs',
+                        logger,
+                        date: new Date(),
+                      });
+                      await manager.clean();
+                    },
+                  },
+                ]
+              : []),
+            ...(indexes.has('catalog')
+              ? [
+                  {
+                    id: 'catalog',
+                    collatorFactory: CatalogCollatorFactory.fromConfig(config, {
+                      auth,
+                      discovery,
+                      logger,
+                    }),
+                    transformerFactories: [
+                      CatalogTransformerFactory.fromConfig(config),
+                    ],
+                    indexer: Indexer.fromConfig(config, {
+                      batchSize: 50,
+                      index: 'catalog',
+                      logger,
+                    }),
+                    frequency: { minutes: 60 },
+                    timeout: { minutes: 15 },
+                    initialDelay: { seconds: 30 },
+                    done: async () => {
+                      const manager = IndexManager.fromConfig(config, {
+                        index: 'catalog',
+                        logger,
+                        date: new Date(),
+                      });
+                      await manager.clean();
+                    },
+                  },
+                ]
+              : []),
           ];
         }
         const trigger = new PipelineTrigger({

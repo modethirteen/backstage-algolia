@@ -1,8 +1,8 @@
 {
   "name": "backstage-plugin-algolia-backend",
-  "version": "0.1.2",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "version": "0.1.4",
+  "main": "dist/index.cjs.js",
+  "types": "dist/index.d.ts",
   "license": "Apache-2.0",
   "publishConfig": {
     "access": "public",
@@ -69,5 +69,12 @@
     "dist",
     "config.d.ts"
   ],
-  "configSchema": "config.d.ts"
+  "configSchema": "config.d.ts",
+  "typesVersions": {
+    "*": {
+      "index": [
+        "dist/index.d.ts"
+      ]
+    }
+  }
 }
