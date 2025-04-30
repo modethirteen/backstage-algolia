@@ -22,7 +22,7 @@ export interface IndexManagerOptions {
   index: string;
   logger: LoggerService;
   filter?: {
-    sources?: string[];
+    types?: string[];
   };
 }
 
@@ -38,8 +38,8 @@ export class IndexManager implements IndexManagerInterface {
           ttl: toSeconds(parse(c.get('ttl')), date),
         })) ?? [];
     return new IndexManager({
-      expirations: filter?.sources
-        ? expirations.filter(({ type }) => filter.sources?.includes(type))
+      expirations: filter?.types
+        ? expirations.filter(({ type }) => filter.types?.includes(type))
         : expirations,
       logger,
       now: new Date(),

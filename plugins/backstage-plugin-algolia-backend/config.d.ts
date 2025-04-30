@@ -1,13 +1,3 @@
-interface IndexConfig {
-  name: string;
-
-  // max age of records since last index before cleanup in ISO8601 duration format
-  expirations?: {
-    source: string;
-    ttl: string;
-  }[];
-}
-
 export interface Config {
   algolia: {
     backend: {
@@ -17,19 +7,41 @@ export interface Config {
       apikey: string;
       applicationId: string;
       indexes: {
-        catalog?: IndexConfig & {
+        catalog?: {
+          name: string;
+
+          // max age of records since last index before cleanup in ISO8601 duration format
+          expirations?: {
+            type: string;
+            ttl: string;
+          }[];
           kinds?: string[];
           locationTemplate?: string;
           parallelismLimit?: number;
         };
-        techdocs?: IndexConfig & {
+        techdocs?: {
+          name: string;
+
+          // max age of records since last index before cleanup in ISO8601 duration format
+          expirations?: {
+            type: string;
+            ttl: string;
+          }[];
           locationTemplate?: string;
           parallelismLimit?: number;
         };
-        [key: string]: IndexConfig;
+        [key: string]: {
+          name: string;
+
+          // max age of records since last index before cleanup in ISO8601 duration format
+          expirations?: {
+            type: string;
+            ttl: string;
+          }[];
+        };
       };
-      maxObjectSizeBytes: number;
-      chunk: boolean;
+      maxObjectSizeBytes?: number;
+      chunk?: boolean;
     };
   };
 }

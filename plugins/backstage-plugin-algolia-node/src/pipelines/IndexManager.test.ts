@@ -58,7 +58,7 @@ describe('IndexManager', () => {
     ]);
   });
 
-  it('can be constructed with filtered sources', () => {
+  it('can be constructed with filtered types', () => {
     const config = new ConfigReader({
       algolia: {
         backend: {
@@ -87,7 +87,7 @@ describe('IndexManager', () => {
       index: 'techdocs',
       logger,
       filter: {
-        sources: ['coda'],
+        types: ['coda'],
       },
     });
     expect(indexManager.expirations).toEqual([
