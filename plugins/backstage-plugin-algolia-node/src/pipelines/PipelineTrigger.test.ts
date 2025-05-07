@@ -23,7 +23,7 @@ describe('PipelineTrigger', () => {
   });
 
   it('can register pipeline', async () => {
-    trigger.addScheduledPipeline({
+    await trigger.addScheduledPipeline({
       id: 'xyzzy',
       collatorFactory: {} as CollatorFactory,
       transformerFactories: [],
@@ -71,7 +71,7 @@ describe('PipelineTrigger', () => {
 
   it('can execute done callback', async () => {
     const done = jest.fn();
-    trigger.addScheduledPipeline({
+    await trigger.addScheduledPipeline({
       id: 'xyzzy',
       collatorFactory: {
         newCollator: jest.fn().mockResolvedValue(Readable.from([])),

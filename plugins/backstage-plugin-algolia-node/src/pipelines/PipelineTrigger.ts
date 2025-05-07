@@ -50,10 +50,10 @@ export class PipelineTrigger implements PipelineTriggerInterface {
     this.scheduler = scheduler;
   }
 
-  public addScheduledPipeline(options: PipelineOptionsInterface) {
+  public async addScheduledPipeline(options: PipelineOptionsInterface) {
     const { id, collatorFactory, transformerFactories, indexer, done } =
       options;
-    this.scheduler.scheduleTask({
+    return this.scheduler.scheduleTask({
       ...options,
       id: `algolia-pipeline:${id}`,
       fn: async () => {

@@ -27,9 +27,9 @@ export class Indexer extends Writable {
       batchSize,
       chunk: config.getOptionalBoolean('algolia.backend.chunk') ?? false,
       logger,
-      maxObjectSizeBytes: config.getNumber(
+      maxObjectSizeBytes: config.getOptionalNumber(
         'algolia.backend.maxObjectSizeBytes',
-      ),
+      ) ?? 10000,
       now: new Date(),
       searchIndex: client.initIndex(
         config.getString(`algolia.backend.indexes.${index}.name`),
