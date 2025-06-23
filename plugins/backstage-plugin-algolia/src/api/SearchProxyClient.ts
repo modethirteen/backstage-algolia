@@ -56,12 +56,12 @@ export class SearchProxyClient implements SearchProxyApi {
     return {
       results: (results as SearchResponse<IndexObjectWithIdAndTimestamp>[])
         .map(r =>
-          r.hits.map(({ type, title, text, location }) => ({
+          r.hits.map(({ type, title, text, path }) => ({
             type,
             document: {
               title,
               text,
-              location,
+              location: path,
             },
           })),
         )
